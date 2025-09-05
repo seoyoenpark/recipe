@@ -1,0 +1,23 @@
+.navbar {
+  display: flex;
+  width: 100%;
+  background-color:#FFC36D;
+  justify-content: space-around;  /* 아이템들 사이에 동일한 공간 배분 */
+  padding: 5px 0px;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.navbarMenu {
+  color: black;
+  margin: 8px;
+  text-decoration: none;
+}
+
+.navbarMenu.active {
+  color: #ffffff;
+}
+
+.navbarMenu:hover {
+  color: #ffffff; /* 마우스 올렸을 때 색상 (예: 노란색) */
+}

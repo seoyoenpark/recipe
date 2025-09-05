@@ -1,0 +1,59 @@
+.header-container-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #ffffff
+}
+
+.header-flex-placeholder-left {
+  flex: 1;
+}
+
+.headerContainer {
+  flex: 1;
+  text-align: center;
+  justify-content: center;
+  align-items: center; 
+  padding: 0;
+}
+
+.headerTitle {
+  font-size: 3.5em;
+  color: #000000;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* 로그인/회원가입 버튼 영역 */
+.header-auth-buttons {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* 로그인/회원가입 Link */
+.header-auth-buttons .auth-button {
+  text-decoration: none;
+}
+
+/* 로그인/회원가입 버튼 */
+.header-auth-buttons button {
+  padding: 8px 15px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+/* 로그인/회원가입 버튼 hover */
+.header-auth-buttons button:hover {
+  background-color: #DDDDDD;
+  color: #000000;
+}

@@ -1,0 +1,51 @@
+.body {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.logincontainer {
+  max-width: 600px;
+  margin: 60px auto;
+  background-color: #FFF2DB;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin: 10px 0 5px;
+  font-size: 1.3rem;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #333333;
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.loginbutton {
+  background-color: #FF7B52;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+  text-decoration: none;
+  text-align: center;
+}
+
+.loginbutton:hover {
+  background-color: #e6732d;
+}

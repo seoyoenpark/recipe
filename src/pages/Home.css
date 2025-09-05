@@ -1,0 +1,148 @@
+/* 전체 메인 레이아웃 */
+.Maincontent {
+  font-family: 'Noto Sans KR';
+  padding: 40px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  color: #333;
+}
+
+/* 소개 섹션 */
+.Introduce {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 60px;
+}
+
+.intro {
+  flex: 1;
+  font-size: 1.5rem;
+  line-height: 1.8;
+  font-weight: bold;
+  padding-left: 5em;
+}
+
+.imagecontent {
+  flex: 1;
+  text-align: right;
+  padding-right: 5em;
+}
+
+.imagecontent img {
+  max-width: 300px;
+  height: auto;
+}
+
+/* 주요 기능 */
+.featuretitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.feature {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.feature-items-wrapper {
+  display: flex;
+  gap: 80px;
+}
+
+.feature-item {
+  background: #FFF2DB;
+  border: 2px solid #f6d276;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  width: 250px;
+  transition: transform 0.2s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+}
+
+.feature-item img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 15px;
+}
+
+.feature-item h3 {
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  color: #333333;
+}
+
+.feature-item p {
+  font-size: 1.0rem;
+  color: #333333;
+  line-height: 1.4;
+}
+
+/* 단계별 사용자 흐름 */
+.user-flow {
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.user-flow h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.steps {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.step-circle {
+  background: #ffe4b3;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-size: 1.4rem;
+  padding: 10px;
+  text-align: center;
+}
+
+.step-arrow {
+  margin: 10px;
+  font-size: 5.0rem;
+  color: #FFC36D;
+}
+
+/* 시작 버튼 */
+.start-button {
+  display: block;
+  margin: 0 auto;
+  padding: 12px 28px;
+  background-color: #FF7B52;
+  color: white;
+  font-size: 1rem;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+  width: fit-content;
+}
+
+.start-button:hover {
+  background-color: #e6732d;
+}
+
+@media (min-width: 1200px) {
+  .feature-items-wrapper {
+    gap: 100px; /* 아주 큰 화면일 때만 간격 더 넓힘 */
+  }
+}
