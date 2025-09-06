@@ -15,7 +15,7 @@ function Login() {
     console.log('로그인 시도:', {username, password});
 
     try {
-    const res = await fetch('/api/login', { // 백엔드의 로그인 API 엔드포인트
+    const res = await fetch('http://localhost:3001/api/login', { // 백엔드의 로그인 API 엔드포인트
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
