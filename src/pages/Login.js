@@ -21,8 +21,8 @@ function Login() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ // 백엔드로 보낼 데이터 (키 값은 백엔드에서 예상하는 이름과 동일하게)
-        userID: username, // 예시: 백엔드에서 'userID'로 받음
-        userPW: password, // 예시: 백엔드에서 'userPW'로 받음
+        userID: username, // 백엔드에서 'userID'로 받음
+        userPW: password, // 백엔드에서 'userPW'로 받음
       }),
     });
 
