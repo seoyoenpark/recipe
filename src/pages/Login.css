@@ -45,3 +45,29 @@ input {
 .loginbutton:hover {
   background-color: #e6732d;
 }
+
+@media (max-width: 768px) {
+  .logincontainer {
+    margin: 30px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: none;
+  }
+
+  label {
+    font-size: 1.1rem;
+    margin: 8px 0 4px;
+  }
+
+  input {
+    padding: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .loginbutton {
+    padding: 10px;
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+}

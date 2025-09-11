@@ -1,0 +1,254 @@
+/* 전체 마이페이지 컨테이너 */
+.MypageContainer {
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #333;
+  background-color: #fff;
+}
+
+/* 섹션별 스타일 */
+.MypageContainer section {
+  margin-bottom: 10px;
+}
+
+/* 제목 스타일 */
+.MypageContainer h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #000;
+}
+
+/* 폼 공통 스타일 */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 라벨 스타일 */
+form label {
+  font-size: 1.0rem;
+  margin: 12px 0 15px;
+}
+
+/* 입력 필드 스타일 */
+form input[type="text"], form input[type="password"] {
+  padding: 10px 14px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #828282;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+form input[type="text"]:focus, form input[type="password"]:focus {
+  outline: none;
+  border-color: #ff7b52;
+}
+
+/* 수정 완료 버튼 스타일 */
+form button[type="submit"] {
+  background-color: #ff7b52;
+  color: white;
+  padding: 14px 0;
+  border: none;
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 1.0rem;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+  background-color: #e6732d;
+}
+
+/* 회원 탈퇴 버튼 스타일 */
+.withdraw-btn {
+  background-color: #828282;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 0;
+  font-size: 1.0rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.withdraw-btn:hover {
+  background-color: #8a8a8a;
+}
+
+/* 알레르기 태그 영역 */
+.allergy-tags {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* 태그들 간 간격 */
+}
+
+/* 알레르기 태그 스타일 */
+.allergy-tag {
+  background-color: #ff7b52;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* 알레르기 태그 안 삭제 버튼 */
+.allergy-tag button {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+}
+
+/* 조리도구 버튼 그룹 */
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  gap: 12px;
+}
+
+/* 각 조리도구 버튼 */
+.tool-button {
+  background-color: #fff2db;
+  border: 1.5px solid #f6d276;
+  border-radius: 25px;
+  padding: 10px 20px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 선택된 조리도구 버튼 */
+.tool-button.selected {
+  background-color: #ff7b52;
+  color: white;
+  border-color: #ff7b52;
+}
+
+.tool-button:hover {
+  background-color: #fb8c6a;
+  color: white;
+}
+
+/* 모달 오버레이 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* 모달 본체 */
+.modal-content {
+  background-color: #fff2db;
+  padding: 30px 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 550px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+/* 모달 제목 */
+.modal-content h3 {
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #333333;
+}
+
+/* 모달 입력 필드 */
+.modal-content input[type="password"] {
+  width: 100%;
+  padding: 15px 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 25px;
+  box-sizing: border-box;
+}
+
+/* 탈퇴 확인 버튼 */
+.confirm-btn {
+  background-color: #828282;
+  color: #fff;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-btn:hover {
+  background-color: #8a8a8a;
+}
+
+/* 돌아가기 버튼 */
+.cancel-btn {
+  color: white;
+  background-color: #ff7b52;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #e6732d;
+}
+
+/* 반응형 모바일 지원 */
+@media (max-width: 768px) {
+
+  .MypageContainer {
+    padding: 0 15px;
+  }
+
+  .MypageContainer h2 {
+    font-size: 1.5rem;
+  }
+
+  form label,
+  .tool-button {
+    font-size: 0.9rem;
+  }
+
+  form button[type="submit"],
+  .withdraw-btn {
+    font-size: 1rem;
+  }
+
+  .tool-button {
+    padding: 8px 16px;
+  }
+}

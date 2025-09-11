@@ -10,6 +10,7 @@ import Mypage from './pages/Mypage';
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Userlogin from './pages/Userlogin';
 
 function App() {
    return (
@@ -25,6 +26,7 @@ function App() {
          <Route path="/mypage" element={<Mypage />}/>
          <Route path="/Register" element={<Register />}/>
          <Route path="/Login" element={<Login />}/>
+         <Route path="/Userlogin" element={<Userlogin />}/>
        </Routes>
      </div>
    );

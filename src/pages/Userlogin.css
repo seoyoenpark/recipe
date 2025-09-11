@@ -1,17 +1,12 @@
-.registercontainer {
-  max-width: 800px;
-  margin: 30px auto;
+.logincontainer {
+  max-width: 600px;
+  margin: 60px auto;
   background-color: #FFF2DB;
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-}
-
-.registercontainer h1 {
-  font-size: 2.5rem;
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-weight: normal;
+  flex-direction: column;
+  align-items: center;
 }
 
 form {
@@ -33,7 +28,7 @@ input {
   margin-bottom: 15px;
 }
 
-.registerbutton {
+.loginbutton {
   background-color: #FF7B52;
   color: white;
   padding: 12px;
@@ -47,22 +42,16 @@ input {
   text-align: center;
 }
 
-.registerbutton:hover {
+.loginbutton:hover {
   background-color: #e6732d;
 }
 
 @media (max-width: 768px) {
-  .registercontainer {
-    margin: 20px auto;
+  .logincontainer {
+    margin: 5rem auto;
     padding: 20px;
     width: 90%;
     max-width: none;
-  }
-
-  .registercontainer h1 {
-    font-size: 2rem;
-    margin-bottom: 15px;
-    text-align: center;
   }
 
   label {
@@ -76,7 +65,7 @@ input {
     margin-bottom: 10px;
   }
 
-  .registerbutton {
+  .loginbutton {
     padding: 10px;
     font-size: 0.9rem;
     margin-top: 8px;
