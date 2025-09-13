@@ -88,8 +88,7 @@ function Mypage() {
 
   // 알레르기 태그 추가 (엔터 키 입력 시)
   const handleAllergyKeyDown = (e) => {
-    if (e.key === 'Enter' && allergyInput.trim() !== '') {
-      // 이미 존재하는 태그는 추가하지 않습니다.
+    if (e.key === 'Enter' && e.nativeEvent.isComposing === false && allergyInput.trim() !== '') {
       if (!allergies.includes(allergyInput.trim())) {
         setAllergies([...allergies, allergyInput.trim()]);
       }
