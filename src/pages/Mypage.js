@@ -27,9 +27,25 @@ function Mypage() {
   useEffect(() => {
     //API 호출
     const fetchUserInfo = async () => {
+      try {
+        // API 호출
+        // 예시 URL: '/api/user/myinfo'
+        const response = await fetch('http://localhost:3001/api/user/myinfo', {
+          method: 'GET',
+          headers: {
+            // 인증 토큰 추가
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('사용자 정보를 불러오는데 실패했습니다.');
+        }
+
+        const dataFromDb = await response.json(); // 서버로부터 받은 JSON 데이터
 
       // DB에서 가져왔다고 가정한 데이터
-      const dataFromDb = {
+      const dummyData  = {
         nickname: 'Smitherton',
         username: 'Smitherton123',
         password: '',
@@ -39,12 +55,21 @@ function Mypage() {
 
       // 불러온 데이터 각 상태에 업데이트
       setBasicInfo({
-        nickname: dataFromDb.nickname,
-        username: dataFromDb.username,
+        nickname: dataFromDb.nickname || dummyData.nickname,
+        username: dataFromDb.username || dummyData.username,
         password: dataFromDb.password,
       });
       setAllergies(dataFromDb.allergies || []);
       setTools(dataFromDb.tools || {});
+    } catch (error) {
+        console.error('사용자 정보를 불러오는 중 오류 발생:', error);
+        alert('사용자 정보를 불러오는데 실패했습니다. 기본 데이터를 표시합니다.');
+        // 에러 발생 시, 위에서 정의한 dummyData로 초기화
+        setBasicInfo({ nickname: 'Smitherton', username: 'Smitherton123', password: '' });
+        setAllergies(['땅콩', '새우']);
+        setTools({ wok: true, microwave: false, bigPot: true, oven: false, smallPot: true, fryer: false
+        });
+      }
     };
 
     fetchUserInfo();
@@ -92,9 +117,32 @@ function Mypage() {
 
     console.log('기본 정보 수정 제출 데이터:', basicInfo);
 
-    // 여기에 DB 업데이트 API 호출 로직 구현하기
+    try {
+      // DB 업데이트 API 구현
+      const response = await fetch('http://localhost:3001/api/user/basicinfo', {
+        method: 'PUT', // 또는 'PATCH'
+        headers: {
+          'Content-Type': 'application/json',
+          //인증 토큰 추가
+        },
+        body: JSON.stringify({ // 서버로 보낼 데이터
+          nickname: basicInfo.nickname,
+          username: basicInfo.username,
+          password: basicInfo.password || undefined, // 비밀번호가 입력되었을 경우에만 전송
+        }),
+      });
 
-    alert('기본 정보가 수정되었습니다!');
+      if (!response.ok) {
+        throw new Error('기본 정보 수정에 실패했습니다.');
+      }
+      const result = await response.json(); // 서버 응답 데이터
+      console.log('기본 정보 수정 성공:', result);
+      alert('기본 정보가 성공적으로 수정되었습니다!');
+
+    } catch (error) {
+      console.error('기본 정보 수정 중 오류 발생:', error);
+      alert('기본 정보 수정에 실패했습니다.');
+    }
   };
 
   // 폼 제출 핸들러 (상세 정보 수정)
@@ -104,9 +152,29 @@ function Mypage() {
     const detailData = { allergies, tools };
     console.log('상세 정보 수정 제출 데이터:', detailData);
 
-    // 여기에 DB 업데이트 API 호출 로직 구현하기
-    
-    alert('상세 정보가 수정되었습니다!');
+    // DB 업데이트 API 호출 구현
+     try {
+      const response = await fetch('http://localhost:3001/api/user/detailinfo', {
+        method: 'PUT', // 또는 'PATCH'
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${AuthToken}`,
+        },
+        body: JSON.stringify(detailData),
+      });
+
+      if (!response.ok) {
+        throw new Error('상세 정보 수정에 실패했습니다.');
+      }
+
+      const result = await response.json();
+      console.log('상세 정보 수정 성공:', result);
+      alert('상세 정보가 성공적으로 수정되었습니다!');
+
+    } catch (error) {
+      console.error('상세 정보 수정 중 오류 발생:', error);
+      alert('상세 정보 수정에 실패했습니다.');
+    }
   };
 
   // 모달 열림 상태
@@ -123,15 +191,39 @@ function Mypage() {
   };
 
   // 회원 탈퇴 실행 핸들러
-  const handleWithdrawConfirm = () => {
+  const handleWithdrawConfirm = async () => {
     if (!withdrawPassword) {
       alert('비밀번호를 입력해주세요.');
       return;
     }
     // API 호출로 탈퇴 처리
     console.log('탈퇴 비밀번호:', withdrawPassword);
-    alert('회원 탈퇴 처리 완료');
-    closeModal();
+
+     try {
+      // API 호출로 탈퇴 처리
+      const response = await fetch('http://localhost:3001/api/user/withdraw', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${AuthToken}`,
+        },
+        body: JSON.stringify({ password: withdrawPassword }), // 탈퇴 시 비밀번호 확인
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json(); // 서버에서 보낸 에러 메시지
+        throw new Error(errorData.message || '회원 탈퇴에 실패했습니다.');
+      }
+
+      alert('회원 탈퇴가 성공적으로 처리되었습니다.');
+      // 탈퇴 성공 후 비로그인 메인 페이지로 리디렉션
+      window.location.href = '/home'; 
+      closeModal();
+
+    } catch (error) {
+      console.error('회원 탈퇴 중 오류 발생:', error);
+      alert(`회원 탈퇴에 실패했습니다: ${error.message}`);
+    }
   };
 
   return (
