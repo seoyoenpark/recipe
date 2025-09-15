@@ -11,6 +11,8 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Userlogin from './pages/Userlogin';
+import InfoRegistration from './pages/InfoRegistration';
+import IngredientRegistration from './pages/IngredientRegistration';
 
 function App() {
    return (
@@ -19,7 +21,7 @@ function App() {
        <Nav />
        <Routes>
          {/* 기본 경로(/)로 접근 시 /Home으로 리다이렉트하는 Route */}
-        <Route path="/" element={<Navigate to="/Home" replace />} />
+         <Route path="/" element={<Navigate to="/Home" replace />} />
          <Route path="/Home" element={<Home />} />
          <Route path="/myrefrig" element={<Myrefrig />}/>
          <Route path="/recom" element={<Recom />}/>
@@ -27,6 +29,8 @@ function App() {
          <Route path="/Register" element={<Register />}/>
          <Route path="/Login" element={<Login />}/>
          <Route path="/Userlogin" element={<Userlogin />}/>
+         <Route path="/InfoRegistration" element={<InfoRegistration />} />
+         <Route path="/IngredientRegistration" element={<IngredientRegistration />} />
        </Routes>
      </div>
    );

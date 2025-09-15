@@ -1,0 +1,231 @@
+.info-registration-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.info-registration-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-section {
+  width: 100%;
+  max-width: 2600px;
+  background-color: #FFF2DB;
+  padding: 20px 40px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+}
+
+.section-title h1 {
+  font-size: 2.5rem;
+  font-weight: normal;
+  margin-bottom: 50px;
+  color: #333333;
+}
+
+/* 알레르기 섹션 */
+.allergy-section {
+  margin-bottom: 40px;
+}
+
+.allergy-label {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333333;
+}
+
+.allergy-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.allergy-input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #ffffff;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.allergy-input::placeholder {
+  color: #333333;
+}
+
+.allergy-input:focus {
+  border-color: #FF7B52;
+}
+
+/* 알레르기 태그 스타일 */
+.allergy-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+.allergy-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 수평 중앙 정렬 추가 */
+  background-color: #FF7B52;
+  color: white;
+  padding: 4px 12px 8px 12px; /* 위 4px, 좌우 12px, 아래 8px로 아래쪽 여백 증가 */
+  border-radius: 20px;
+  font-size: 1rem;
+  gap: 6px;
+  line-height: 1; /* 줄 간격을 1로 설정하여 수직 정렬 개선 */
+  min-height: 28px; /* 32px → 28px로 최소 높이 감소 */
+}
+
+.tag-remove-btn {
+  background: none;
+  border: none;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  font-size: 0.8rem; /* 크기를 약간 줄임 */
+  padding: 0;
+  margin: 0;
+  width: 16px; /* 크기 줄임 */
+  height: 16px; /* 크기 줄임 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+
+.tag-remove-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 조리도구 섹션 */
+.tools-section {
+  margin-bottom: 40px;
+}
+
+.tools-label {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333333;
+}
+
+.tools-grid {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.tool-btn {
+  padding: 12px 24px;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.tool-btn:hover {
+  border-color: #FF7B52;
+  background-color: #fff5f0;
+}
+
+.tool-btn.selected {
+  background-color: #FF7B52;
+  color: #ffffff;
+  border-color: #FF7B52;
+}
+
+/* 제출 버튼 */
+.submit-btn {
+  width: 100%;
+  max-width: 2000px;
+  padding: 15px;
+  background-color: #FF7B52;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0 auto;
+  display: block;
+}
+
+.submit-btn:hover {
+  background-color: #e85d3d;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .form-section {
+    padding: 20px 30px;
+    max-width: 95%;
+  }
+  
+  .tools-grid {
+    gap: 15px;
+  }
+  
+  .tool-btn {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .allergy-label, .tools-label {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-registration-content {
+    padding: 10px;
+  }
+  
+  .form-section {
+    max-width: 100%;
+    padding: 15px 20px;
+  }
+  
+  .tools-grid {
+    gap: 10px;
+  }
+  
+  .tool-btn {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .allergy-tags {
+    justify-content: flex-start;
+  }
+  
+  .allergy-tag {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}

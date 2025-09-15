@@ -1,0 +1,440 @@
+.ingredient-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-title {
+  text-align: left; /* 좌측 정렬 */
+  font-size: 1.3rem; /* 재료 목록과 같은 크기 */
+  margin-bottom: 30px;
+  color: #333333;
+}
+
+.register-methods {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+  justify-content: space-between;
+}
+
+.register-method {
+  flex: 1;
+  background-color: #ffffff; /* 하얀 배경으로 변경 */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.register-method h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  color: #333333;
+}
+
+.photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px; /* 간격을 늘려서 버튼 위치 맞춤 */
+}
+
+.photo-upload-area {
+  background-color: #e9ecef;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  width: 288px; /* 1.2배 크기 */
+  height: 192px; /* 1.2배 크기 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.photo-upload-area:hover {
+  background-color: #d1ecf1;
+}
+
+.upload-placeholder {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.divider {
+  width: 2px;
+  background-color: #dee2e6;
+  min-height: 300px;
+  margin: 0 20px;
+}
+
+.manual-form {
+  margin-bottom: 20px;
+}
+
+.manual-register-section {
+  display: flex;
+  justify-content: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333333;
+}
+
+.ingredient-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.quantity-selector {
+  position: relative;
+  display: inline-block;
+  width: 100px; /* 작은 크기로 설정 */
+}
+
+.quantity-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.quantity-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100px; /* 버튼과 같은 크기 */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.quantity-option {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.quantity-option:hover {
+  background-color: #f8f9fa;
+}
+
+.register-btn {
+  width: auto; /* 자동 크기 */
+  padding: 12px 24px; /* 좌우 패딩 추가 */
+  background-color: #FF7B52;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.register-btn:hover {
+  background-color: #e85d3d;
+}
+
+.cancel-btn {
+  width: auto;
+  padding: 10px 24px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+}
+
+.ingredients-wrapper {
+  position: relative;
+}
+
+.ingredients-title {
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  color: #333333;
+  position: absolute;
+  top: -55px;
+  left: 0;
+}
+
+.ingredients-section {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.ingredients-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 45px;
+  margin-bottom: 0;
+  justify-content: flex-start;
+}
+
+.empty-message {
+  width: 100%;
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  padding: 40px 20px;
+}
+
+.ingredient-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: calc(45% - 7.5px); /* 43%로 축소 */
+  min-width: 250px;
+  border: 1px solid #e9ecef;
+}
+
+.ingredient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.ingredient-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333333;
+  flex: 1;
+}
+
+.ingredient-buttons {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.edit-btn, .delete-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px; /* 네모난 모양으로 변경 */
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #FF7B52;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #e85d3d;
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+.ingredient-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ingredient-info {
+  color: #6c757d;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.complete-btn {
+  width: auto; /* 자동 크기 */
+  padding: 15px 30px; /* 좌우 패딩 추가 */
+  background-color: #FF7B52; /* 등록하기 버튼과 같은 색상 */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px; /* 박스와의 여백 */
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* 중앙 정렬 */
+}
+
+.complete-btn:hover {
+  background-color: #e85d3d; /* 등록하기 버튼과 같은 호버 색상 */
+}
+
+/* 모달 스타일 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: #F5F5DC; /* 베이지색 */
+  padding: 30px;
+  border-radius: 15px;
+  width: 400px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-text {
+  color: #000000;
+  font-size: 1.1rem;
+  font-weight: normal;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px 24px;
+  background-color: #FF7B52;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-btn:hover {
+  background-color: #e85d3d;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .register-methods {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .divider {
+    width: 100%;
+    height: 2px;
+    min-height: auto;
+    margin: 0;
+  }
+  
+  .ingredient-card {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .ingredient-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .ingredient-buttons {
+    align-self: flex-end;
+  }
+
+  .modal-content {
+    width: 90%;
+    height: auto;
+    padding: 25px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ingredient-container {
+    padding: 15px;
+  }
+  
+  .page-title {
+    font-size: 1.2rem;
+  }
+  
+  .register-method {
+    padding: 15px;
+  }
+  
+  .ingredient-card {
+    padding: 15px;
+  }
+  
+  .ingredient-name {
+    font-size: 1.1rem;
+  }
+  
+  .edit-btn, .delete-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  .photo-upload-area {
+    width: 216px; /* 1.2배 적용 */
+    height: 144px; /* 1.2배 적용 */
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .modal-text {
+    font-size: 1rem;
+  }
+}
