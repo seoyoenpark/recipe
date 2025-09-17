@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import './Myrefrig.css';
+import './IngredientRegistration.css';
+import Stage from '../components/Stage';
 import { useNavigate } from 'react-router-dom';
 
-function Myrefrig() {
+function IngredientRegistration() {
   const [ingredients, setIngredients] = useState([]);
   const [newIngredient, setNewIngredient] = useState({
     name: '',
@@ -19,6 +20,7 @@ function Myrefrig() {
     unit: '개'
   });
   const [showEditUnitDropdown, setShowEditUnitDropdown] = useState(false);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
   
   const [uploadedImage, setUploadedImage] = useState(null);
   const [analyzedIngredients, setAnalyzedIngredients] = useState([]);
@@ -256,6 +258,39 @@ function Myrefrig() {
     setShowEditUnitDropdown(false);
   };
 
+  const handleComplete = async () => {
+    if (ingredients.length === 0) {
+      alert('등록할 재료가 없습니다.');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3001/api/ingredients', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ingredients: ingredients,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('재료 등록 성공:', data);
+        setShowCompletionModal(true);
+      } else {
+        console.error('재료 등록 실패:', response.status);
+        alert('재료 등록에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류:', error);
+      alert('서버와 연결할 수 없습니다.');
+    }
+  };
+
   const handleModalClickOutside = useCallback((e) => {
     if (showPhotoModal && e.target.closest('.modal-content') === null) {
       setShowPhotoModal(false);
@@ -280,6 +315,8 @@ function Myrefrig() {
 
   return (
     <>
+      <Stage currentstage={3} />
+      
       <div className="ingredient-container">
         <h2 className="page-title">재료 등록하기</h2>
         
@@ -518,7 +555,36 @@ function Myrefrig() {
             <div className="empty-message">냉장고에 재료가 없어요.</div>
           )}
         </div>
+
+        <button className="complete-btn" onClick={handleComplete}>
+          재료 등록 완료
+        </button>
       </div>
+
+      {showCompletionModal && (
+        <div className="modal-overlay" onClick={() => setShowCompletionModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-text">
+              <p>재료가 성공적으로 등록되었습니다!</p>
+              <p>이제 냉장고를 부탁해의 모든 서비스를 이용할 수 있어요.</p>
+            </div>
+            <div className="modal-buttons">
+              <button
+                className="modal-btn"
+                onClick={() => navigate('/my-refrigerator')}
+              >
+                나의 냉장고 보러가기
+              </button>
+              <button
+                className="modal-btn"
+                onClick={() => navigate('/recipe-recommendation')}
+              >
+                레시피 추천 받기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showPhotoModal && (
         <div className="modal-overlay">
@@ -636,4 +702,4 @@ function Myrefrig() {
   );
 }
 
-export default Myrefrig;
+export default IngredientRegistration;
