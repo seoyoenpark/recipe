@@ -1,6 +1,6 @@
 /* 전체 마이페이지 컨테이너 */
 .MypageContainer {
-  max-width: 90%;
+  width: 65%;
   margin: 40px auto;
   padding: 0 20px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -51,6 +51,7 @@ form input[type="text"]:focus, form input[type="password"]:focus {
 
 /* 수정 완료 버튼 스타일 */
 form button[type="submit"] {
+  width: 300px;
   background-color: #ff7b52;
   color: white;
   padding: 14px 0;

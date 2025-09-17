@@ -75,6 +75,7 @@ function Mypage() {
     fetchUserInfo();
   }, []); // 빈 배열을 두어 컴포넌트가 처음 마운트될 때만 실행되도록 함
 
+
   // 기본 정보 입력값 변경 핸들러
   const handleBasicChange = (e) => {
     const { name, value } = e.target;
