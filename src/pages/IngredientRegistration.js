@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './IngredientRegistration.css';
 import Stage from '../components/Stage';
 import { useNavigate } from 'react-router-dom';
@@ -8,64 +8,256 @@ function IngredientRegistration() {
   const [newIngredient, setNewIngredient] = useState({
     name: '',
     expiry: '',
-    quantity: 1
+    quantity: '',
+    unit: '개'
   });
-  const [showQuantityDropdown, setShowQuantityDropdown] = useState(false);
+  const [showUnitDropdown, setShowUnitDropdown] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [editingIngredient, setEditingIngredient] = useState({
+    name: '',
+    expiry: '',
+    quantity: '',
+    unit: '개'
+  });
+  const [showEditUnitDropdown, setShowEditUnitDropdown] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
-
+  
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [analyzedIngredients, setAnalyzedIngredients] = useState([]);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [editingAnalyzedId, setEditingAnalyzedId] = useState(null);
+  const [editingAnalyzedIngredient, setEditingAnalyzedIngredient] = useState({
+    name: '',
+    expiry: '',
+    quantity: '',
+    unit: '개'
+  });
+  
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  // 수량 옵션들 (숫자만, 넉넉하게 준비)
-  const quantities = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30
-  ];
+  const units = ['개', 'ml', 'l', 'g', 'kg'];
 
-  // 사진으로 등록하기 클릭
-  const handlePhotoRegister = () => {
-    alert('사진으로 등록하기 기능 - 추후 구현 예정');
+  const getExpiringIngredients = () => {
+    const today = new Date();
+    const threeDaysLater = new Date(today);
+    threeDaysLater.setDate(today.getDate() + 3);
+
+    return ingredients.filter(ingredient => {
+      if (!ingredient.expiry) return false;
+      const expiryDate = new Date(ingredient.expiry);
+      return expiryDate <= threeDaysLater && expiryDate >= today;
+    });
   };
 
-  // 수기로 등록하기 (재료 추가)
+  const expiringIngredients = getExpiringIngredients();
+
+  const handlePhotoUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedImage(e.target.result);
+        setAnalyzedIngredients([]);
+        setEditingAnalyzedId(null);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert('이미지 파일을 선택해주세요.');
+    }
+  };
+
+  const handlePhotoAnalyze = async () => {
+    if (!uploadedImage) {
+      alert('먼저 사진을 업로드해주세요.');
+      return;
+    }
+
+    setIsAnalyzing(true);
+    
+    // Simulate API call to analyze the image
+    setTimeout(() => {
+      const mockAnalyzedData = [
+        { id: Date.now() + 1, name: '토마토', expiry: '', quantity: '', unit: '개' },
+        { id: Date.now() + 2, name: '양파', expiry: '', quantity: '300', unit: 'g' },
+        { id: Date.now() + 3, name: '당근', expiry: '', quantity: '', unit: '개' },
+      ];
+      
+      setAnalyzedIngredients(mockAnalyzedData);
+      setShowPhotoModal(true);
+      setIsAnalyzing(false);
+    }, 2000);
+  };
+  
+  const handleModalRegister = () => {
+    if (analyzedIngredients.length === 0) {
+      alert('등록할 재료가 없습니다.');
+      return;
+    }
+    
+    setIngredients([...ingredients, ...analyzedIngredients]);
+    
+    setUploadedImage(null);
+    setAnalyzedIngredients([]);
+    setShowPhotoModal(false);
+    setEditingAnalyzedId(null);
+    setEditingAnalyzedIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+    
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleEditAnalyzed = (id) => {
+    const ingredient = analyzedIngredients.find(item => item.id === id);
+    if (ingredient) {
+      setEditingAnalyzedIngredient({
+        name: ingredient.name,
+        expiry: ingredient.expiry,
+        quantity: ingredient.quantity,
+        unit: ingredient.unit
+      });
+      setEditingAnalyzedId(id);
+    }
+  };
+
+  const handleSaveAnalyzedEdit = () => {
+    if (!editingAnalyzedIngredient.name.trim()) {
+      alert('재료 이름을 입력해주세요.');
+      return;
+    }
+
+    const quantityToSave = editingAnalyzedIngredient.quantity && parseFloat(editingAnalyzedIngredient.quantity) > 0
+      ? editingAnalyzedIngredient.quantity
+      : '';
+
+    setAnalyzedIngredients(analyzedIngredients.map(ingredient =>
+      ingredient.id === editingAnalyzedId
+        ? { ...ingredient, ...editingAnalyzedIngredient, quantity: quantityToSave }
+        : ingredient
+    ));
+    
+    setEditingAnalyzedId(null);
+    setEditingAnalyzedIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+    setShowEditUnitDropdown(false);
+  };
+
+  const handleCancelAnalyzedEdit = () => {
+    setEditingAnalyzedId(null);
+    setEditingAnalyzedIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+    setShowEditUnitDropdown(false);
+  };
+
+  const handleDeleteAnalyzed = (id) => {
+    setAnalyzedIngredients(analyzedIngredients.filter(ingredient => ingredient.id !== id));
+    setEditingAnalyzedId(null);
+  };
+
   const handleManualRegister = () => {
     if (newIngredient.name.trim()) {
-      setIngredients([...ingredients, { ...newIngredient, id: Date.now() }]);
-      setNewIngredient({ name: '', expiry: '', quantity: 1 });
-      setShowQuantityDropdown(false);
-      setEditingId(null); // 등록 완료 후 수정 모드 해제
+      const quantityToSave = newIngredient.quantity && parseFloat(newIngredient.quantity) > 0
+        ? newIngredient.quantity
+        : '';
+      
+      setIngredients([...ingredients, {
+        ...newIngredient,
+        quantity: quantityToSave,
+        id: Date.now()
+      }]);
+      setNewIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+      setShowUnitDropdown(false);
     } else {
       alert('재료 이름을 입력해주세요.');
     }
   };
 
-  // 수량 선택
-  const handleQuantitySelect = (quantity) => {
-    setNewIngredient({...newIngredient, quantity: quantity});
-    setShowQuantityDropdown(false);
-  };
-
-  // 재료 삭제
-  const removeIngredient = (id) => {
-    setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
-  };
-
-  // 재료 수정
-  const handleEditIngredient = (id) => {
-    const ingredient = ingredients.find(item => item.id === id);
-    if (ingredient) {
-      setNewIngredient({
-        name: ingredient.name,
-        expiry: ingredient.expiry,
-        quantity: ingredient.quantity
-      });
-      setEditingId(id);
-      // 기존 재료를 목록에서 제거
-      setIngredients(ingredients.filter(item => item.id !== id));
+  const handleQuantityChange = (e) => {
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value)) {
+      setNewIngredient({...newIngredient, quantity: value});
     }
   };
 
-  // 재료 등록 완료
+  const handleEditQuantityChange = (e) => {
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value)) {
+      setEditingIngredient({...editingIngredient, quantity: value});
+    }
+  };
+
+  const handleAnalyzedQuantityChange = (e) => {
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value)) {
+      setEditingAnalyzedIngredient({...editingAnalyzedIngredient, quantity: value});
+    }
+  };
+
+  const handleUnitSelect = (unit) => {
+    setNewIngredient({...newIngredient, unit: unit});
+    setShowUnitDropdown(false);
+  };
+
+  const handleEditUnitSelect = (unit) => {
+    setEditingIngredient({...editingIngredient, unit: unit});
+    setShowEditUnitDropdown(false);
+  };
+
+  const handleEditAnalyzedUnitSelect = (unit) => {
+    setEditingAnalyzedIngredient({...editingAnalyzedIngredient, unit: unit});
+    setShowEditUnitDropdown(false);
+  };
+
+  const removeIngredient = (id) => {
+    setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
+    if (editingId === id) {
+      setEditingId(null);
+      setEditingIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+    }
+  };
+
+  const handleEditIngredient = (id) => {
+    const ingredientToEdit = ingredients.find(item => item.id === id);
+    if (ingredientToEdit) {
+      setEditingIngredient({
+        name: ingredientToEdit.name,
+        expiry: ingredientToEdit.expiry,
+        quantity: ingredientToEdit.quantity,
+        unit: ingredientToEdit.unit
+      });
+      setEditingId(id);
+    }
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingIngredient.name.trim()) {
+      alert('재료 이름을 입력해주세요.');
+      return;
+    }
+    
+    const quantityToSave = editingIngredient.quantity && parseFloat(editingIngredient.quantity) > 0
+      ? editingIngredient.quantity
+      : '';
+
+    setIngredients(ingredients.map(ingredient =>
+      ingredient.id === editingId
+        ? { ...ingredient, ...editingIngredient, quantity: quantityToSave }
+        : ingredient
+    ));
+    setEditingId(null);
+    setEditingIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+  };
+  
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditingIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+    setShowEditUnitDropdown(false);
+  };
+
   const handleComplete = async () => {
     if (ingredients.length === 0) {
       alert('등록할 재료가 없습니다.');
@@ -99,19 +291,27 @@ function IngredientRegistration() {
     }
   };
 
-  // 드롭다운 외부 클릭 시 닫기
-  const handleClickOutside = (e) => {
-    if (!e.target.closest('.quantity-selector')) {
-      setShowQuantityDropdown(false);
+  const handleModalClickOutside = useCallback((e) => {
+    if (showPhotoModal && e.target.closest('.modal-content') === null) {
+      setShowPhotoModal(false);
     }
-  };
-
-  React.useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
+  }, [showPhotoModal]);
+  
+  const handleDropdownClickOutside = useCallback((e) => {
+    if (!e.target.closest('.unit-selector')) {
+      setShowUnitDropdown(false);
+      setShowEditUnitDropdown(false);
+    }
   }, []);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleModalClickOutside);
+    document.addEventListener('mousedown', handleDropdownClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleModalClickOutside);
+      document.removeEventListener('mousedown', handleDropdownClickOutside);
+    };
+  }, [handleModalClickOutside, handleDropdownClickOutside]);
 
   return (
     <>
@@ -121,30 +321,56 @@ function IngredientRegistration() {
         <h2 className="page-title">재료 등록하기</h2>
         
         <div className="register-methods">
-          {/* 사진으로 등록하기 */}
           <div className="register-method">
             <h3>사진으로 등록하기</h3>
             <div className="photo-section">
-              <div className="photo-upload-area" onClick={handlePhotoRegister}>
-                <div className="upload-placeholder">
-                  사진 촬영
+              {uploadedImage ? (
+                <div className="uploaded-image-container">
+                  <img
+                    src={uploadedImage}
+                    alt="업로드된 이미지"
+                    className="uploaded-image"
+                  />
                 </div>
+              ) : (
+                <div className="photo-upload-area" onClick={handlePhotoUpload}>
+                  <div className="upload-placeholder">
+                    사진 업로드
+                  </div>
+                </div>
+              )}
+              
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileSelect}
+                accept="image/*"
+                style={{ display: 'none' }}
+              />
+              
+              <div className="photo-buttons">
+                {uploadedImage && (
+                  <button className="change-photo-btn" onClick={handlePhotoUpload}>
+                    사진 변경
+                  </button>
+                )}
+                <button
+                  className="register-btn"
+                  onClick={handlePhotoAnalyze}
+                  disabled={!uploadedImage || isAnalyzing}
+                >
+                  {isAnalyzing ? '분석 중...' : '등록하기'}
+                </button>
               </div>
-              <button className="register-btn" onClick={handlePhotoRegister}>
-                등록하기
-              </button>
             </div>
           </div>
 
-          {/* 구분선 */}
           <div className="divider"></div>
 
-          {/* 수기로 등록하기 */}
           <div className="register-method">
             <h3>수기로 등록하기</h3>
             
             <div className="manual-form">
-              {/* 이름 입력 */}
               <div className="form-group">
                 <label>이름</label>
                 <input
@@ -156,9 +382,8 @@ function IngredientRegistration() {
                 />
               </div>
 
-              {/* 소비기한/유통기한 */}
               <div className="form-group">
-                <label>소비기한/유통기한</label>
+                <label>소비기한/유통기한 (선택사항)</label>
                 <input
                   type="date"
                   value={newIngredient.expiry}
@@ -167,128 +392,312 @@ function IngredientRegistration() {
                 />
               </div>
 
-              {/* 수량 (드롭다운) */}
               <div className="form-group">
-                <label>수량</label>
-                <div className="quantity-selector">
-                  <button 
-                    className="quantity-btn"
-                    onClick={() => setShowQuantityDropdown(!showQuantityDropdown)}
-                  >
-                    {newIngredient.quantity} ▼
-                  </button>
-                  {showQuantityDropdown && (
-                    <div className="quantity-dropdown">
-                      {quantities.map((quantity) => (
-                        <div
-                          key={quantity}
-                          className="quantity-option"
-                          onClick={() => handleQuantitySelect(quantity)}
-                        >
-                          {quantity}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                <label>수량 (선택사항)</label>
+                <div className="quantity-input-group">
+                  <input
+                    type="text"
+                    value={newIngredient.quantity}
+                    onChange={handleQuantityChange}
+                    placeholder="수량을 입력하세요"
+                    className="quantity-input"
+                  />
+                  <div className="unit-selector">
+                    <button
+                      className="unit-btn"
+                      onClick={() => setShowUnitDropdown(!showUnitDropdown)}
+                    >
+                      {newIngredient.unit} ▼
+                    </button>
+                    {showUnitDropdown && (
+                      <div className="unit-dropdown">
+                        {units.map((unit) => (
+                          <div
+                            key={unit}
+                            className="unit-option"
+                            onClick={() => handleUnitSelect(unit)}
+                          >
+                            {unit}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="manual-register-section">
               <button className="register-btn" onClick={handleManualRegister}>
-                {editingId ? '수정 완료' : '등록하기'}
+                등록하기
               </button>
             </div>
-            {editingId && (
-              <div style={{textAlign: 'center', marginTop: '10px'}}>
-                <button 
-                  className="cancel-btn" 
-                  onClick={() => {
-                    setEditingId(null);
-                    setNewIngredient({ name: '', expiry: '', quantity: 1 });
-                  }}
-                >
-                  수정 취소
-                </button>
-              </div>
-            )}
           </div>
         </div>
 
-        {/* 재료 목록 */}
-        <div className="ingredients-wrapper">
-          <h3 className="ingredients-title">재료 목록</h3>
-          <div className="ingredients-section">
+        <h2 className="ingredients-title">재료 목록</h2>
+        <div className="ingredients-section">
+          {expiringIngredients.length > 0 && (
+            <div className="expiry-warning-box">
+              <h4 className="expiry-warning-title">🚨 유통기한이 임박한 재료가 있어요!</h4>
+              <div className="expiry-tags">
+                {expiringIngredients.map(ingredient => (
+                  <span key={ingredient.id} className="expiry-tag">{ingredient.name}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {ingredients.length > 0 ? (
             <div className="ingredients-list">
-              {ingredients.length === 0 ? (
-                <div className="empty-message">
-                  냉장고가 비어있어요!
-                </div>
-              ) : (
-                ingredients.map((ingredient) => (
-                  <div key={ingredient.id} className="ingredient-card">
-                    <div className="ingredient-header">
-                      <div className="ingredient-name">{ingredient.name}</div>
+              {ingredients.map((ingredient) => (
+                <div key={ingredient.id} className={`ingredient-card ${editingId === ingredient.id ? 'editing' : ''}`}>
+                  {editingId === ingredient.id ? (
+                    <div className="edit-form">
+                      <div className="form-group">
+                        <label>재료 이름</label>
+                        <input
+                          type="text"
+                          value={editingIngredient.name}
+                          onChange={(e) => setEditingIngredient({
+                            ...editingIngredient,
+                            name: e.target.value
+                          })}
+                          className="ingredient-input"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>소비기한/유통기한</label>
+                        <input
+                          type="date"
+                          value={editingIngredient.expiry}
+                          onChange={(e) => setEditingIngredient({
+                            ...editingIngredient,
+                            expiry: e.target.value
+                          })}
+                          className="ingredient-input"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>수량</label>
+                        <div className="quantity-input-group">
+                          <input
+                            type="text"
+                            value={editingIngredient.quantity}
+                            onChange={handleEditQuantityChange}
+                            className="quantity-input"
+                          />
+                          <div className="unit-selector">
+                            <button
+                              className="unit-btn"
+                              onClick={() => setShowEditUnitDropdown(!showEditUnitDropdown)}
+                            >
+                              {editingIngredient.unit} ▼
+                            </button>
+                            {showEditUnitDropdown && (
+                              <div className="unit-dropdown">
+                                {units.map((unit) => (
+                                  <div
+                                    key={unit}
+                                    className="unit-option"
+                                    onClick={() => handleEditUnitSelect(unit)}
+                                  >
+                                    {unit}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="edit-buttons">
+                        <button className="save-btn" onClick={handleSaveEdit}>
+                          저장
+                        </button>
+                        <button className="cancel-btn" onClick={handleCancelEdit}>
+                          취소
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="ingredient-info-display">
+                        <div className="ingredient-name-display">{ingredient.name}</div>
+                        <div className="ingredient-details">
+                          <div className="ingredient-info">
+                            소비기한 {ingredient.expiry ? ingredient.expiry : "미등록"}
+                          </div>
+                          <div className="ingredient-info">
+                            수량 {ingredient.quantity ? `${ingredient.quantity} ${ingredient.unit}` : "미등록"}
+                          </div>
+                        </div>
+                      </div>
                       <div className="ingredient-buttons">
-                        <button 
-                          className="edit-btn"
-                          onClick={() => handleEditIngredient(ingredient.id)}
-                        >
-                          수정하기
-                        </button>
-                        <button 
-                          className="delete-btn"
-                          onClick={() => removeIngredient(ingredient.id)}
-                        >
-                          삭제하기
-                        </button>
+                          <button
+                            className="edit-btn"
+                            onClick={() => handleEditIngredient(ingredient.id)}
+                          >
+                            수정하기
+                          </button>
+                          <button
+                            className="delete-btn"
+                            onClick={() => removeIngredient(ingredient.id)}
+                          >
+                            삭제하기
+                          </button>
                       </div>
-                    </div>
-                    <div className="ingredient-details">
-                      <div className="ingredient-info">
-                        소비기한 {ingredient.expiry || '미설정'}
-                      </div>
-                      <div className="ingredient-info">
-                        수량 {ingredient.quantity}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
+                    </>
+                  )}
+                </div>
+              ))}
             </div>
-          </div>
-          
-          <button className="complete-btn" onClick={handleComplete}>
-            재료 등록 완료
-          </button>
+          ) : (
+            <div className="empty-message">냉장고에 재료가 없어요.</div>
+          )}
         </div>
 
-        {/* 완료 모달 */}
-        {showCompletionModal && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <div className="modal-text">
-                서비스 이용을 위한 준비 과정이 끝났습니다.<br/>
-                레시피 추천 페이지로 이동해 맞춤 레시피를 추천받거나 메인 페이지로 돌아가 서비스를 자유롭게 이용해보세요.
-              </div>
-              <div className="modal-buttons">
-                <button 
-                  className="modal-btn"
-                  onClick={() => navigate('/main')}
-                >
-                  메인 페이지
-                </button>
-                <button 
-                  className="modal-btn"
-                  onClick={() => navigate('/recom')}
-                >
-                  레시피 추천 페이지
-                </button>
-              </div>
+        <button className="complete-btn" onClick={handleComplete}>
+          등록 완료
+        </button>
+      </div>
+
+      {showCompletionModal && (
+        <div className="modal-overlay" onClick={() => setShowCompletionModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-text">
+              <p>재료가 성공적으로 등록되었습니다!</p>
+              <p>이제 냉장고를 부탁해의 모든 서비스를 이용할 수 있어요.</p>
+            </div>
+            <div className="modal-buttons">
+              <button
+                className="modal-btn"
+                onClick={() => navigate('/my-refrigerator')}
+              >
+                나의 냉장고 보러가기
+              </button>
+              <button
+                className="modal-btn"
+                onClick={() => navigate('/recipe-recommendation')}
+              >
+                레시피 추천 받기
+              </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {showPhotoModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2 className="analysis-title">재료 확인하기</h2>
+            <p className="analysis-subtitle">재료가 정확한지 확인하고 수정해주세요.</p>
+            
+            <div className="analyzed-ingredients-list">
+              {analyzedIngredients.map((ingredient) => (
+                <div key={ingredient.id} className="analyzed-ingredient-card">
+                  {editingAnalyzedId === ingredient.id ? (
+                    <div className="edit-form">
+                      <div className="form-group">
+                        <label>재료 이름</label>
+                        <input
+                          type="text"
+                          value={editingAnalyzedIngredient.name}
+                          onChange={(e) => setEditingAnalyzedIngredient({
+                            ...editingAnalyzedIngredient,
+                            name: e.target.value
+                          })}
+                          className="ingredient-input"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>소비기한/유통기한</label>
+                        <input
+                          type="date"
+                          value={editingAnalyzedIngredient.expiry}
+                          onChange={(e) => setEditingAnalyzedIngredient({
+                            ...editingAnalyzedIngredient,
+                            expiry: e.target.value
+                          })}
+                          className="ingredient-input"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>수량</label>
+                        <div className="quantity-input-group">
+                          <input
+                            type="text"
+                            value={editingAnalyzedIngredient.quantity}
+                            onChange={handleAnalyzedQuantityChange}
+                            className="quantity-input"
+                          />
+                          <div className="unit-selector">
+                            <button
+                              className="unit-btn"
+                              onClick={() => setShowEditUnitDropdown(!showEditUnitDropdown)}
+                            >
+                              {editingAnalyzedIngredient.unit} ▼
+                            </button>
+                            {showEditUnitDropdown && (
+                              <div className="unit-dropdown">
+                                {units.map((unit) => (
+                                  <div
+                                    key={unit}
+                                    className="unit-option"
+                                    onClick={() => handleEditAnalyzedUnitSelect(unit)}
+                                  >
+                                    {unit}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="edit-buttons">
+                        <button className="save-btn" onClick={handleSaveAnalyzedEdit}>
+                          저장
+                        </button>
+                        <button className="cancel-btn" onClick={handleCancelAnalyzedEdit}>
+                          취소
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="ingredient-info-display">
+                        <div className="ingredient-name-display">{ingredient.name}</div>
+                        <div className="ingredient-details">
+                          <div className="ingredient-info">
+                            소비기한 {ingredient.expiry ? ingredient.expiry : "미등록"}
+                          </div>
+                          <div className="ingredient-info">
+                            수량 {ingredient.quantity ? `${ingredient.quantity} ${ingredient.unit}` : "미등록"}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="ingredient-buttons">
+                          <button className="edit-btn" onClick={() => handleEditAnalyzed(ingredient.id)}>
+                            수정하기
+                          </button>
+                          <button className="delete-btn" onClick={() => handleDeleteAnalyzed(ingredient.id)}>
+                            삭제하기
+                          </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            <button
+              className="modal-register-btn"
+              onClick={handleModalRegister}
+            >
+              등록하기
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
