@@ -557,7 +557,7 @@ function IngredientRegistration() {
         </div>
 
         <button className="complete-btn" onClick={handleComplete}>
-          등록 완료
+          재료 등록 완료
         </button>
       </div>
 

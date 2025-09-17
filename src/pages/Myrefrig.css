@@ -559,28 +559,6 @@
   font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
-.complete-btn {
-  width: auto;
-  padding: 15px 40px;
-  background-color: #FF7B52;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-bottom: 40px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
-}
-
-.complete-btn:hover {
-  background-color: #e85d3d;
-}
-
 .modal-overlay {
   position: fixed;
   top: 0;
