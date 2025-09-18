@@ -31,7 +31,7 @@ function Login() {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       alert(data.message);
-      navigate('/로그인 상태 메인페이지');
+      navigate('/Main');
     } else { // HTTP 상태 코드가 400, 500번대 -> 실패
       alert(data.message || '로그인 실패'); // 백엔드에서 보낸 실패 메시지 또는 기본 메시지
     }

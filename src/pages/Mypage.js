@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useGlobalLoading } from '../components/LoadingProvider';
 import './Mypage.css';
 
 function Mypage() {
@@ -23,15 +24,21 @@ function Mypage() {
     smallPot: false,
     fryer: false,
   });
+  
+  const {show, hide} = useGlobalLoading();
 
-  // DB에서 사용자 정보 불러오기
+  // DB에서 사용자 정보 불러오기 & 로딩 페이지
   useEffect(() => {
+    let alive = true;
+
     //API 호출
     const fetchUserInfo = async () => {
+      show();
+
       try {
         // API 호출
         // 예시 URL: '/api/user/myinfo'
-        const response = await fetch('http://localhost:3001/api/user/myinfo', {
+        const response = await fetch('http://localhost:3001/api/user/mypage', {
           method: 'GET',
           headers: {
             // 인증 토큰 추가
@@ -62,11 +69,17 @@ function Mypage() {
         setAllergies(['땅콩', '새우']);
         setTools({ wok: true, microwave: false, bigPot: true, oven: false, smallPot: true, fryer: false
         });
+      } finally {
+        hide();
       }
     };
 
     fetchUserInfo();
-  }, []); // 빈 배열을 두어 컴포넌트가 처음 마운트될 때만 실행되도록 함
+
+    return () => {
+      alive = false;
+    };
+  }, [show, hide]); // 빈 배열을 두어 컴포넌트가 처음 마운트될 때만 실행되도록 함
 
 
   // 기본 정보 입력값 변경 핸들러

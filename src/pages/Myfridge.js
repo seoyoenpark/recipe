@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import './Myrefrig.css';
+import './Myfridge.css';
+import { useGlobalLoading } from '../components/LoadingProvider';
 import { useNavigate } from 'react-router-dom';
 
-function Myrefrig() {
+function Myfridge() {
   const [ingredients, setIngredients] = useState([]);
   const [newIngredient, setNewIngredient] = useState({
     name: '',
@@ -268,6 +269,40 @@ function Myrefrig() {
       setShowEditUnitDropdown(false);
     }
   }, []);
+
+  const { show, hide } = useGlobalLoading();
+
+  useEffect(() => {
+    let alive = true;
+
+    async function fetchFridge() {
+      show();
+      try {
+        const res = await fetch('http://localhost:3001/api/Myfridge');
+        if (!res.ok) {
+          const text = await res.text().catch(() => '');
+          throw new Error(`냉장고 데이터를 불러오지 못했어요: ${res.status} - ${text}`);
+        }
+        const data = await res.json();
+        if (!alive) return;
+
+        const list = Array.isArray(data?.items) ? data.items
+                   : Array.isArray(data) ? data
+                   : [];
+        setIngredients(list);
+      } catch (e) {
+        if (!alive) return;
+        console.error(e);
+        alert('냉장고 데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.');
+        setIngredients([]); // 에러 시 안전 폴백
+      } finally {
+        hide();
+      }
+    }
+
+    fetchFridge();
+    return () => { alive = false; };
+  }, [show, hide, setIngredients]);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleModalClickOutside);
@@ -636,4 +671,4 @@ function Myrefrig() {
   );
 }
 
-export default Myrefrig;
+export default Myfridge;

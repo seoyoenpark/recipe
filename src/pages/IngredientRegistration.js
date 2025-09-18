@@ -571,9 +571,9 @@ function IngredientRegistration() {
             <div className="modal-buttons">
               <button
                 className="modal-btn"
-                onClick={() => navigate('/my-refrigerator')}
+                onClick={() => navigate('/Main')}
               >
-                나의 냉장고 보러가기
+                메인 페이지로 이동하기
               </button>
               <button
                 className="modal-btn"
