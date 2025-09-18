@@ -1,11 +1,12 @@
 .navbar {
   display: flex;
   width: 100%;
+  height: fit-content;
   background-color:#FFC36D;
   justify-content: space-around;  /* 아이템들 사이에 동일한 공간 배분 */
   padding: 5px 0px;
   text-align: center;
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 
 .navbarMenu {

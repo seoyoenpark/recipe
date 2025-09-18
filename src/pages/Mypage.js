@@ -7,6 +7,7 @@ function Mypage() {
     nickname: '',
     username: '',
     password: '',
+    passwordConfirm: '',
   });
 
   // 알레르기 상태와 입력창 상태
@@ -39,32 +40,24 @@ function Mypage() {
         });
 
         if (!response.ok) {
-          throw new Error('사용자 정보를 불러오는데 실패했습니다.');
+          const erroText = await response.text();
+          throw new Error('사용자 정보를 불러오는데 실패했습니다. 서버 응답 오류: ${response.status} - ${errorText}');
         }
 
         const dataFromDb = await response.json(); // 서버로부터 받은 JSON 데이터
 
-      // DB에서 가져왔다고 가정한 데이터
-      const dummyData  = {
-        nickname: 'Smitherton',
-        username: 'Smitherton123',
-        password: '',
-        allergies: ['땅콩', '새우'],
-        tools: { wok: true, microwave: false, bigPot: true, oven: false, smallPot: true, fryer: false }
-      };
-
       // 불러온 데이터 각 상태에 업데이트
-      setBasicInfo({
-        nickname: dataFromDb.nickname || dummyData.nickname,
-        username: dataFromDb.username || dummyData.username,
-        password: dataFromDb.password,
-      });
+      setBasicInfo(prev => ({
+        ...prev,
+        nickname: dataFromDb.nickname,
+        username: dataFromDb.username,
+      }));
       setAllergies(dataFromDb.allergies || []);
       setTools(dataFromDb.tools || {});
     } catch (error) {
         console.error('사용자 정보를 불러오는 중 오류 발생:', error);
         alert('사용자 정보를 불러오는데 실패했습니다. 기본 데이터를 표시합니다.');
-        // 에러 발생 시, 위에서 정의한 dummyData로 초기화
+        // 에러 발생 시, dummyData로 초기화
         setBasicInfo({ nickname: 'Smitherton', username: 'Smitherton123', password: '' });
         setAllergies(['땅콩', '새우']);
         setTools({ wok: true, microwave: false, bigPot: true, oven: false, smallPot: true, fryer: false
@@ -115,9 +108,25 @@ function Mypage() {
   const handleBasicSubmit = async (e) => {
     e.preventDefault(); // 폼의 기본 제출 동작(새로고침) 방지
 
-    console.log('기본 정보 수정 제출 데이터:', basicInfo);
+    const {nickname, username, password, passwordConfirm} = basicInfo;
+
+      // 비밀번호 일치 여부 확인
+      if(password || passwordConfirm) {
+        if (password !== passwordConfirm) {
+          alert("비밀번호가 일치하지 않습니다.");
+          return; // 비밀번호 불일치 시 함수 실행 중단
+        }
+      }
+
+      console.log('기본 정보 수정 제출 데이터:', basicInfo);
 
     try {
+      const updateData = {nickname, username};
+
+      if (password && passwordConfirm) {
+        updateData.password = password;
+      }
+
       // DB 업데이트 API 구현
       const response = await fetch('http://localhost:3001/api/user/basicinfo', {
         method: 'PUT', // 또는 'PATCH'
@@ -133,11 +142,19 @@ function Mypage() {
       });
 
       if (!response.ok) {
-        throw new Error('기본 정보 수정에 실패했습니다.');
+        const errorData = await response.json();
+        throw new Error(errorData.message || '기본 정보 수정에 실패했습니다.');
       }
       const result = await response.json(); // 서버 응답 데이터
       console.log('기본 정보 수정 성공:', result);
       alert('기본 정보가 성공적으로 수정되었습니다!');
+
+       // 성공 후 비밀번호 입력 필드 초기화
+      setBasicInfo(prev => ({
+        ...prev,
+        password: '',
+        passwordConfirm: '',
+      }));
 
     } catch (error) {
       console.error('기본 정보 수정 중 오류 발생:', error);
@@ -231,25 +248,41 @@ function Mypage() {
       <section className="BasicUserContainer">
         <h2>회원 기본 정보 수정</h2>
         <form onSubmit={handleBasicSubmit}>
-          <label>닉네임</label>
-          <input name="nickname" value={basicInfo.nickname} onChange={handleBasicChange} />
-          <label>아이디</label>
-          <input name="username" value={basicInfo.username} onChange={handleBasicChange} />
-          <label>비밀번호</label>
+          <label htmlFor="nick">닉네임</label>
+          <input 
+          id="nick" 
+          type="text" 
+          value={basicInfo.nickname} 
+          onChange={handleBasicChange} />
+          <label htmlFor="id">아이디</label>
+          <input 
+          id="id"
+          type="text" 
+          value={basicInfo.username} 
+          onChange={handleBasicChange} />
+          <label htmlFor="password">비밀번호</label>
           <input
-            name="password"
+            id="password"
             type="password"
             value={basicInfo.password}
             onChange={handleBasicChange}
             />
-          <button type="submit">수정 완료</button>
+            <label htmlFor="passwordConfirm">비밀번호 확인</label>
+          <input
+            id="passwordConfirm"
+            type="password"
+            value={basicInfo.passwordConfirm}
+            onChange={handleBasicChange}
+            placeholder="비밀번호를 다시 입력하세요"  />
+          <button type="submit" className="mypage-submit-button">수정 완료</button>
         </form>
       </section>
       <section className='DetailUserContainer'>
         <h2>회원 상세 정보 수정</h2>
         <form onSubmit={handleDetailSubmit}>
-          <label>알레르기</label>
+          <label htmlFor="allergy">알레르기</label>
             <input
+              id="allergy"
               type="text"
               placeholder="알레르기 입력 후 엔터"
               value={allergyInput}
@@ -259,7 +292,7 @@ function Mypage() {
             <div className="allergy-tags">
               {allergies.map((tag) => (
               <span key={tag} className="allergy-tag">
-              {tag} <button type="button" onClick={() => removeAllergyTag(tag)}>X</button>
+              {tag} <button type="button" className='remove-btn' onClick={() => removeAllergyTag(tag)}>X</button>
             </span>
             ))}
             </div>
@@ -283,7 +316,7 @@ function Mypage() {
               </button>
             ))}
             </div>
-            <button type="submit">수정 완료</button>
+            <button type="submit" className='mypage-submit-button'>수정 완료</button>
         </form>
       </section>
       <button onClick={openModal} className="withdraw-btn">회원 탈퇴</button>

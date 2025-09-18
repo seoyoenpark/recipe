@@ -5,7 +5,6 @@
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .page-title {
@@ -13,7 +12,6 @@
   font-size: 1.3rem;
   margin-bottom: 30px;
   color: #333333;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .register-methods {
@@ -39,7 +37,6 @@
   margin-bottom: 20px;
   font-size: 1.2rem;
   color: #333333;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .photo-section {
@@ -71,7 +68,6 @@
 .upload-placeholder {
   color: #6c757d;
   font-size: 1rem;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .uploaded-image-container {
@@ -104,7 +100,6 @@
   font-size: 1rem;
   cursor: pointer;
   font-weight: bold;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .change-photo-btn:hover {
@@ -126,7 +121,6 @@
   margin-bottom: 0;
   text-align: center;
   margin-top: 0;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .analysis-subtitle {
@@ -135,7 +129,6 @@
   margin-bottom: 10px;
   text-align: center;
   margin-top: 5px;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .analyzed-ingredients-list {
@@ -192,7 +185,7 @@
 }
 
 .save-btn:hover {
-  background-color: #e85d3d;
+  background-color: #e6732d;
 }
 
 .add-analyzed-btn {
@@ -207,11 +200,10 @@
   cursor: pointer;
   display: block;
   margin: 0 auto;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .add-analyzed-btn:hover {
-  background-color: #e85d3d;
+  background-color: #e6732d;
 }
 
 .divider {
@@ -244,7 +236,6 @@
   margin-bottom: 5px;
   font-weight: bold;
   color: #333333;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .ingredient-input {
@@ -254,7 +245,6 @@
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .quantity-input-group {
@@ -271,7 +261,6 @@
   font-size: 1rem;
   box-sizing: border-box;
   height: 42px;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .unit-selector {
@@ -293,7 +282,6 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .unit-btn:hover {
@@ -318,7 +306,6 @@
   cursor: pointer;
   border-bottom: 1px solid #f0f0f0;
   font-size: 1rem;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .unit-option:last-child {
@@ -339,18 +326,16 @@
   font-size: 1rem;
   cursor: pointer;
   font-weight: bold;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .register-btn:hover {
-  background-color: #e85d3d;
+  background-color: #e6732d;
 }
 
 .cancel-btn {
   background-color: #6c757d;
   color: white;
   border: none;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .cancel-btn:hover {
@@ -376,7 +361,6 @@
   position: static;
   margin-bottom: 15px;
   margin-top: 0;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .ingredients-section {
@@ -405,7 +389,6 @@
   color: #333333;
   margin-bottom: 15px;
   text-align: center;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .expiry-tags {
@@ -423,7 +406,6 @@
   font-size: 0.9rem;
   font-weight: 500;
   border: 1px solid #f0d49c;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .ingredients-list {
@@ -440,7 +422,6 @@
   color: #6c757d;
   font-size: 1.1rem;
   padding: 40px 20px;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .ingredient-card {
@@ -479,7 +460,6 @@
   font-weight: bold;
   color: #333333;
   flex: 1;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .ingredient-name-display {
@@ -488,7 +468,6 @@
   color: #333333;
   margin-bottom: 10px;
   text-align: left;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .ingredient-buttons {
@@ -509,7 +488,6 @@
   font-weight: 500;
   transition: all 0.3s ease;
   margin-bottom: 0;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .edit-btn {
@@ -518,7 +496,7 @@
 }
 
 .edit-btn:hover {
-  background-color: #e85d3d;
+  background-color: #e6732d;
   transform: translateY(-1px);
 }
 
@@ -544,19 +522,16 @@
   font-size: 0.95rem;
   display: flex;
   align-items: center;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .ingredient-details .info-label {
   font-weight: normal;
   color: #6c757d;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .ingredient-details .info-value {
   color: #6c757d;
   font-size: 0.95rem;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .complete-btn {
@@ -574,11 +549,10 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .complete-btn:hover {
-  background-color: #e85d3d;
+  background-color: #e6732d;
 }
 
 .modal-overlay {
@@ -603,7 +577,6 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 .modal-register-btn {
@@ -618,7 +591,6 @@
   cursor: pointer;
   display: block;
   margin: 20px auto 0;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, '맑은 고딕', 'Malgun Gothic', sans-serif;
 }
 
 @media (max-width: 768px) {

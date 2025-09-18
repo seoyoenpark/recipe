@@ -79,7 +79,7 @@
   display: flex;
   align-items: center;
   justify-content: center; /* 수평 중앙 정렬 추가 */
-  background-color: #FF7B52;
+  background-color: #ff7b52;
   color: white;
   padding: 4px 12px 8px 12px; /* 위 4px, 좌우 12px, 아래 8px로 아래쪽 여백 증가 */
   border-radius: 20px;
@@ -147,6 +147,7 @@
 .tool-btn:hover {
   border-color: #FF7B52;
   background-color: #fff5f0;
+  color: #333333;
 }
 
 .tool-btn.selected {
@@ -173,7 +174,7 @@
 }
 
 .submit-btn:hover {
-  background-color: #e85d3d;
+  background-color: #e6732d;
 }
 
 /* 반응형 디자인 */

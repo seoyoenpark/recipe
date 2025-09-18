@@ -19,7 +19,7 @@
 }
 
 .headerTitle {
-  font-size: 3.5em;
+  font-size: 3em;
   color: #000000;
   margin: 0;
   white-space: nowrap;
@@ -54,7 +54,7 @@
 
 /* 로그인/회원가입 버튼 hover */
 .header-auth-buttons button:hover {
-  background-color: #FFF2DB;
+  background-color: #ff7b52;
   color: #000000;
 }
 
