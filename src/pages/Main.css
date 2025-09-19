@@ -1,0 +1,248 @@
+/* 전체 레이아웃 */
+.MainPage {
+  width: 65%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #333;
+}
+/* 냉장고 속 재료 */
+.ingredient-banner {
+  margin-bottom: 5rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.ingredient-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ingredient-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.link-to-fridge {
+  color: #000000;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link-to-fridge:hover {
+  text-decoration: underline;
+}
+
+.ingredient-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.ingredient-button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.ingredient-button.selected {
+  background-color: #FFF2DB;
+  color: #ffbb00;
+  font-weight: 500;
+}
+
+/* 유통기한 임박 */
+.expiring-banner {
+  margin-bottom: 5rem;
+  padding: 1rem;
+  border: 2px dotted #ff7b52;
+  border-radius: 8px;
+}
+
+.expiring-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.expiring-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #d32f2f;
+}
+
+.expiring-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.expiring-button {
+  padding: 8px 18px;
+  border-radius: 18px;
+  border: 1px solid #ffe0b2;
+  background-color: #FFF2DB;
+  color: #ff7b52;
+  font-weight: bold;
+}
+
+/* 레시피 추천받기 */
+.recommend-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.recommend-title {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.ingredient-form {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.ingredient-form label {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-right: 1.5rem;
+  min-width: 120px;
+}
+
+.ingredient-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.chip {
+  padding: 10px 22px;
+  border: 1px solid #ffe0b2;
+  border-radius: 22px;
+  background-color: #FFF2DB;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+}
+
+.chip:hover {
+  background-color: #ff7b52;
+  color: white;
+}
+
+.chip.active {
+  background-color: #ff7b52;
+  color: white;
+  border-color: #ff7b52;
+}
+
+.inline-search {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
+.inline-search label {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-right: 1.5rem;
+  min-width: 120px;
+}
+
+.inline-search input[type="search"] {
+  flex-grow: 1;
+  border: none;
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+
+.inline-search input[type="search"]:focus {
+  outline: none;
+}
+
+.inline-search button {
+  padding: 12px 30px;
+  background-color: #ff7b52;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.inline-search button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* 추천받은 레시피들 (결과) */
+.results-wrap {
+  margin-top: 3rem;
+}
+
+.results-wrap h3 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #007bff;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.recipe-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.recipe-card .thumb {
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
+}
+
+.recipe-card .thumb img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipe-card .title {
+  padding: 1rem;
+  margin: 0;
+  font-size: 1.1rem;
+  text-align: center;
+  background-color: #fff;
+}

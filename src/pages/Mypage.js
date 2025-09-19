@@ -36,39 +36,43 @@ function Mypage() {
       show();
 
       try {
-        // API 호출
-        // 예시 URL: '/api/user/myinfo'
-        const response = await fetch('http://localhost:3001/api/user/mypage', {
+        // localStorage에서 JWT 토큰 가져오기
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('로그인이 필요합니다.');
+          window.location.href = '/login';
+          return;
+        }
+         // API 호출 - 백엔드의 /api/profile 엔드포인트 사용
+        const response = await fetch('http://localhost:3001/api/profile', {
           method: 'GET',
           headers: {
-            // 인증 토큰 추가
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // JWT 토큰 추가
           },
         });
 
-        if (!response.ok) {
-          const erroText = await response.text();
-          throw new Error('사용자 정보를 불러오는데 실패했습니다. 서버 응답 오류: ${response.status} - ${errorText}');
-        }
-
         const dataFromDb = await response.json(); // 서버로부터 받은 JSON 데이터
-
-      // 불러온 데이터 각 상태에 업데이트
-      setBasicInfo(prev => ({
-        ...prev,
-        nickname: dataFromDb.nickname,
-        username: dataFromDb.username,
-      }));
-      setAllergies(dataFromDb.allergies || []);
-      setTools(dataFromDb.tools || {});
-    } catch (error) {
+        // 백엔드에서 받은 사용자 정보로 상태 업데이트
+        if (dataFromDb.success && dataFromDb.user) {
+                  setBasicInfo({
+                    nickname: dataFromDb.user.nickname,
+                    username: dataFromDb.user.username,
+                    password: '', // 보안상 비밀번호는 빈 문자열로 설정
+                  });
+                  // 알레르기와 조리도구는 현재 DB에 없으므로 기본값 사용
+                  setAllergies([]);
+                  setTools({ wok: false, microwave: false, bigPot: false, oven: false, smallPot: false, fryer: false });
+                } else {
+                  throw new Error('사용자 정보 형식이 올바르지 않습니다.');
+                }
+      } catch (error) {
         console.error('사용자 정보를 불러오는 중 오류 발생:', error);
-        alert('사용자 정보를 불러오는데 실패했습니다. 기본 데이터를 표시합니다.');
-        // 에러 발생 시, dummyData로 초기화
-        setBasicInfo({ nickname: 'Smitherton', username: 'Smitherton123', password: '' });
-        setAllergies(['땅콩', '새우']);
-        setTools({ wok: true, microwave: false, bigPot: true, oven: false, smallPot: true, fryer: false
-        });
+        alert('사용자 정보를 불러오는데 실패했습니다.');
+        // 에러 발생 시 기본값으로 초기화
+        setBasicInfo({ nickname: '', username: '', password: '' });
+        setAllergies([]);
+        setTools({ wok: false, microwave: false, bigPot: false, oven: false, smallPot: false, fryer: false });
       } finally {
         hide();
       }
@@ -80,7 +84,6 @@ function Mypage() {
       alive = false;
     };
   }, [show, hide]); // 빈 배열을 두어 컴포넌트가 처음 마운트될 때만 실행되도록 함
-
 
   // 기본 정보 입력값 변경 핸들러
   const handleBasicChange = (e) => {
@@ -120,8 +123,11 @@ function Mypage() {
   // 폼 제출 핸들러 (기본 정보 수정)
   const handleBasicSubmit = async (e) => {
     e.preventDefault(); // 폼의 기본 제출 동작(새로고침) 방지
+    
+    console.log('기본 정보 수정 제출 데이터:', basicInfo); 
 
     const {nickname, username, password, passwordConfirm} = basicInfo;
+
 
       // 비밀번호 일치 여부 확인
       if(password || passwordConfirm) {
@@ -131,21 +137,26 @@ function Mypage() {
         }
       }
 
-      console.log('기본 정보 수정 제출 데이터:', basicInfo);
-
     try {
       const updateData = {nickname, username};
 
       if (password && passwordConfirm) {
         updateData.password = password;
       }
+    
+        // localStorage에서 JWT 토큰 가져오기
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/Userlogin';
+        return;
+      }
 
-      // DB 업데이트 API 구현
-      const response = await fetch('http://localhost:3001/api/user/basicinfo', {
-        method: 'PUT', // 또는 'PATCH'
+      // DB 업데이트 API 구현 - 백엔드의 /api/profile 엔드포인트 사용
+      const response = await fetch('http://localhost:3001/api/profile', {
+        method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          //인증 토큰 추가
+          'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, // JWT 토큰 추가
         },
         body: JSON.stringify({ // 서버로 보낼 데이터
           nickname: basicInfo.nickname,
