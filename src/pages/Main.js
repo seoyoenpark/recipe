@@ -79,7 +79,7 @@ function Main() {
   useEffect(() => {
     if (!queryFromUrl) return;
     searchRecipes(queryFromUrl, selectedIngredients);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [queryFromUrl, selectedIngredients, searchRecipes]);
 
   // 로컬 검색 폼 핸들러

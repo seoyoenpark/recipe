@@ -51,11 +51,11 @@ function Mypage() {
       try {
         // localStorage에서 JWT 토큰 가져오기
         const token = localStorage.getItem('token');
-        // if (!token) {
-        //   alert('로그인이 필요합니다.');
-        //   window.location.href = '/Userlogin';
-        //   return;
-        // }
+        if (!token) {
+          alert('로그인이 필요합니다.');
+          window.location.href = '/Userlogin';
+          return;
+        }
          // API 호출 - 백엔드의 /api/profile 엔드포인트 사용
         const response = await fetch('http://localhost:3001/api/profile', {
           method: 'GET',

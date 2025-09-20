@@ -99,7 +99,7 @@
 }
 
 /* 검색창의 'X' (검색 취소) 버튼 스타일링 */
-.main-header-center input[type="search"]::-webkit-search-cancel-button {
+.main-header-center input::-webkit-search-cancel-button {
   -webkit-appearance: none;
   appearance: none;
   
