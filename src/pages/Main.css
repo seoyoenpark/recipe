@@ -9,28 +9,43 @@
 }
 /* 냉장고 속 재료 */
 .ingredient-banner {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 5rem;
   padding: 1.5rem;
   border-radius: 12px;
 }
 
+
 .ingredient-header {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
 
+.header-placeholder {
+ flex: 1;
+}
+
 .ingredient-header h3 {
+  flex: 1;
   margin: 0;
   font-size: 1.5rem;
   font-weight: bold;
+  white-space: nowrap;
+  margin-left: 150px;
 }
 
 .link-to-fridge {
+  display: flex;
+  flex: 1;
   color: #000000;
   text-decoration: none;
   font-weight: 500;
+  white-space: wrap;
+  margin-left: 150px;
 }
 
 .link-to-fridge:hover {
@@ -43,7 +58,6 @@
   gap: 10px;
   justify-content: center;
   align-items: center;
-
 }
 
 .ingredient-button {
@@ -57,12 +71,13 @@
 
 .ingredient-button.selected {
   background-color: #FFF2DB;
-  color: #ffbb00;
+  color: #333333;
   font-weight: 500;
 }
 
 /* 유통기한 임박 */
 .expiring-banner {
+  width: 100%;
   margin-bottom: 5rem;
   padding: 1rem;
   border: 2px dotted #ff7b52;
@@ -101,6 +116,7 @@
 
 /* 레시피 추천받기 */
 .recommend-section {
+  width: 100%;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -119,6 +135,7 @@
   gap: 1.5rem;
   text-align: left;
   margin-bottom: 1.5rem;
+  align-items: baseline;
 }
 
 .ingredient-form label {
@@ -159,11 +176,14 @@
 
 .inline-search {
   display: flex;
-  align-items: center;
+  flex-direction: row;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 1.5rem;
   gap: 1.5rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  align-items: baseline;
 }
 
 .inline-search label {
@@ -173,14 +193,14 @@
   min-width: 120px;
 }
 
-.inline-search input[type="search"] {
+.inline-search input {
   flex-grow: 1;
   border: none;
   font-size: 1rem;
   padding: 0.5rem;
 }
 
-.inline-search input[type="search"]:focus {
+.inline-search input:focus {
   outline: none;
 }
 
@@ -191,12 +211,13 @@
   border: none;
   border-radius: 8px;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: normal;
   cursor: pointer;
+  width:fit-content;
 }
 
 .inline-search button:disabled {
-  background-color: #ccc;
+  background-color: #828282;
   cursor: not-allowed;
 }
 
@@ -214,7 +235,7 @@
 
 .recipe-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
 }
 
@@ -245,4 +266,89 @@
   font-size: 1.1rem;
   text-align: center;
   background-color: #fff;
+}
+
+@media (max-width: 768px) {
+  /* 전체 레이아웃 여백 조정 */
+  .MainPage {
+    width: 90%;
+    padding: 1rem;
+  }
+
+  /* 섹션별 상하 여백 줄이기 */
+  .ingredient-banner,
+  .expiring-banner,
+  .recommend-section {
+    margin-bottom: 3rem;
+  }
+  
+  /* 냉장고 속 재료 헤더 */
+  .ingredient-header h3 {
+    font-size: 1.2rem;
+    margin-left: 0;
+  }
+
+  .link-to-fridge {
+    font-size: 0.9rem;
+    margin-left: 0;
+    white-space: nowrap;
+  }
+
+  .expiring-banner {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* 유통기한 임박 헤더 */
+  .expiring-header h3 {
+    font-size: 1.1rem;
+  }
+
+  /* 재료 버튼들 크기 조정 */
+  .ingredient-button,
+  .expiring-button,
+  .chip {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  /* 레시피 추천 폼 세로 배치 */
+  .ingredient-form,
+  .inline-search {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .ingredient-form label,
+  .inline-search label {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  /* 주제 검색 버튼 너비 조정 */
+  .inline-search button {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .inline-search input {
+    width: 100%;
+  }
+
+  /* 추천 레시피 결과를 한 줄에 하나씩 표시 */
+  .recipe-grid {
+    grid-template-columns: repeat(2,1fr);
+    gap:1.5rem;
+  }
+
+  .recipe-card .thumb {
+    padding-bottom: 90%;
+  }
+
+  .recipe-card .title {
+    font-size: 1rem;
+  }
 }

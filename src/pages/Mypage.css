@@ -88,36 +88,38 @@ input:focus {
   background-color: #8a8a8a;
 }
 
-/* 알레르기 태그 영역 */
-.allergy-tags {
-  margin-top: 10px;
+/* 알레르기 버튼 그룹 */
+.allergies-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* 태그들 간 간격 */
+  margin-top: 5px;
+  gap: 12px;
+  margin-bottom: 15px; /* 조리도구와의 간격 */
 }
 
-/* 알레르기 태그 스타일 */
-.allergy-tag {
-  background-color: #ff7b52;
-  color: #fff;
-  padding: 6px 14px;
+/* 알레르기 버튼 */
+.allergy-button {
+  background-color: #f1f8e9; /* 연한 녹색 계열 */
+  border: 1.5px solid #8bc34a; /* 녹색 계열 */
+  color: #33691e; /* 진한 녹색 */
   border-radius: 25px;
-  font-size: 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
+  padding: 10px 20px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 알레르기 태그 안 삭제 버튼 */
-.remove-btn {
-  background: none;
-  border: none;
+/* 선택된 알레르기 버튼 */
+.allergy-button.selected {
+  background-color: #8bc34a; /* 녹색 계열 */
   color: white;
-  cursor: pointer;
-  font-size: 1rem;
-  line-height: 1;
-  padding: 0;
+  border-color: #8bc34a;
+}
+
+.allergy-button:hover {
+  background-color: #9ccc65;
+  border-color: #8bc34a;
 }
 
 /* 조리도구 버튼 그룹 */
@@ -131,6 +133,7 @@ input:focus {
 /* 각 조리도구 버튼 */
 .tool-button {
   background-color: #fff5f0;
+  color: #333333;
   border: 1.5px solid #ff7b52;
   border-radius: 25px;
   padding: 10px 20px;

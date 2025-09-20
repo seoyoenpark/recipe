@@ -126,6 +126,7 @@ function Main() {
     <main className="MainPage">
       <section className="ingredient-banner">
         <div className="ingredient-header">
+        <div className="header-placeholder"></div>
           <h3>지금 나의 냉장고 속 재료는?</h3>
           <Link to="/Myfridge" className="link-to-fridge">더보기</Link>
         </div>
