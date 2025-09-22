@@ -29,6 +29,9 @@ const Layout = ({ onSearch }) => {
   );
 };
 
+// 로그인 여부를 확인하는 함수
+const isAuthenticated = () => !!localStorage.getItem('token');
+
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -44,7 +47,7 @@ function App() {
        <Nav />
        <Routes>
          {/* 기본 경로(/)로 접근 시 /Home으로 리다이렉트하는 Route */}
-         <Route path="/" element={<Navigate to="/Home" replace />} />
+         <Route path="/" element={isAuthenticated() ? <Navigate to="/Main" /> : <Navigate to="/Home" />} />
          <Route path="/Home" element={<Home />} />
          <Route path="/Myfridge" element={<Myfridge />}/>
          <Route path="/Recom" element={<Recom />}/>
