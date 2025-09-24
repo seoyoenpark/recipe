@@ -1,7 +1,10 @@
 .info-registration-container {
-  width: 100%;
+  width: 65%;
   min-height: 100vh;
   background-color: #ffffff;
+  margin: 0 auto; /* 중앙 정렬 추가 */
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
 .info-registration-content {
@@ -17,13 +20,13 @@
   width: 100%;
   max-width: 2600px;
   background-color: #FFF2DB;
-  padding: 20px 40px;
+  padding: 5px 40px;
   border-radius: 15px;
   margin-bottom: 30px;
 }
 
 .section-title {
-  font-size: 1.8rem;
+  font-size: 1.5rem !important;
   font-weight: bold;
   margin-bottom: 30px;
   color: #333333;
@@ -36,7 +39,7 @@
 
 .allergy-label {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.0rem;
   font-weight: normal;
   margin-bottom: 15px;
   color: #333333;
@@ -83,7 +86,7 @@
 
 .tools-label {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.0rem;
   font-weight: normal;
   margin-bottom: 15px;
   color: #333333;
@@ -144,18 +147,29 @@
 }
 
 /* 반응형 디자인 */
+@media (max-width: 1200px) {
+  .info-registration-container {
+    width: 80%;
+  }
+}
+
 @media (max-width: 768px) {
+  .info-registration-container {
+    width: 95%;
+    padding: 15px;
+  }
+  
   .form-section {
     padding: 20px 30px;
     max-width: 95%;
   }
   
   .section-title {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
   
   .allergy-label, .tools-label {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
 
   .tool-button,
@@ -166,6 +180,11 @@
 }
 
 @media (max-width: 480px) {
+  .info-registration-container {
+    width: 100%;
+    padding: 10px;
+  }
+  
   .info-registration-content {
     padding: 10px;
   }
