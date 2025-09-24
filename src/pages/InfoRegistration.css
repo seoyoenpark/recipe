@@ -22,10 +22,10 @@
   margin-bottom: 30px;
 }
 
-.section-title h1 {
-  font-size: 2.5rem;
-  font-weight: normal;
-  margin-bottom: 50px;
+.section-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 30px;
   color: #333333;
 }
 
@@ -37,79 +37,43 @@
 .allergy-label {
   display: block;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: normal;
   margin-bottom: 15px;
   color: #333333;
 }
 
-.allergy-input-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.allergy-input {
-  width: 100%;
-  padding: 12px 15px;
-  font-size: 1rem;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  background-color: #ffffff;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.allergy-input::placeholder {
-  color: #333333;
-}
-
-.allergy-input:focus {
-  border-color: #FF7B52;
-}
-
-/* 알레르기 태그 스타일 */
-.allergy-tags {
+/* 알레르기 버튼 그룹 스타일 */
+.allergies-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 3px;
+  margin-top: 5px;
+  gap: 12px;
+  margin-bottom: 15px;
 }
 
-.allergy-tag {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* 수평 중앙 정렬 추가 */
-  background-color: #ff7b52;
-  color: white;
-  padding: 4px 12px 8px 12px; /* 위 4px, 좌우 12px, 아래 8px로 아래쪽 여백 증가 */
-  border-radius: 20px;
-  font-size: 1rem;
-  gap: 6px;
-  line-height: 1; /* 줄 간격을 1로 설정하여 수직 정렬 개선 */
-  min-height: 28px; /* 32px → 28px로 최소 높이 감소 */
-}
-
-.tag-remove-btn {
-  background: none;
-  border: none;
-  color: rgb(0, 0, 0);
+/* 알레르기 버튼 스타일 */
+.allergy-button {
+  background-color: #f1f8e9; /* 연한 녹색 계열 */
+  border: 1.5px solid #8bc34a; /* 녹색 계열 */
+  color: #33691e; /* 진한 녹색 */
+  border-radius: 25px;
+  padding: 10px 20px;
   cursor: pointer;
-  font-size: 0.8rem; /* 크기를 약간 줄임 */
-  padding: 0;
-  margin: 0;
-  width: 16px; /* 크기 줄임 */
-  height: 16px; /* 크기 줄임 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-  flex-shrink: 0;
+  user-select: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* 선택된 알레르기 버튼 */
+.allergy-button.selected {
+  background-color: #8bc34a; /* 녹색 계열 */
+  color: white;
+  border-color: #8bc34a;
+}
 
-.tag-remove-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.allergy-button:hover {
+  background-color: #9ccc65;
+  border-color: #8bc34a;
 }
 
 /* 조리도구 섹션 */
@@ -120,39 +84,41 @@
 .tools-label {
   display: block;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: normal;
   margin-bottom: 15px;
   color: #333333;
 }
 
-.tools-grid {
+/*조리도구 버튼 그룹 스타일 */
+.tools {
   display: flex;
-  gap: 20px;
-  justify-content: flex-start;
   flex-wrap: wrap;
+  margin-top: 5px;
+  gap: 12px;
 }
 
-.tool-btn {
-  padding: 12px 24px;
-  border: 2px solid #ddd;
-  border-radius: 25px;
-  background-color: #ffffff;
-  color: #000000;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.tool-btn:hover {
-  border-color: #FF7B52;
+/* Mypage와 동일한 조리도구 버튼 스타일 */
+.tool-button {
   background-color: #fff5f0;
   color: #333333;
+  border: 1.5px solid #ff7b52;
+  border-radius: 25px;
+  padding: 10px 20px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.tool-btn.selected {
-  background-color: #FF7B52;
-  color: #ffffff;
+/* 선택된 조리도구 버튼 */
+.tool-button.selected {
+  background-color: #ff7b52;
+  color: white;
+  border-color: #ff7b52;
+}
+
+.tool-button:hover {
+  background-color: #f79273;
   border-color: #FF7B52;
 }
 
@@ -184,21 +150,18 @@
     max-width: 95%;
   }
   
-  .tools-grid {
-    gap: 15px;
-  }
-  
-  .tool-btn {
-    padding: 10px 18px;
-    font-size: 0.9rem;
-  }
-  
   .section-title {
     font-size: 1.5rem;
   }
   
   .allergy-label, .tools-label {
     font-size: 1.3rem;
+  }
+
+  .tool-button,
+  .allergy-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
   }
 }
 
@@ -212,21 +175,9 @@
     padding: 15px 20px;
   }
   
-  .tools-grid {
-    gap: 10px;
-  }
-  
-  .tool-btn {
+  .tool-button,
+  .allergy-button {
     padding: 8px 15px;
     font-size: 0.85rem;
-  }
-  
-  .allergy-tags {
-    justify-content: flex-start;
-  }
-  
-  .allergy-tag {
-    font-size: 0.8rem;
-    padding: 5px 10px;
   }
 }

@@ -4,42 +4,55 @@ import { useNavigate } from 'react-router-dom';
 import './InfoRegistration.css';
 import Stage from '../components/Stage';
 
+// 조리도구 리스트
+const TOOLS_LIST = [
+  '냄비', '프라이팬', '볼', '계량스푼', '키친타올', '계량컵', 
+  '전자레인지', '에어프라이어', '오븐', '찜기', '내열용기', '밀폐용기', 
+  '믹서기', '거품기', '스텐트레이', '랩', '매셔', '전기밥솥', '면보', '체망', '토치'
+];
+
+// 알레르기 리스트
+const ALLERGIES_LIST = [
+  '① 난류(가금류)', '② 우유', '③ 메밀', '④ 땅콩', '⑤ 대두', '⑥ 밀', 
+  '⑦ 고등어', '⑧ 게', '⑨ 새우', '⑩ 돼지고기', '⑪ 복숭아', '⑫ 토마토', 
+  '⑬ 아황산염', '⑭ 호두', '⑮ 닭고기', '⑯ 소고기', '⑰ 오징어', '⑱ 조개류(굴, 전복, 홍합 포함)'
+];
+
+// state 초기 객체 생성 함수
+const InitialState = (list) => {
+  const initialState = {};
+  list.forEach(item => {
+    initialState[item] = false;
+  });
+  return initialState;
+};
+
 function InfoRegistration() {
-  const [allergyInput, setAllergyInput] = useState('');
-  const [allergyTags, setAllergyTags] = useState([]);
-  const [selectedTools, setSelectedTools] = useState([]);
+  // state 설정
+  const [allergies, setAllergies] = useState(InitialState(ALLERGIES_LIST));
+  const [tools, setTools] = useState(InitialState(TOOLS_LIST));
 
   const navigate = useNavigate();
 
-  const cookingTools = [
-    '웍', '전자레인지', '큰 냄비', '뚝배기', 
-    '오븐', '작은 냄비', '후라이팬', '에어프라이기'
-  ];
-
-  const handleAllergyKeyPress = (e) => {
-    if (e.key === 'Enter' && allergyInput.trim()) {
-      if (!allergyTags.includes(allergyInput.trim())) {
-        setAllergyTags([...allergyTags, allergyInput.trim()]);
-      }
-      setAllergyInput('');
-    }
+  // 알레르기 토글 핸들러
+  const toggleAllergy = (allergyName) => {
+    setAllergies((prev) => ({
+      ...prev,
+      [allergyName]: !prev[allergyName]
+    }));
   };
 
-  const removeAllergyTag = (tagToRemove) => {
-    setAllergyTags(allergyTags.filter(tag => tag !== tagToRemove));
-  };
-
-  const handleToolClick = (tool) => {
-    if (selectedTools.includes(tool)) {
-      setSelectedTools(selectedTools.filter(t => t !== tool));
-    } else {
-      setSelectedTools([...selectedTools, tool]);
-    }
+  // 조리도구 토글 핸들러
+  const toggleTool = (toolName) => {
+    setTools((prev) => ({
+      ...prev,
+      [toolName]: !prev[toolName]
+    }));
   };
 
   const handleSubmit = async () => {
-    console.log('알레르기:', allergyTags);
-    console.log('선택된 조리도구:', selectedTools);
+    console.log('선택된 알레르기:', allergies);
+    console.log('선택된 조리도구:', tools);
     
     try {
       // 백엔드 API 호출 예시 (필요시 사용)
@@ -51,8 +64,8 @@ function InfoRegistration() {
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          allergies: allergyTags,
-          cookingTools: selectedTools,
+          allergies: allergies,
+          tools: tools,
         }),
       });
 
@@ -81,45 +94,31 @@ function InfoRegistration() {
           
           <div className="allergy-section">
             <label className="allergy-label">알레르기</label>
-            <div className="allergy-input-container">
-              <input
-                type="text"
-                placeholder="엔터로 입력해주세요"
-                value={allergyInput}
-                onChange={(e) => setAllergyInput(e.target.value)}
-                onKeyPress={handleAllergyKeyPress}
-                className="allergy-input"
-              />
+            <div className="allergies-list">
+              {Object.entries(allergies).map(([allergyName, isSelected]) => (
+                <button
+                  key={allergyName}
+                  className={`allergy-button ${isSelected ? 'selected' : ''}`}
+                  onClick={() => toggleAllergy(allergyName)}
+                  type="button"
+                >
+                  {allergyName}
+                </button>
+              ))}
             </div>
-            {allergyTags.length > 0 && (
-              <div className="allergy-tags">
-                {allergyTags.map((tag, index) => (
-                  <div key={index} className="allergy-tag">
-                    {tag}
-                    <button 
-                      className="tag-remove-btn"
-                      onClick={() => removeAllergyTag(tag)}
-                    >
-                      X
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
 
           <div className="tools-section">
             <label className="tools-label">조리도구</label>
-            <div className="tools-grid">
-              {cookingTools.map((tool) => (
+            <div className="tools">
+              {Object.entries(tools).map(([toolName, isSelected]) => (
                 <button
-                  key={tool}
-                  className={`tool-btn ${
-                    selectedTools.includes(tool) ? 'selected' : ''
-                  }`}
-                  onClick={() => handleToolClick(tool)}
+                  key={toolName}
+                  className={`tool-button ${isSelected ? 'selected' : ''}`}
+                  onClick={() => toggleTool(toolName)}
+                  type="button"
                 >
-                  {tool}
+                  {toolName}
                 </button>
               ))}
             </div>
