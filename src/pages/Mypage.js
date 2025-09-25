@@ -129,7 +129,6 @@ function Mypage() {
 
     const {nickname, username, password, passwordConfirm} = basicInfo;
 
-
       // 비밀번호 일치 여부 확인
       if(password || passwordConfirm) {
         if (password !== passwordConfirm) {
@@ -194,13 +193,22 @@ function Mypage() {
     const detailData = { allergies, tools };
     console.log('상세 정보 수정 제출 데이터:', detailData);
 
+    try {
+      // ===== 1. localStorage에서 JWT 토큰 가져오기 (추가) =====
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/Userlogin';
+        return;
+      }
+
     // DB 업데이트 API 호출 구현
-     try {
       const response = await fetch('http://localhost:3001/api/user/detailinfo', {
         method: 'PUT', // 또는 'PATCH'
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${AuthToken}`,
+          // Authorization 헤더에 토큰 추가
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(detailData),
       });
@@ -242,12 +250,14 @@ function Mypage() {
     console.log('탈퇴 비밀번호:', withdrawPassword);
 
      try {
+      const token = localStorage.getItem('token');
       // API 호출로 탈퇴 처리
       const response = await fetch('http://localhost:3001/api/user/withdraw', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${AuthToken}`,
+          // Authorization 헤더에 토큰 추가
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ password: withdrawPassword }), // 탈퇴 시 비밀번호 확인
       });
@@ -267,7 +277,7 @@ function Mypage() {
       alert(`회원 탈퇴에 실패했습니다: ${error.message}`);
     }
   };
-
+  
   return (
     <div className='MypageContainer'>
       <section className="BasicUserContainer">

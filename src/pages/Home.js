@@ -12,11 +12,10 @@ function Home() {
     <main className="Maincontent">
     <section className="Introduce">
       <div className="intro">
-        <p>냉장고 속 식재료, AI가 맞춤형 레시피로 바꿔드립니다!<br></br>
-          나의 식재료, 나만의 맞춤 레시피<br></br>
-          내 냉장고에 딱 맞는 요리를 추천받으세요<br></br>
-          냉장고 속 재료, 더 이상 고민하지 말고 요리하세요<br></br>
-          남은 재료, 버리지 말고 요리로
+        <p>나의 식재료, 알레르기, 조리도구까지. 나만을 위한 AI 셰프가 최고의 레시피를 찾아드립니다.<br></br>
+          사진 촬영 한 번으로 끝내는 '오늘 뭐 먹지?' 고민은 이제 끝!<br></br>
+          유통기한마저 고려해줘 버릴까 말까 망설이는 고민도 이제 그만!<br></br>
+          AI와 함께 당신의 냉장고를 가장 맛있게 비우는 방법을 찾아보세요.
         </p>
       </div>
       <div className="imagecontent">

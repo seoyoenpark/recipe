@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import React from 'react';
 import './Nav.css';
 
-function Nav() {
+function Nav({ isAdmin }) {
   return (
     <nav className="navbar">
       <NavLink 
@@ -14,6 +14,11 @@ function Nav() {
       <NavLink 
         className={({ isActive }) => isActive ? "navbarMenu active" : "navbarMenu"} 
         to="/Mypage">마이페이지</NavLink>
+        {isAdmin && (
+        <NavLink 
+          className={({ isActive }) => isActive ? "navbarMenu active" : "navbarMenu"} 
+          to="/Admin">관리자 페이지</NavLink>
+      )}
     </nav>
   );
 }

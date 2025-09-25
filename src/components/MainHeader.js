@@ -74,13 +74,13 @@ function MainHeader() {
   // 로그아웃 처리
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/');
+    navigate('/Home');
   };
 
   return (
     <div className="main-header-wrapper">
       <div className="main-header-left">
-        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={isAuthenticated() ? "/Main" : "/Home"} style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1>냉장고를 부탁해</h1>
         </Link>
       </div>

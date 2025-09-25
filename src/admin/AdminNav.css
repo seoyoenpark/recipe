@@ -1,0 +1,66 @@
+/* 네비게이션 바 전체 컨테이너 */
+.admin-nav-wrapper {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  background-color: #343a40;
+  padding: 0 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 각 메뉴 섹션 */
+.admin-nav-item {
+  position: relative;
+}
+
+/* 메인 메뉴 링크 */
+.main-menu-link {
+  display: block;
+  padding: 15px 25px;
+  color: #f8f9fa;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.main-menu-link:hover {
+  background-color: #495057;
+}
+
+/* 서브 메뉴 리스트 */
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  list-style: none;
+  padding: 5px 0;
+  margin: 0;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  min-width: 250px;
+  z-index: 1000;
+}
+
+/* 서브메뉴 보여주기 */
+.admin-nav-item:hover .submenu {
+  display: block;
+}
+
+/* 서브 메뉴 링크 */
+.submenu li a {
+  display: block;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #212529;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.submenu li a:hover {
+  background-color: #cfe4fa;
+}

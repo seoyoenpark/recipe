@@ -5,7 +5,7 @@ import Header from './components/Header';
 import MainHeader from './components/MainHeader';
 import Nav from './components/Nav';
 
-// 페이지 컴포넌트 import
+// 사용자 페이지
 import Myfridge from './pages/Myfridge';
 import Recom from './pages/Recom';
 import Mypage from './pages/Mypage';
@@ -17,34 +17,44 @@ import InfoRegistration from './pages/InfoRegistration';
 import IngredientRegistration from './pages/IngredientRegistration';
 import Main from './pages/Main';
 
-// 헤더와 네비게이션을 관리하는 레이아웃 컴포넌트
-const Layout = ({ onSearch }) => {
-  const location = useLocation();
-  const isMainPage = location.pathname === '/Main';
-
-  return (
-    <>
-      {isMainPage ? <MainHeader onSearch={onSearch} /> : <Header />}
-    </>
-  );
-};
+// 관리자 페이지
+import AdminMain from './admin/AdminMain';
+import AdminUser from './admin/AdminUser';
+import AdminHeader from './admin/AdminHeader';
+import AdminLayout from './admin/AdminLayout';
 
 // 로그인 여부를 확인하는 함수
 const isAuthenticated = () => !!localStorage.getItem('token');
+// 사용자 권한 확인 함수
+const getUserInfo = () => {
+  const userInfo = localStorage.getItem('user');
+  if (userInfo) {
+    return JSON.parse(userInfo);
+  }
+  return null;
+};
 
-function App() {
+function AppContent() {
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
+  const handleSearch = (query) => setSearchQuery(query);
 
-  const handleSearch = (query) => {
-    // MainHeader에서 검색어가 입력되면 Main 페이지로 전달하기 위해 상태를 업데이트
-    setSearchQuery(query);
-  };
+  // 사용자 정보와 관리자 여부 확인
+  // const currentUser = getUserInfo();
+  // const isAdmin = currentUser && currentUser.role === 'admin';
+  const isAdmin = true;
+
+  // 현재 경로가 관리자 페이지인지 확인
+  const isAdminPage = location.pathname.startsWith('/admin');
 
    return (
-    <LoadingProvider delay={2500}>
      <div className='app'>
-      <Layout onSearch={handleSearch} />
-       <Nav />
+      {!isAdminPage && (
+        <>
+          {location.pathname === '/Main' ? <MainHeader onSearch={handleSearch} /> : <Header />}
+          <Nav isAdmin={isAdmin} />
+        </>
+      )}
        <Routes>
          {/* 기본 경로(/)로 접근 시 /Home으로 리다이렉트하는 Route */}
          <Route path="/" element={isAuthenticated() ? <Navigate to="/Main" /> : <Navigate to="/Home" />} />
@@ -58,10 +68,21 @@ function App() {
          <Route path="/InfoRegistration" element={<InfoRegistration />} />
          <Route path="/IngredientRegistration" element={<IngredientRegistration />} />
          <Route path="/Main" element={<Main />}/>
+         {/* 관리자 페이지 */}
+        <Route path="/admin" element={isAdmin ? <AdminLayout /> : <Navigate to="/" />}>
+            <Route index element={<AdminMain />} /> 
+            <Route path="AdminUser" element={<AdminUser />} />
+          </Route>
        </Routes>
      </div>
-     </LoadingProvider>
    );
- }
+  }
+function App() {
+  return (
+    <LoadingProvider delay={2500}>
+        <AppContent />
+    </LoadingProvider>
+  );
+}
 
 export default App;

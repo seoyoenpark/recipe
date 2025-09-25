@@ -9,14 +9,14 @@ function Header() {
   // 로그아웃 처리
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/');
+    navigate('/Home');
   };
 
   return (
     <div className="header-container-wrapper">
       <div className="header-flex-placeholder-left"></div>
       <div className="headerContainer">
-        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={isAuthenticated() ? "/Main" : "/Home"} style={{ textDecoration: 'none', color: 'inherit' }}>
         <h1 className="headerTitle">냉장고를 부탁해</h1>
         </Link>
       </div>

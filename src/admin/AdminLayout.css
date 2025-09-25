@@ -1,0 +1,17 @@
+.admin-layout-container {
+  display: flex; /* Flexbox 레이아웃 사용 */
+  flex-direction: column; /* 헤더와 아래 컨텐츠를 수직 정렬 */
+  width: 100%;
+}
+
+.admin-main-content {
+  display: flex; /* 사이드바와 컨텐츠 영역을 수평 정렬 */
+  flex-grow: 1; /* 남은 공간을 모두 차지하도록 */
+  overflow: hidden; /* 스크롤바 관리 */
+}
+
+.admin-page-content {
+  flex-grow: 1; /* 네비게이션을 제외한 나머지 공간을 모두 차지 */
+  padding: 30px;
+  overflow-y: auto; /* 컨텐츠가 길어지면 스크롤 생성 */
+}
