@@ -1,0 +1,433 @@
+.recom-container {
+  width: 65%;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 20px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+/* 공통 섹션 바 스타일 - 완벽한 중앙 정렬 */
+.section-bar {
+  background-color: #FFF2DB;
+  padding: 3px 15px; /* 패딩 조정으로 시각적 균형 */
+  border-radius: 10px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 전체적인 정렬 시작점 */
+  gap: 15px; /* 간격 조정 */
+  height: auto;
+  min-height: 28px; /* 높이 증가로 여유 공간 확보 */
+  max-height: 32px;
+}
+
+.section-title {
+  margin: 0;
+  margin-top: 28px; /* 위쪽 마진 추가로 시각적 중앙 정렬 */
+  margin-right: 25px; /* 오른쪽 여백 조정 */
+  font-size: 16px !important;
+  color: #333333;
+  font-weight: bold;
+  white-space: nowrap;
+  display: flex;
+  align-items: center; /* 타이틀 자체도 수직 중앙 정렬 */
+}
+
+.ingredient-tags-wrapper {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 26px;
+}
+
+.navigation-button {
+  width: 28px; 
+  height: 28px;
+  background-color: #FF7B52;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(255, 123, 82, 0.3);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.navigation-button:hover {
+  background-color: #e6732d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 123, 82, 0.4);
+}
+
+.ingredient-tag {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 15px;
+  background-color: #FFEACE;
+  color: #6c757d;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  height: 26px; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; 
+}
+
+.ingredient-tag:hover {
+  background-color: #FFD9A3;
+}
+
+.ingredient-tag.selected {
+  background-color: #FF7B52;
+  color: white;
+}
+
+/* 주제 선택하기 섹션  */
+.topic-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 시작 지점부터 정렬 */
+  gap: 12px; /* 간격 조정 */
+  flex: 1;
+  min-height: 30px; /* 중앙 정렬 기준 높이 */
+}
+
+.topic-input {
+  width: 140px;
+  height: 30px; /* 높이 조정 */
+  padding: 5px 12px; /* 패딩 조정 */
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+  background-color: white;
+  display: flex;
+  align-items: center; 
+  box-sizing: border-box;
+  margin-top: 16px;
+}
+
+.topic-input:focus {
+  border-color: #FF7B52;
+}
+
+.topic-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center; 
+}
+
+.topic-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; 
+  background-color: #FF7B52;
+  color: white;
+  padding: 4px 10px 4px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+  gap: 5px;
+  height: 20px; 
+}
+
+.topic-tag-delete {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 2px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topic-tag-delete:hover {
+  opacity: 0.8;
+}
+
+/* 주재료 유무 체크박스 - 완벽한 중앙 정렬 */
+.radio-container {
+  display: flex;
+  gap: 30px; 
+  flex: 1;
+  align-items: center; 
+  justify-content: flex-start; 
+  min-height: 30px;
+  margin-bottom: 2px;
+  margin-left: 16px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 10px; 
+  height: 100%; 
+}
+
+.checkbox-text {
+  font-size: 13px;
+  color: #333333;
+  font-weight: 500;
+  display: flex;
+  align-items: center; 
+}
+
+.custom-checkbox {
+  width: 20px; 
+  height: 20px;
+  border: 2px solid #999;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 2px; 
+}
+
+.custom-checkbox.checked {
+  background-color: #FF7B52;
+  border-color: #FF7B52;
+}
+
+.checkmark {
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 레시피 섹션 */
+.recipe-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 15px;
+  box-sizing: border-box;
+}
+
+/* 검색 버튼 컨테이너 */
+.search-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.search-btn {
+  padding: 8px 20px;
+  background-color: #FF7B52;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  background-color: #e6732d;
+  transform: translateY(-1px);
+}
+
+/* 빈 레시피 컨테이너 스타일 */
+.empty-recipe-container {
+  width: 100%;
+  min-height: 300px;
+  border: 2px dashed #ddd;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.empty-recipe-message {
+  text-align: center;
+  color: #666;
+}
+
+.empty-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.empty-subtitle {
+  font-size: 14px;
+  color: #999;
+  line-height: 1.5;
+}
+
+/* 3x2 그리드 컨테이너 */
+.recipe-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(120px, auto));
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 레시피 카드 */
+.recipe-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  height: 120px;
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 100%;
+}
+
+.recipe-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.recipe-image {
+  width: 100px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.recipe-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.recipe-name {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recipe-description {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recipe-details {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+  .recom-container {
+    width: 80%;
+  }
+  
+  .recipe-grid-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(120px, auto));
+  }
+}
+
+@media (max-width: 768px) {
+  .recom-container {
+    width: 95%;
+    padding: 15px;
+  }
+  
+  .recipe-grid-container {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+  
+  .section-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+    gap: 8px;
+    max-height: none;
+    min-height: auto;
+  }
+  
+  .section-title {
+    margin-bottom: 8px;
+    height: auto;
+  }
+  
+  .ingredient-tags-wrapper,
+  .topic-input-container,
+  .radio-container {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .empty-recipe-container {
+    min-height: 250px;
+    padding: 30px 15px;
+  }
+  
+  .empty-title {
+    font-size: 16px;
+  }
+  
+  .empty-subtitle {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recom-container {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .topic-input {
+    width: 100px;
+  }
+  
+  .empty-recipe-container {
+    min-height: 200px;
+    padding: 20px 10px;
+  }
+}
