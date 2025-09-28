@@ -16,7 +16,7 @@ function AdminHeader() {
     <header className="admin-header-wrapper">
       <div className="admin-header-left"></div>
       <div className="admin-header-center">
-        <Link to="/AdminMain" className="admin-header-title-link">
+        <Link to="/admin" className="admin-header-title-link">
           <h1>냉장고를 부탁해 관리자 페이지</h1>
         </Link>
       </div>

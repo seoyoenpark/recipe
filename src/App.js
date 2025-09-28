@@ -45,7 +45,7 @@ function AppContent() {
   const isAdmin = true;
 
   // 현재 경로가 관리자 페이지인지 확인
-  const isAdminPage = location.pathname.startsWith('/admin');
+  const isAdminPage = location.pathname.toLocaleLowerCase().startsWith('/admin');
 
    return (
      <div className='app'>

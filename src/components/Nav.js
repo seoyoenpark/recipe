@@ -17,7 +17,7 @@ function Nav({ isAdmin }) {
         {isAdmin && (
         <NavLink 
           className={({ isActive }) => isActive ? "navbarMenu active" : "navbarMenu"} 
-          to="/Admin">관리자 페이지</NavLink>
+          to="/admin">관리자 페이지</NavLink>
       )}
     </nav>
   );

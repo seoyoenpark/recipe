@@ -22,7 +22,7 @@
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 5px;
-  overflow: hidden; /* 내부 요소가 둥근 모서리를 넘지 않도록 */
+  overflow: hidden;
 }
 
 .search-bar input {
@@ -44,7 +44,7 @@
 /* 사용자 테이블 스타일 */
 .user-table {
   width: 100%;
-  border-collapse: collapse; /* 테두리 한 줄로 합치기 */
+  border-collapse: collapse;
   text-align: center;
   font-size: 0.9em;
   background-color: #fff;
