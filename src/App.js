@@ -8,6 +8,7 @@ import Nav from './components/Nav';
 // 사용자 페이지
 import Myfridge from './pages/Myfridge';
 import Recom from './pages/Recom';
+import RecipeDetail from './pages/RecipeDetail';
 import Mypage from './pages/Mypage';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -20,6 +21,8 @@ import Main from './pages/Main';
 // 관리자 페이지
 import AdminMain from './admin/AdminMain';
 import AdminUser from './admin/AdminUser';
+import AdminRecipe from './admin/AdminRecipe';
+import AdminIngredient from './admin/AdminIngredient';
 import AdminHeader from './admin/AdminHeader';
 import AdminLayout from './admin/AdminLayout';
 
@@ -67,11 +70,14 @@ function AppContent() {
          <Route path="/Userlogin" element={<Userlogin />}/>
          <Route path="/InfoRegistration" element={<InfoRegistration />} />
          <Route path="/IngredientRegistration" element={<IngredientRegistration />} />
+         <Route path="/RecipeDetail/:id" element={<RecipeDetail />} />
          <Route path="/Main" element={<Main />}/>
          {/* 관리자 페이지 */}
-        <Route path="/admin" element={isAdmin ? <AdminLayout /> : <Navigate to="/" />}>
+          <Route path="/admin" element={isAdmin ? <AdminLayout /> : <Navigate to="/" />}>
             <Route index element={<AdminMain />} /> 
             <Route path="AdminUser" element={<AdminUser />} />
+            <Route path="AdminRecipe" element={<AdminRecipe />} />
+            <Route path="AdminIngredient" element={<AdminIngredient />} />
           </Route>
        </Routes>
      </div>

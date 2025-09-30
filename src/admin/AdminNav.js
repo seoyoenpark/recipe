@@ -15,10 +15,10 @@ function AdminNav() {
 
       {/* 레시피 관리 메뉴 */}
       <div className="admin-nav-item">
-        <NavLink to="레시피 관리" className="main-menu-link">레시피 관리</NavLink>
+        <NavLink to="/admin/AdminRecipe" className="main-menu-link">레시피 관리</NavLink>
         <ul className="submenu">
-          <li><NavLink to="레시피 상세 정보 조회">레시피 상세 정보 조회</NavLink></li>
-          <li><NavLink to="식재료 관리">식재료 관리</NavLink></li>
+          <li><NavLink to="/admin/AdminRecipe">레시피 상세 정보 조회</NavLink></li>
+          <li><NavLink to="/admin/AdminIngredient">식재료 관리</NavLink></li>
         </ul>
       </div>
 

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Recom.css';
 
 function Recom() {
@@ -11,6 +12,8 @@ function Recom() {
   //     window.location.href = '/login';
   //   }
   // }, []);
+
+  const navigate = useNavigate();
 
   // 냉장고 재료 데이터 (서버 연결 전 더미 데이터)
   const [ingredientPages, setIngredientPages] = useState([
@@ -137,8 +140,11 @@ function Recom() {
   };
 
   // 레시피 카드 클릭 시 상세 페이지로 이동
+  
   const handleRecipeClick = (recipeId) => {
-    window.location.href = `/RecipeDetail/${recipeId}`;
+    // 선택된 재료를 URL 파라미터로 전달
+    const ingredientsParam = selectedIngredients.join(',');
+    navigate(`/RecipeDetail/${recipeId}?ingredients=${encodeURIComponent(ingredientsParam)}`); // 👈 이 부분을 수정
   };
   const handleNextIngredientPage = () => {
     if (currentIngredientPage < ingredientPages.length - 1) {

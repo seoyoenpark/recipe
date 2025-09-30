@@ -1,0 +1,213 @@
+.admin-recipe-container {
+  padding: 20px;
+}
+
+.admin-recipe-container h2 {
+  font-size: 1.5em;
+  color: #333;
+  margin: 0 0 25px 0;
+}
+
+/* 레시피 테이블 스타일 */
+.recipe-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 0.9em;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.recipe-table th,
+.recipe-table td {
+  padding: 12px 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.recipe-table thead tr {
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+}
+
+/* 테이블 바디의 행에 마우스를 올렸을 때 */
+.recipe-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* 팝업 스타일 */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 스크롤바 스타일링 (선택사항) */
+.popup-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.popup-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.popup-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.popup-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.popup-header {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.popup-body {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 완성된 음식 이미지 컨테이너 */
+.completed-image-container {
+  width: 100%;
+  margin-bottom: 0;
+  padding: 30px 0 0 50px;
+}
+
+.completed-image {
+  width: 100%;
+  max-width: 780px;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  margin-right: 0px;
+}
+
+/* 레시피명 스타일 */
+.recipe-title {
+  padding: 30px 30px 20px 20px;
+  text-align: left;
+}
+
+.recipe-title h2 {
+  margin: 0;
+  font-size: 2em;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 조리 순서 스타일 */
+.cooking-steps {
+  padding: 0 30px 30px 20px;
+}
+
+.step-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.step-image {
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.step-image img {
+  width: 160px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-number {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.step-description {
+  font-size: 1em;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .popup-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .step-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .step-image {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .recipe-title h2 {
+    font-size: 1.5em;
+  }
+}
