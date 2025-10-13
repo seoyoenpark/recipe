@@ -4,6 +4,7 @@ import { LoadingProvider } from './components/LoadingProvider';
 import Header from './components/Header';
 import MainHeader from './components/MainHeader';
 import Nav from './components/Nav';
+import Footer from './components/Footer';
 
 // 사용자 페이지
 import Myfridge from './pages/Myfridge';
@@ -74,6 +75,7 @@ function AppContent() {
             <Route path="AdminUser" element={<AdminUser />} />
           </Route>
        </Routes>
+       {!isAdminPage && <Footer />}
      </div>
    );
   }
