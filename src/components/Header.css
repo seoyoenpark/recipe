@@ -5,24 +5,20 @@
   align-items: center;
   width: 100%;
   padding: 10px 20px;
-  background-color: #ffffff
-}
-
-.header-flex-placeholder-left {
-  flex: 1;
+  background-color: #ffffff;
 }
 
 .headerContainer {
-  text-align: center;
-  padding: 0;
+  padding-left: 50px;
   margin: 0;
+  text-decoration: none;
+  color: inherit;
 }
 
-.headerTitle {
-  font-size: 3em;
-  color: #000000;
-  margin: 0;
-  white-space: nowrap;
+.headerContainer img {
+  width: 260px;
+  height: 130px;
+  border: none;
 }
 
 /* 로그인/회원가입 버튼 영역 */
@@ -31,7 +27,7 @@
   flex: 1;
   gap: 10px;
   justify-content: flex-end;
-  margin-right: 2rem;
+  margin-right: 50px;
   white-space: wrap;
 }
 
@@ -43,10 +39,10 @@
 /* 로그인/회원가입 버튼 */
 .header-auth-buttons button {
   padding: 8px 15px;
-  background-color: #FFC36D;
-  color: white;
+  background-color: #ffffff;
+  color: #3D3D3D;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease;
@@ -54,8 +50,8 @@
 
 /* 로그인/회원가입 버튼 hover */
 .header-auth-buttons button:hover {
-  background-color: #ff7b52;
-  color: #000000;
+  background-color: #4E6C50;
+  color: white;
 }
 
 @media (max-width: 768px) {
@@ -65,19 +61,12 @@
     padding: 10px 15px;
   }
 
-  .header-flex-placeholder-left {
-    display: none;
-  }
 
   .headerContainer {
-    flex: none; /* flex: 1; 이라면 해제 */
-    width: 100%; /* 제목이 한 줄을 다 차지하도록 */
-    text-align: center; /* 제목을 가운데 정렬 */
-    margin-bottom: 10px; /* 제목 아래에 약간의 여백 추가 */
-  }
-
-  .headerTitle {
-    font-size: 2.5em; /* 모바일에서 글꼴 크기 줄임 */
+    flex: none; 
+    width: 100%;
+    text-align: center;
+    margin-left: 10px;
   }
 
   .header-auth-buttons {

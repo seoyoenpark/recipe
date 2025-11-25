@@ -1,7 +1,7 @@
 /* 전체 메인 레이아웃 */
 .Maincontent {
   padding: 40px 20px;
-  max-width: 1100px;
+  width: 65%;
   margin: 0 auto;
   color: #333;
 }
@@ -15,28 +15,28 @@
 }
 
 .intro {
-  flex: 1;
-  font-size: 1.5rem;
+  flex: 1.5;
+  font-size: 1.4rem;
   line-height: 1.8;
-  font-weight: bold;
-  padding-left: 5em;
+  font-weight: 550;
+  text-align: left;
+  padding-left: 10px;
 }
 
 .imagecontent {
   flex: 1;
-  text-align: right;
-  padding-right: 5em;
 }
 
 .imagecontent img {
-  max-width: 300px;
+  max-width: 260px;
   height: auto;
+  padding-left: 5px;
 }
 
 /* 주요 기능 */
 .featuretitle {
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 20px;
   text-align: left;
 }
@@ -55,12 +55,12 @@
 }
 
 .feature-item {
-  background: #FFF2DB;
-  border: 2px solid #f6d276;
+  background: #FDF8F5;
+  border: 2px solid #FDF8F5;
   border-radius: 15px;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
-  width: 250px;
+  width: 210px;
   transition: transform 0.2s ease;
 }
 
@@ -71,57 +71,60 @@
 .feature-item img {
   width: 80px;
   height: 80px;
-  margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .feature-item h3 {
-  margin-bottom: 10px;
+  margin: 0;
   font-size: 1.3rem;
   color: #333333;
+  font-weight: 500;
 }
 
 .feature-item p {
   font-size: 1.0rem;
   color: #333333;
   line-height: 1.4;
+  padding: 0 11px;
 }
 
 /* 단계별 사용자 흐름 */
 .user-flow {
   text-align: left;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .user-flow h3 {
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-weight: 500;
 }
 
 .steps {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-bottom: 30px;
 }
 
 .step-circle {
-  background: #ffe4b3;
+  border: 4px solid #609966;
   border-radius: 50%;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #333;
   font-size: 1.4rem;
-  padding: 10px;
+  font-weight: 500;
+  padding: 5px;
   text-align: center;
 }
 
 .step-arrow {
-  margin: 10px;
+  margin: 5px;
   font-size: 5.0rem;
-  color: #FFC36D;
+  color: #4E6C50;
 }
 
 /* 시작 버튼 */
@@ -129,9 +132,9 @@
   display: block;
   margin: 0 auto;
   padding: 12px 28px;
-  background-color: #FF7B52;
+  background-color: #4CAF50;
   color: white;
-  font-size: 1rem;
+  font-size: 1.2rem;
   border-radius: 25px;
   text-decoration: none;
   transition: background 0.2s ease;
@@ -139,93 +142,5 @@
 }
 
 .start-button:hover {
-  background-color: #e6732d;
-}
-
-@media (min-width: 1200px) {
-  .feature-items-wrapper {
-    gap: 100px; /* 아주 큰 화면일 때만 간격 더 넓힘 */
-  }
-}
-
-@media (max-width: 768px) {
-  .Maincontent {
-    padding: 20px 15px;
-  }
-
-  /* 소개 섹션 */
-  .Introduce {
-    flex-direction: column;
-    text-align: center;
-    margin-bottom: 40px;
-  }
-
-  .intro {
-    padding-left: 0;
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
-
-  .imagecontent {
-    text-align: center;
-    padding-right: 0;
-  }
-
-  .imagecontent img {
-    max-width: 250px;
-  }
-
-  /* 주요 기능 섹션 */
-  .featuretitle {
-    font-size: 1.3rem;
-    text-align: center;
-  }
-
-  .feature {
-    margin-bottom: 40px;
-  }
-
-  .feature-items-wrapper {
-    gap: 20px;
-    justify-content: center;
-  }
-
-  .feature-item {
-    width: calc(50% - 10px);
-    width: 250px;
-    padding: 15px;
-  }
-
-  .feature-item h3 {
-    font-size: 1.1rem;
-  }
-
-  .feature-item p {
-    font-size: 0.9rem;
-  }
-
-  /* 단계별 사용자 흐름 */
-  .user-flow h3 {
-    font-size: 1.3rem;
-    text-align: center;
-  }
-
-  .steps {
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-
-  .step-circle {
-    width: 120px;
-    height: 120px;
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-  }
-
-  .step-arrow {
-    font-size: 3.0rem;
-    transform: rotate(90deg);
-    margin: 10px 0;
-  }
-
+  background-color: #4E6C50;
 }

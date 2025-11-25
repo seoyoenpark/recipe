@@ -64,7 +64,13 @@ function Login() {
               placeholder="비밀번호를 입력하세요"
               required
             />
-          <button type="submit" className="loginbutton">로그인</button>
+          <div className="button-group">
+            <button type="submit" className="login-button">로그인</button>
+            <div className="find-group">
+              <Link to="/FindAccount01" className="find">아이디 찾기</Link>
+              <Link to="/FindAccount02" className="find">비밀번호 재설정</Link>
+            </div>
+          </div>
         </form>
       </section>
     </>

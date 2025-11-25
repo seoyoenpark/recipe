@@ -32,24 +32,29 @@
 .ingredient-header h3 {
   flex: 1;
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 25px;
+  font-weight: 550;
   white-space: nowrap;
-  margin-left: 150px;
+  margin-left: 260px;
+  color: #5D4037;
 }
 
 .link-to-fridge {
   display: flex;
   flex: 1;
-  color: #000000;
+  color: #333;
   text-decoration: none;
   font-weight: 500;
   white-space: nowrap;
-  margin-left: 150px;
+  margin-left: 260px;
 }
 
 .link-to-fridge:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  border: 1px solid #4E6C50;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 3px;
 }
 
 .ingredient-list {
@@ -62,16 +67,15 @@
 
 .ingredient-button {
   padding: 10px 20px;
-  border-radius: 20px;
-  border: 1px solid #ddd;
-  background-color: #fff;
+  border-radius: 30px;
+  border: 2px solid #FFC36D;
   cursor: pointer;
   font-size: 1rem;
 }
 
 .ingredient-button.selected {
-  background-color: #FFF2DB;
-  color: #333333;
+  background-color: #fff;
+  color: #5D4037;
   font-weight: 500;
 }
 
@@ -80,8 +84,8 @@
   width: 100%;
   margin-bottom: 5rem;
   padding: 1rem;
-  border: 2px dotted #ff7b52;
-  border-radius: 8px;
+  border: 2px dotted #4CAF50;
+  border-radius: 15px;
 }
 
 .expiring-header {
@@ -93,9 +97,9 @@
 
 .expiring-header h3 {
   margin: 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #d32f2f;
+  font-size: 25px;
+  font-weight: 600;
+  color: #5D4037;
 }
 
 .expiring-list {
@@ -107,42 +111,75 @@
 
 .expiring-button {
   padding: 8px 18px;
-  border-radius: 18px;
-  border: 1px solid #ffe0b2;
-  background-color: #FFF2DB;
-  color: #ff7b52;
-  font-weight: bold;
+  border-radius: 30px;
+  border: 1px solid #4E6C50;
+  background-color: #ffffff;
+  color: #333333;
+  font-weight: 500;
 }
 
 /* 레시피 추천받기 */
 .recommend-section {
   width: 100%;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 10px;
+}
+
+.recommend-title-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 50px;
 }
 
 .recommend-title {
-  font-size: 1.8rem;
+  font-size: 25px;
   margin-bottom: 2rem;
-  font-weight: 700;
+  font-weight: 500;
+  color: #5D4037;
+}
+
+/* 검색 버튼 */
+.recommend-btn {
+  background-color: #ffffff;
+  padding: 6px 10px;
+  width: fit-content;
+  color: #5D4037;
+  border: 2px solid #FFC36D;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.recommend-btn:hover {
+  background-color: #FFC36D;
+}
+
+.chosse-section {
+  background-color: #FAF8F5;
+  border: 1px solid #FAF8F5;
+  border-radius: 20px;
 }
 
 .ingredient-form {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   gap: 1.5rem;
   text-align: left;
-  margin-bottom: 1.5rem;
+  margin: 0;
   align-items: baseline;
 }
 
 .ingredient-form label {
-  font-weight: 600;
+  font-weight: 550;
   font-size: 1.1rem;
-  margin-right: 1.5rem;
+  margin: 0 2rem;
   min-width: 120px;
+  color: #5D4037;
+  text-align: center;
 }
 
 .ingredient-pills {
@@ -154,58 +191,135 @@
 
 .chip {
   padding: 10px 22px;
-  border: 1px solid #ffe0b2;
-  border-radius: 22px;
-  background-color: #FFF2DB;
+  border: 2px solid #609966;
+  border-radius: 30px;
+  background-color: #ffffff;
   cursor: pointer;
   font-size: 1rem;
+  font-weight: 450;
   color: #333;
   transition: all 0.2s ease-in-out;
 }
 
 .chip:hover {
-  background-color: #ff7b52;
+  background-color: #609966;
   color: white;
 }
 
 .chip.active {
-  background-color: #ff7b52;
+  background-color: #609966;
   color: white;
-  border-color: #ff7b52;
+  border-color: #609966;
 }
 
-/* 주제 선택 */
-.inline-search {
+.recommend-row {
   display: flex;
-  flex-direction: row;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1.5rem;
-  gap: 1.5rem;
-  text-align: left;
-  margin-bottom: 1.5rem;
-  align-items: baseline;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: none;
 }
 
-.inline-search label {
-  font-weight: 600;
+/* 왼쪽 라벨 */
+.row-label {
+  flex: 0 0 160px;
+  font-weight: 550;
   font-size: 1.1rem;
-  margin-right: 1.5rem;
-  min-width: 120px;
+  color: #5D4037;
+  text-align: center;
+  margin: 0 2rem;
 }
 
-.inline-search input {
-  flex-grow: 1;
-  border: none;
+/* 오른쪽 콘텐츠 영역 */
+.row-content {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* 4. 주제 입력창 스타일 */
+.topic-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.topic-input {
+  width: 100%;
+  border: none; /* 테두리 없음 */
   font-size: 1rem;
-  padding: 0.5rem;
+  padding: 8px 0;
+  outline: none; /* 포커스 시 테두리 제거 */
+  background: transparent;
+  color: #333;
 }
 
-.inline-search input:focus {
-  outline: none;
+.topic-input::placeholder {
+  color: #999;
 }
 
-/* 검색창의 'X' (검색 취소) 버튼 스타일링 */
+/* 주제 태그 리스트 */
+.topic-tags-list {
+  display: flex;
+  gap: 15px;
+}
+
+.topic-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.topic-tag button {
+  background: none;
+  border: none;
+  color: #999;
+  margin-left: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+}
+
+/* 주재료 유무 */
+.radio-group {
+  display: flex;
+  gap: 24px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #5D4037;
+}
+
+.radio-label input[type="radio"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #5D4037;
+  border-radius: 50%;
+  margin: 0;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.radio-label input[type="radio"]:checked {
+  border-color: #5D4037;
+  background-color: #5D4037; 
+}
+
+/* 검색창의 'X' (검색 취소) */
 .inline-search input::-webkit-search-cancel-button {
   -webkit-appearance: none;
   appearance: none;
@@ -221,7 +335,7 @@
 
 .inline-search button {
   padding: 12px 30px;
-  background-color: #ff7b52;
+  background-color: #828282;
   color: white;
   border: none;
   border-radius: 8px;
@@ -236,16 +350,9 @@
   cursor: not-allowed;
 }
 
-/* 추천받은 레시피들 (결과) */
+/* 추천받은 레시피들 */
 .results-wrap {
   margin-top: 3rem;
-}
-
-.results-wrap h3 {
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #007bff;
 }
 
 .recipe-grid {
@@ -281,89 +388,4 @@
   font-size: 1.1rem;
   text-align: center;
   background-color: #fff;
-}
-
-@media (max-width: 768px) {
-  /* 전체 레이아웃 여백 조정 */
-  .MainPage {
-    width: 90%;
-    padding: 1rem;
-  }
-
-  /* 섹션별 상하 여백 줄이기 */
-  .ingredient-banner,
-  .expiring-banner,
-  .recommend-section {
-    margin-bottom: 3rem;
-  }
-  
-  /* 냉장고 속 재료 헤더 */
-  .ingredient-header h3 {
-    font-size: 1.2rem;
-    margin-left: 0;
-  }
-
-  .link-to-fridge {
-    font-size: 0.9rem;
-    margin-left: 0;
-    white-space: nowrap;
-  }
-
-  .expiring-banner {
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* 유통기한 임박 헤더 */
-  .expiring-header h3 {
-    font-size: 1.1rem;
-  }
-
-  /* 재료 버튼들 크기 조정 */
-  .ingredient-button,
-  .expiring-button,
-  .chip {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-
-  /* 레시피 추천 폼 세로 배치 */
-  .ingredient-form,
-  .inline-search {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-  }
-
-  .ingredient-form label,
-  .inline-search label {
-    margin-right: 0;
-    margin-bottom: 0.5rem;
-  }
-
-  /* 주제 검색 버튼 너비 조정 */
-  .inline-search button {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .inline-search input {
-    width: 100%;
-  }
-
-  /* 추천 레시피 결과를 한 줄에 하나씩 표시 */
-  .recipe-grid {
-    grid-template-columns: repeat(2,1fr);
-    gap:1.5rem;
-  }
-
-  .recipe-card .thumb {
-    padding-bottom: 90%;
-  }
-
-  .recipe-card .title {
-    font-size: 1rem;
-  }
 }

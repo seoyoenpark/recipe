@@ -1,5 +1,6 @@
 import React from 'react';
 import './AdminMain.css';
+import { Link } from 'react-router-dom';
 
 function AdminMain() {
   return (
@@ -18,6 +19,9 @@ function AdminMain() {
         {/* 통계 및 분석 카드 */}
           <h3 className="menu-card-title">통계 및 분석</h3>
           <p>서비스 사용 현황과 주요 데이터를 분석합니다.</p>
+        { /* 사용자 페이지로 이동 */}
+          <h3 className="menu-card-title">사용자 페이지로 이동</h3>
+          <p><Link to="/main" className="movetomainpage">여기</Link>를 클릭하면 사용자 페이지 메인 화면으로 이동합니다.</p>
       </div>
     </div>
   );

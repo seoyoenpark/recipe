@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import './App.css';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { LoadingProvider } from './components/LoadingProvider';
 import Header from './components/Header';
@@ -15,6 +16,8 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Userlogin from './pages/Userlogin';
+import FindAccount01 from './pages/FindAccount01';
+import FindAccount02 from './pages/FindAccount02';
 import InfoRegistration from './pages/InfoRegistration';
 import IngredientRegistration from './pages/IngredientRegistration';
 import Main from './pages/Main';
@@ -56,9 +59,11 @@ function AppContent() {
       {!isAdminPage && (
         <>
           {location.pathname === '/Main' ? <MainHeader onSearch={handleSearch} /> : <Header />}
-          <Nav isAdmin={isAdmin} />
         </>
       )}
+      <div className='main-content-wrapper'>
+        <Nav isAdmin={isAdmin} />
+      <div className='content'>
        <Routes>
          {/* 기본 경로(/)로 접근 시 /Home으로 리다이렉트하는 Route */}
          <Route path="/" element={isAuthenticated() ? <Navigate to="/Main" /> : <Navigate to="/Home" />} />
@@ -68,6 +73,8 @@ function AppContent() {
          <Route path="/Mypage" element={<Mypage />}/>
          <Route path="/Register" element={<Register />}/>
          <Route path="/Login" element={<Login />}/>
+         <Route path="/FindAccount01" element={<FindAccount01 />}/>
+         <Route path="/FindAccount02" element={<FindAccount02 />}/>
          <Route path="/Userlogin" element={<Userlogin />}/>
          <Route path="/InfoRegistration" element={<InfoRegistration />} />
          <Route path="/IngredientRegistration" element={<IngredientRegistration />} />
@@ -81,8 +88,10 @@ function AppContent() {
             <Route path="AdminIngredient" element={<AdminIngredient />} />
           </Route>
        </Routes>
-       {!isAdminPage && <Footer />}
-     </div>
+       </div>
+       </div>
+       {!isAdminPage && <Footer />} 
+    </div>
    );
   }
 function App() {
