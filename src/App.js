@@ -29,6 +29,7 @@ import AdminRecipe from './admin/AdminRecipe';
 import AdminIngredient from './admin/AdminIngredient';
 import AdminHeader from './admin/AdminHeader';
 import AdminLayout from './admin/AdminLayout';
+import AdminStatistics from './admin/AdminStatistics';
 
 // 로그인 여부를 확인하는 함수
 const isAuthenticated = () => !!localStorage.getItem('token');
@@ -86,6 +87,7 @@ function AppContent() {
             <Route path="AdminUser" element={<AdminUser />} />
             <Route path="AdminRecipe" element={<AdminRecipe />} />
             <Route path="AdminIngredient" element={<AdminIngredient />} />
+            <Route path="AdminStatistics" element={<AdminStatistics />} />
           </Route>
        </Routes>
        </div>

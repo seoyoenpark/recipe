@@ -26,7 +26,7 @@ function AdminNav() {
       <div className="admin-nav-item">
         <NavLink to="통계 및 분석" className="main-menu-link">통계 및 분석</NavLink>
         <ul className="submenu">
-          <li><NavLink to="식재료 통계">식재료 통계</NavLink></li>
+          <li><NavLink to="/admin/AdminStatistics">식재료 통계</NavLink></li>
           <li><NavLink to="레시피 통계">레시피 통계</NavLink></li>
           <li><NavLink to="AI 모델 분석">AI 모델 분석</NavLink></li>
         </ul>
