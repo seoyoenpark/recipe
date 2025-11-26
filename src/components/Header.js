@@ -1,5 +1,6 @@
 import React from 'react';
 import './Header.css';
+import logo from '../img/logo.jpg';
 import { Link, useNavigate  } from 'react-router-dom';
 
 function Header() {
@@ -14,10 +15,9 @@ function Header() {
 
   return (
     <div className="header-container-wrapper">
-      <div className="header-flex-placeholder-left"></div>
       <div className="headerContainer">
-        <Link to={isAuthenticated() ? "/Main" : "/Home"} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <h1 className="headerTitle">냉장고를 부탁해</h1>
+        <Link to={isAuthenticated() ? "/Main" : "/Home"}>
+        <img src={logo} alt='냉장고를 부탁해' className='logo'/>
         </Link>
       </div>
       <div className="header-auth-buttons">

@@ -1,6 +1,6 @@
 import React from "react";
 import './Main.css';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useGlobalLoading } from '../components/LoadingProvider';
 
@@ -15,13 +15,34 @@ function Main() {
   const [isSearching, setIsSearching] = useState(false);
   // 레시피 추천 - 주제,재료
   const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [topicTags, setTopicTags] = useState([]);
+  const [topicInput, setTopicInput] = useState([]);
+  const [hasMainIngredient, setHasMainIngredient] = useState(true);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const queryFromUrl = searchParams.get('query') || '';
 
+  const handleTopicInputChange = (e) => {
+    setTopicInput(e.target.value);
+  };
+
+
 // searchRecipes 함수
-  const searchRecipes = useCallback(async (q, ingredients = []) => {
+  const searchRecipes = useCallback(async () => {
+    if (selectedIngredients.length === 0 && topicTags.length === 0) {
+      alert('재료를 선택하거나 주제를 입력해주세요.');
+      return;
+    }
+
     setIsSearching(true);
     show();
+
+    const searchData = {
+      ingredients: selectedIngredients,
+      topics: topicTags,
+      hasMainIngredient: hasMainIngredient
+    };
+
     try {
       // API 구현
       await new Promise(res => setTimeout(res, 800));
@@ -38,7 +59,7 @@ function Main() {
       setIsSearching(false);
       hide();
     }
-  }, [show, hide]);
+  }, [selectedIngredients, topicTags, hasMainIngredient, show, hide]);
 
   // 재료 목록 불러오기
   useEffect(() => {
@@ -82,23 +103,19 @@ function Main() {
 
   }, [queryFromUrl, selectedIngredients, searchRecipes]);
 
-  // 로컬 검색 폼 핸들러
-  const [localQuery, setLocalQuery] = useState('');
-  const handleLocalSearch = async (e) => {
-    e.preventDefault();
-    const q = localQuery.trim();
-    if (!q && selectedIngredients.length === 0) {
-      alert('재료를 선택하거나 주제(태그)를 입력해주세요.');
-      return;
+  // 주제 태그 핸들러
+  const handleTopicInputKeyPress = (e) => {
+    if (e.key == 'Enter' && topicInput.trim()) {
+      e.preventDefault();
+      if (!topicTags.includes(topicInput.trim())) {
+        setTopicTags([...topicTags, topicInput.trim()]);
+      }
+      setTopicInput('');
     }
-   
-    setSearchParams(prev => {
-      const next = new URLSearchParams(prev);
-      if (q) next.set('query', q); else next.delete('query');
-      return next;
-    });
-    // 실제 검색
-    await searchRecipes(q, selectedIngredients);
+  };
+
+  const handleTopicTagDelete = (tagToDelete) => {
+    setTopicTags(topicTags.filter(tag => tag !== tagToDelete));
   };
 
    // 유통기한 임박 재료 계산
@@ -118,9 +135,6 @@ function Main() {
     };
     setApproachingExpiries(getExpiringIngredients());
   }, [ingredients]);
-
-  // 이동 핸들러
-  const goMyFridge = () => navigate('/Myfridge');
 
   return (
     <main className="MainPage">
@@ -161,7 +175,13 @@ function Main() {
 
       {/* 레시피 추천받기 */}
       <section className="recommend-section">
-        <h3 className="recommend-title">레시피 추천받기</h3>
+        <div className="recommend-title-section">
+          <h3 className="recommend-title">레시피 추천받기</h3>
+          <button className="recommend-btn" onClick={searchRecipes} disabled={isSearching}>
+              {isSearching ? '검색 중...' : '검색'}
+          </button>
+         </div>
+         <div className="chosse-section">
         {/* 재료 선택 */}
         <div className="ingredient-form">
           <label>재료 선택하기</label>
@@ -188,18 +208,51 @@ function Main() {
                 </div>
               </div>
         {/* 주제 검색 */}
-        <form className="inline-search" onSubmit={handleLocalSearch}>
-          <label>주제 선택하기</label>
-          <input
-            type="search"
-            placeholder="요리의 주제를 검색해 보세요"
-            value={localQuery}
-            onChange={(e) => setLocalQuery(e.target.value)}
-          />
-          <button type="submit" disabled={isSearching}>
-            {isSearching ? '검색 중…' : '검색'}
-          </button>
-        </form>
+        <div className="recommend-row">
+           <label className="row-label">주제 선택하기</label>
+           <div className="row-content topic-container">
+              <input
+                type="text"
+                className="topic-input"
+                placeholder="텍스트 입력 후 엔터"
+                value={topicInput}
+                onChange={handleTopicInputChange}
+                onKeyPress={handleTopicInputKeyPress}
+              />
+              <div className="topic-tags-list">
+                {topicTags.map((tag, index) => (
+                  <span key={index} className="topic-tag">
+                    {tag}
+                    <button onClick={() => handleTopicTagDelete(tag)}>X</button>
+                  </span>
+                ))}
+              </div>
+           </div>
+        </div>
+        {/* 주재료 유무 선택*/}
+        <div className="recommend-row">
+          <label className="row-label">주재료 유무 선택하기</label>
+          <div className="row-content radio-group">
+            <label className="radio-label">
+              <input
+                type="radio"
+                name="mainIngredient"
+                checked={hasMainIngredient === true}
+                onChange={() => setHasMainIngredient(true)}
+              />
+              주재료 포함하기
+            </label>
+            <label className="radio-label">
+              <input
+                type="radio"
+                name="mainIngredient"
+                checked={hasMainIngredient === false}
+                onChange={() => setHasMainIngredient(false)}
+              />
+              주재료 미포함하기
+            </label>
+          </div>
+        </div>
 
         {/* 결과 리스트 */}
         {recipes.length > 0 && (
@@ -216,6 +269,7 @@ function Main() {
             </div>
           </div>
         )}
+        </div>
       </section>
     </main>
   );

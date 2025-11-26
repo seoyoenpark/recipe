@@ -28,6 +28,9 @@ const ALLERGIES_LIST = [
 
 function Mypage() {
   const [basicInfo, setBasicInfo] = useState({
+    gender: '',
+    btd: '',
+    name:'',
     nickname: '',
     username: '',
     password: '',
@@ -51,11 +54,11 @@ function Mypage() {
       try {
         // localStorage에서 JWT 토큰 가져오기
         const token = localStorage.getItem('token');
-        if (!token) {
-          alert('로그인이 필요합니다.');
-          window.location.href = '/Userlogin';
-          return;
-        }
+        // if (!token) {
+        //   alert('로그인이 필요합니다.');
+        //   window.location.href = '/Userlogin';
+        //   return;
+        // }
          // API 호출 - 백엔드의 /api/profile 엔드포인트 사용
         const response = await fetch('http://localhost:3001/api/profile', {
           method: 'GET',
@@ -70,6 +73,9 @@ function Mypage() {
         // 백엔드에서 받은 사용자 정보로 상태 업데이트
         if (dataFromDb.success && dataFromDb.user) {
                   setBasicInfo({
+                    gender: dataFromDb.user.gender,
+                    btd: dataFromDb.user.btd,
+                    name:dataFromDb.user.name,
                     nickname: dataFromDb.user.nickname,
                     username: dataFromDb.user.username,
                     password: '', // 보안상 비밀번호는 빈 문자열로 설정
@@ -127,7 +133,7 @@ function Mypage() {
     
     console.log('기본 정보 수정 제출 데이터:', basicInfo); 
 
-    const {nickname, username, password, passwordConfirm} = basicInfo;
+    const {gender, btd, name, nickname, username, password, passwordConfirm} = basicInfo;
 
       // 비밀번호 일치 여부 확인
       if(password || passwordConfirm) {
@@ -138,7 +144,7 @@ function Mypage() {
       }
 
     try {
-      const updateData = {nickname, username};
+      const updateData = {gender, btd, name, nickname, username};
 
       if (password && passwordConfirm) {
         updateData.password = password;
@@ -159,6 +165,9 @@ function Mypage() {
           'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, // JWT 토큰 추가
         },
         body: JSON.stringify({ // 서버로 보낼 데이터
+          gender: basicInfo.gender,
+          btd: basicInfo.btd,
+          name: basicInfo.name,
           nickname: basicInfo.nickname,
           username: basicInfo.username,
           password: basicInfo.password || undefined, // 비밀번호가 입력되었을 경우에만 전송
@@ -285,30 +294,84 @@ function Mypage() {
         <form onSubmit={handleBasicSubmit}>
           <label htmlFor="nick">닉네임</label>
           <input 
-          id="nick" 
+          id="nick"
+          name="nickname" 
           type="text" 
           value={basicInfo.nickname} 
           onChange={handleBasicChange} />
+
           <label htmlFor="id">아이디</label>
           <input 
           id="id"
+          name="id"
           type="text" 
           value={basicInfo.username} 
           onChange={handleBasicChange} />
+          
           <label htmlFor="password">비밀번호</label>
           <input
             id="password"
+            name="password"
             type="password"
             value={basicInfo.password}
-            onChange={handleBasicChange}
-            />
-            <label htmlFor="passwordConfirm">비밀번호 확인</label>
+            onChange={handleBasicChange} />
+          
+          <label htmlFor="passwordConfirm">비밀번호 확인</label>
           <input
             id="passwordConfirm"
+            name="passwordConfirm"
             type="password"
             value={basicInfo.passwordConfirm}
             onChange={handleBasicChange}
-            placeholder="비밀번호를 다시 입력하세요"  />
+            placeholder="비밀번호를 다시 입력하세요" />
+          
+          <label htmlFor="name">이름</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            value={basicInfo.name}
+            onChange={handleBasicChange}
+            placeholder="이름을 입력하세요"
+            required />
+          
+          <label htmlFor="btd">생년월일</label>
+          <input
+            id="btd"
+            name="btd"
+            type="text"
+            inputMode="numeric"
+            maxLength="6"
+            value={basicInfo.btd}
+            onChange={handleBasicChange}
+            placeholder="생년월일 6자리(YYMMDD)를 입력하세요."
+            pattern="\d{6}"
+            required />
+            
+          <fieldset className="gender-group">
+            <legend>성별</legend>
+              <input
+              id="gender-male"
+              name="gender"
+              type="radio"
+              value="male"
+              checked={basicInfo.gender === 'male'}
+              onChange={handleBasicChange}
+              required
+            />
+            <label htmlFor="gender-male">남성</label>
+
+            <input
+              id="gender-female"
+              name="gender"
+              type="radio"
+              value="female"
+              checked={basicInfo.gender === 'female'}
+              onChange={handleBasicChange}
+              required
+            />
+          <label htmlFor="gender-female">여성</label>
+        </fieldset>
           <button type="submit" className="mypage-submit-button">수정 완료</button>
         </form>
       </section>

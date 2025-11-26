@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import logo from '../img/logo.jpg';
 import './MainHeader.css';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '../img/search.png';
 
-// 1. 임시 레시피 데이터
+// 임시 레시피 데이터
 const MOCK_RECIPES = [
   { id: 1, title: '김치볶음밥' },
   { id: 2, title: '김치찌개' },
@@ -80,8 +81,8 @@ function MainHeader() {
   return (
     <div className="main-header-wrapper">
       <div className="main-header-left">
-        <Link to={isAuthenticated() ? "/Main" : "/Home"} style={{ textDecoration: 'none', color: 'inherit' }}>
-          <h1>냉장고를 부탁해</h1>
+        <Link to={isAuthenticated() ? "/Main" : "/Home"}>
+        <img src={logo} alt='냉장고를 부탁해' className='logo'/>
         </Link>
       </div>
       <div className="main-header-center" ref={searchContainerRef}>

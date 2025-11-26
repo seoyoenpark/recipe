@@ -5,6 +5,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
+  const [gender, setGender] = useState('');
+  const [btd, setBtd] = useState('');
+  const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -29,6 +32,9 @@ function Register() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        gender: gender,
+        btd: btd,
+        name: name,
         nickname: nickname,
         userID: username,
         userPW: password,
@@ -94,6 +100,53 @@ function Register() {
           placeholder="비밀번호를 다시 입력하세요"
           required
         />
+
+        <label htmlFor="name">이름</label>
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="이름을 입력하세요"
+          required
+        />
+        <label htmlFor="btd">생년월일</label>
+        <input
+          id="btd"
+          type="text"
+          inputMode="numeric"
+          maxLength="6"
+          value={btd}
+          onChange={(e) => setBtd(e.target.value)}
+          placeholder="생년월일 6자리(YYMMDD)를 입력하세요."
+          pattern="\d{6}"
+          required
+        />
+      <fieldset className="gender-group">
+        <legend>성별</legend>
+          <input
+          id="gender-male"
+          name="gender"
+          type="radio"
+          value="male"
+          checked={gender === 'male'}
+          onChange={(e) => setGender(e.target.value)}
+          required
+        />
+        <label htmlFor="gender-male">남성</label>
+
+        <input
+          id="gender-female"
+          name="gender"
+          type="radio"
+          value="female"
+          checked={gender === 'female'}
+          onChange={(e) => setGender(e.target.value)}
+          required
+        />
+        <label htmlFor="gender-female">여성</label>
+      </fieldset>
+
         <button type="submit" className="registerbutton">회원가입 완료</button>
       </form>
     </section>
