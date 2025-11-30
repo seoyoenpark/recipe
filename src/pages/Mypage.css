@@ -1,44 +1,45 @@
-/* 전체 마이페이지 컨테이너 */
+/* 전체 컨테이너 */
 .MypageContainer {
-  width: 65%;
+  width: 75%;
   margin: 40px auto;
   padding: 0 20px;
-  font-family: 'Noto Sans KR', sans-serif;
   color: #333;
   background-color: #fff;
 }
 
-/* 섹션별 스타일 */
+/* 섹션 */
 .MypageContainer section {
   margin-bottom: 10px;
 }
 
-/* 제목 스타일 */
+/* 제목 */
 .MypageContainer h2 {
   font-size: 1.6rem;
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 15px;
-  color: #000;
+  color: #5D4037;
 }
 
-/* 폼 공통 스타일 */
+/* 폼 */
 form {
   display: flex;
   flex-direction: column;
 }
 
-/* 라벨 스타일 */
+/* 라벨 */
 label {
-  font-size: 1.0rem;
+  font-size: 20px;
   margin: 12px 0 15px;
+  color: #5D4037;
+  font-weight: 450;
 }
 
-/* 입력 필드 스타일 */
+/* 입력 필드 */
 input {
   padding: 10px 14px;
   border: 1px solid #dddddd;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 20px;
   color: #828282;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
@@ -46,18 +47,82 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #ff7b52;
+  border-color: #4E6C50;
+}
+
+/* 성별 */
+.gender-group {
+
+  border: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.gender-group legend {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #5D4037;
+  font-weight: 450;
+}
+
+.gender-options {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 실제 라디오 버튼 */
+.gender-input {
+  display: none;
+}
+
+/* 라벨 스타일 */
+.gender-label {
+  flex: 1;
+  padding: 8px 30px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #333;
+  font-size: 20px;
+  font-weight: 400;
+  margin: 0;
+  transition: all 0.3s ease;
+  border-left: 1.5px solid #609966;
+  border-top: 1.5px solid #609966;
+  border-bottom: 1.5px solid #609966;
+}
+
+/* 라벨 사이 경계선 */
+.gender-label + .gender-input + .gender-label {
+  border-right: 1.5px solid #609966;;
+}
+
+/* 선택된 라디오 버튼 라벨 스타일 */
+.gender-input:checked + .gender-label {
+  background-color: #609966;
+  color: white;
+}
+
+.gender-label:hover {
+  background-color: #609966;
+  color: #ffffff;
+}
+
+.gender-input:checked + .gender-label:hover {
+  background-color: #609966;
+  color: #ffffff;
 }
 
 /* 수정 완료 버튼 스타일 */
 .mypage-submit-button {
-  background-color: #ff7b52;
-  width: 20%;
+  background-color: #609966;
+  width: fit-content;
   color: white;
-  padding: 14px 0;
+  padding: 10px;
   border: none;
-  font-weight: bold;
-  border-radius: 8px;
+  font-weight: 500;
+  border-radius: 10px;
   font-size: 1.0rem;
   margin: 15px 0 0 auto;
   cursor: pointer;
@@ -65,27 +130,27 @@ input:focus {
 }
 
 .mypage-submit-button:hover {
-  background-color: #e6732d;
+  background-color: #4E6C50;
 }
 
 /* 회원 탈퇴 버튼 스타일 */
 .withdraw-btn {
   display: block;
-  background-color: #828282;
-  width: 20%;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 14px 0;
+  width: fit-content;
+  background-color: #ffffff;
+  color: #8a8a8a;
+  border: 1px solid #828282;
+  border-radius: 10px;
+  padding: 10px;
   font-size: 1.0rem;
-  font-weight: bold;
+  font-weight: 550;
   margin-left: auto;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .withdraw-btn:hover {
-  background-color: #8a8a8a;
+  color: #333;
 }
 
 /* 알레르기 버튼 그룹 */
@@ -99,9 +164,9 @@ input:focus {
 
 /* 알레르기 버튼 */
 .allergy-button {
-  background-color: #f1f8e9; /* 연한 녹색 계열 */
-  border: 1.5px solid #8bc34a; /* 녹색 계열 */
-  color: #33691e; /* 진한 녹색 */
+  background-color: #ffffff;
+  border: 1.5px solid #609966;
+  color: #5D4037;
   border-radius: 25px;
   padding: 10px 20px;
   cursor: pointer;
@@ -112,14 +177,14 @@ input:focus {
 
 /* 선택된 알레르기 버튼 */
 .allergy-button.selected {
-  background-color: #8bc34a; /* 녹색 계열 */
+  background-color: #609966;
   color: white;
-  border-color: #8bc34a;
+  border-color: #609966;
 }
 
 .allergy-button:hover {
-  background-color: #9ccc65;
-  border-color: #8bc34a;
+  background-color: #609966;
+  border-color: #609966;
 }
 
 /* 조리도구 버튼 그룹 */
@@ -132,9 +197,9 @@ input:focus {
 
 /* 각 조리도구 버튼 */
 .tool-button {
-  background-color: #fff5f0;
-  color: #333333;
-  border: 1.5px solid #ff7b52;
+  background-color: #ffffff;
+  color: #5D4037;
+  border: 1.5px solid #FFC36D;
   border-radius: 25px;
   padding: 10px 20px;
   cursor: pointer;
@@ -145,14 +210,14 @@ input:focus {
 
 /* 선택된 조리도구 버튼 */
 .tool-button.selected {
-  background-color: #ff7b52;
+  background-color: #FFC36D;
   color: white;
-  border-color: #ff7b52;
+  border-color: #FFC36D;
 }
 
 .tool-button:hover {
-  background-color: #f79273;
-  border-color: #FF7B52;
+  background-color: #FFC36D;
+  border-color: #FFC36D;
 }
 
 /* 모달 오버레이 */
@@ -170,21 +235,24 @@ input:focus {
 }
 
 /* 모달 본체 */
-.modal-content {
-  background-color: #fff2db;
+.withdraw-modal-content {
+  background-color: #ffffff;
   padding: 30px 40px;
+  border: 3px solid #609966;
   border-radius: 20px;
   width: 100%;
   max-width: 550px;
   box-sizing: border-box;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 모달 제목 */
 .modal-content h3 {
   margin:0 0 20px;
-  font-weight: bold;
+  font-weight: 550;
   font-size: 1.2rem;
   color: #333333;
 }
@@ -200,15 +268,22 @@ input:focus {
   box-sizing: border-box;
 }
 
+.withdraw-buttons {
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+}
+
 /* 회원 탈퇴 & 돌아가기 버튼 */
-.modal-content button {
-  background-color: #ff7b52;
+.confirm-btn, .turnback-btn {
+  background-color: #4E6C50;
   color: #fff;
-  padding: 12px 0;
+  padding: 12px 15px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  width: 100%;
+  width: fit-content;
   margin-bottom: 12px;
   font-size: 1rem;
   font-weight: normal;
@@ -216,31 +291,5 @@ input:focus {
 }
 
 .modal-content button:hover {
-  background-color: #e6732d;
-}
-
-/* 반응형 모바일 지원 */
-@media (max-width: 768px) {
-
-  .MypageContainer {
-    padding: 0 15px;
-  }
-
-  .MypageContainer h2 {
-    font-size: 1.5rem;
-  }
-
-  form label,
-  .tool-button {
-    font-size: 0.9rem;
-  }
-
-  form button[type="submit"],
-  .withdraw-btn {
-    font-size: 1rem;
-  }
-
-  .tool-button {
-    padding: 8px 16px;
-  }
+  background-color: #609966;
 }

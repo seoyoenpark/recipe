@@ -318,8 +318,8 @@ function Myfridge() {
       <div className="ingredient-container">
         <h2 className="page-title">재료 등록하기</h2>
         
-        <div className="register-methods">
-          <div className="register-method">
+        <div className="myfridge-register-methods">
+          <div className="myfridge-register-method">
             <h3>사진으로 등록하기</h3>
             <div className="photo-section">
               {uploadedImage ? (
@@ -365,7 +365,7 @@ function Myfridge() {
 
           <div className="divider"></div>
 
-          <div className="register-method">
+          <div className="myfridge-register-method">
             <h3>수기로 등록하기</h3>
             
             <div className="manual-form">
@@ -532,16 +532,16 @@ function Myfridge() {
                       </div>
                       <div className="ingredient-buttons">
                           <button
-                            className="edit-btn"
+                            className="fridge-edit-btn"
                             onClick={() => handleEditIngredient(ingredient.id)}
                           >
-                            수정하기
+                            수정
                           </button>
                           <button
-                            className="delete-btn"
+                            className="fridge-delete-btn"
                             onClick={() => removeIngredient(ingredient.id)}
                           >
-                            삭제하기
+                            삭제
                           </button>
                       </div>
                     </>
@@ -645,10 +645,10 @@ function Myfridge() {
                         </div>
                       </div>
                       <div className="ingredient-buttons">
-                          <button className="edit-btn" onClick={() => handleEditAnalyzed(ingredient.id)}>
+                          <button className="fridge-edit-btn" onClick={() => handleEditAnalyzed(ingredient.id)}>
                             수정하기
                           </button>
-                          <button className="delete-btn" onClick={() => handleDeleteAnalyzed(ingredient.id)}>
+                          <button className="fridge-delete-btn" onClick={() => handleDeleteAnalyzed(ingredient.id)}>
                             삭제하기
                           </button>
                       </div>

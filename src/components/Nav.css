@@ -29,16 +29,17 @@
   text-decoration: none;
   width: 100%;
   padding: 10px;
+  transition: color 0.2s ease;
 }
 
-.navbarMenu:hover {
+.navbarMenu:hover .nav-text {
   color: #609966;
-  font-weight: 600;
+  font-weight: 550;
 }
 
-.navbarMenu.active {
+.navbarMenu.active .nav-text {
   color: #609966;
-  font-weight: 600;
+  font-weight: 550;
 }
 
 /* 아이콘 */

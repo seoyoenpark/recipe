@@ -3,13 +3,6 @@ import { useState, useEffect } from 'react';
 import { useGlobalLoading } from '../components/LoadingProvider';
 import './Mypage.css';
 
-// 조리도구 리스트
-const TOOLS_LIST = [
-  '냄비', '프라이팬', '볼', '계량스푼', '키친타올', '계량컵', 
-  '전자레인지', '에어프라이어', '오븐', '찜기', '내열용기', '밀폐용기', 
-  '믹서기', '거품기', '스텐트레이', '랩', '매셔', '전기밥솥', '면보', '체망', '토치'
-];
-
 // state 초기 객체 생성 함수
 const InitialState = (list) => {
   const initialState = {};
@@ -18,13 +11,6 @@ const InitialState = (list) => {
   });
   return initialState;
 };
-
-// 알레르기 리스트
-const ALLERGIES_LIST = [
-  '난류(가금류)', '우유', '메밀', '땅콩', '대두', '밀', 
-  '고등어', '게', '새우', '돼지고기', '복숭아', '토마토', 
-  '아황산염', '호두', '닭고기', '소고기', '오징어', '조개류(굴, 전복, 홍합 포함)'
-];
 
 function Mypage() {
   const [basicInfo, setBasicInfo] = useState({
@@ -37,72 +23,86 @@ function Mypage() {
     passwordConfirm: '',
   });
 
-// 알레르기 & 조리도구를 객체로 변경
-  const [allergies, setAllergies] = useState(InitialState(ALLERGIES_LIST));
-  const [tools, setTools] = useState(InitialState(TOOLS_LIST));
-  
+// 전체 목록 저장 State
+  const [allergyList, setAllergyList] = useState([]);
+  const [toolList, setToolList] = useState([]);
+
+  // 2. 선택 상태 State
+  const [allergies, setAllergies] = useState({});
+  const [tools, setTools] = useState({});
+
   const {show, hide} = useGlobalLoading();
 
-  // DB에서 사용자 정보 불러오기 & 로딩 페이지
+  // 데이터 불러오기
   useEffect(() => {
     let alive = true;
 
-    //API 호출
-    const fetchUserInfo = async () => {
+    const fetchData = async () => {
       show();
-
       try {
-        // localStorage에서 JWT 토큰 가져오기
         const token = localStorage.getItem('token');
-        // if (!token) {
-        //   alert('로그인이 필요합니다.');
-        //   window.location.href = '/Userlogin';
-        //   return;
-        // }
-         // API 호출 - 백엔드의 /api/profile 엔드포인트 사용
-        const response = await fetch('http://localhost:3001/api/profile', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, // JWT 토큰 추가
-          },
-        });
-
-        const dataFromDb = await response.json(); // 서버로부터 받은 JSON 데이터
-        if (!alive) return;
-        // 백엔드에서 받은 사용자 정보로 상태 업데이트
-        if (dataFromDb.success && dataFromDb.user) {
-                  setBasicInfo({
-                    gender: dataFromDb.user.gender,
-                    btd: dataFromDb.user.btd,
-                    name:dataFromDb.user.name,
-                    nickname: dataFromDb.user.nickname,
-                    username: dataFromDb.user.username,
-                    password: '', // 보안상 비밀번호는 빈 문자열로 설정
-                  });
-                
-                  setAllergies(prev => ({ ...prev, ...(dataFromDb.user.allergies || {}) }));
-                  setTools(prevTools => ({
-                ...prevTools, // 모든 도구를 false 초기화
-                ...(dataFromDb.user.tools || {}) // 서버에서 받은 값으로 덮어쓰기
-            }));
-                } else {
-                  throw new Error('사용자 정보 형식이 올바르지 않습니다.');
+        
+        // API 호출 (전체 알레르기, 전체 도구, 사용자 프로필)
+        const [allergiesRes, toolsRes, profileRes] = await Promise.all([
+            fetch('http://localhost:3001/api/user/allergies'),
+            fetch('http://localhost:3001/api/user/tools'),
+            fetch('http://localhost:3001/api/user/profile', {
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
                 }
+            })
+        ]);
+        if (!alive) return;
+
+        // 전체 목록 설정
+        if (allergiesRes.ok && toolsRes.ok) {
+            const allergiesData = await allergiesRes.json();
+            const toolsData = await toolsRes.json();
+            
+            const allAllergies = allergiesData.data || allergiesData; 
+            const allTools = toolsData.data || toolsData;
+
+            setAllergyList(allAllergies);
+            setToolList(allTools);
+
+            // 모든 항목 false로 초기화
+            const initialAllergies = InitialState(allAllergies);
+            const initialTools = InitialState(allTools);
+
+            // 3. 사용자 정보가 있으면 덮어쓰기
+            if (profileRes.ok) {
+                const profileData = await profileRes.json();
+                if (profileData.success && profileData.user) {
+                    setBasicInfo({
+                        // ... 기존 basicInfo 매핑
+                        gender: profileData.user.gender,
+                        btd: profileData.user.btd,
+                        name: profileData.user.name,
+                        nickname: profileData.user.nickname,
+                        username: profileData.user.username,
+                        password: '',
+                        passwordConfirm: '',
+                    });
+
+                    // 기존 선택 내역 병합
+                    // (백엔드에서 선택된 것만 true로 보내준다고 가정하거나, 선택된 리스트만 보내준다면 로직 조정 필요)
+                    setAllergies({ ...initialAllergies, ...(profileData.user.allergies || {}) });
+                    setTools({ ...initialTools, ...(profileData.user.tools || {}) });
+                }
+            }
+        }
+
       } catch (error) {
-        if (alive) return;
-        console.error('사용자 정보를 불러오는 중 오류 발생:', error);
-        alert('사용자 정보를 불러오는데 실패했습니다.');
+        console.error('데이터 로딩 실패:', error);
       } finally {
         hide();
       }
     };
 
-    fetchUserInfo();
+    fetchData();
 
-    return () => {
-      alive = false;
-    };
+    return () => { alive = false; };
   }, [show, hide]);
 
   // 기본 정보 입력값 변경 핸들러
@@ -159,7 +159,7 @@ function Mypage() {
       }
 
       // DB 업데이트 API 구현 - 백엔드의 /api/profile 엔드포인트 사용
-      const response = await fetch('http://localhost:3001/api/profile', {
+      const response = await fetch('http://localhost:3001/api/user/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, // JWT 토큰 추가
@@ -197,13 +197,13 @@ function Mypage() {
 
   // 폼 제출 핸들러 (상세 정보 수정)
   const handleDetailSubmit = async (e) => {
-    e.preventDefault(); // 폼의 기본 제출 동작(새로고침) 방지
+    e.preventDefault();
 
     const detailData = { allergies, tools };
     console.log('상세 정보 수정 제출 데이터:', detailData);
 
     try {
-      // ===== 1. localStorage에서 JWT 토큰 가져오기 (추가) =====
+      // JWT 토큰 가져오기
       const token = localStorage.getItem('token');
       if (!token) {
         alert('로그인이 필요합니다.');
@@ -213,7 +213,7 @@ function Mypage() {
 
     // DB 업데이트 API 호출 구현
       const response = await fetch('http://localhost:3001/api/user/detailinfo', {
-        method: 'PUT', // 또는 'PATCH'
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           // Authorization 헤더에 토큰 추가
@@ -358,8 +358,9 @@ function Mypage() {
               checked={basicInfo.gender === 'male'}
               onChange={handleBasicChange}
               required
+              className='gender-input'
             />
-            <label htmlFor="gender-male">남성</label>
+            <label htmlFor="gender-male" className='gender-label'>남성</label>
 
             <input
               id="gender-female"
@@ -369,8 +370,9 @@ function Mypage() {
               checked={basicInfo.gender === 'female'}
               onChange={handleBasicChange}
               required
+              className='gender-input'
             />
-          <label htmlFor="gender-female">여성</label>
+          <label htmlFor="gender-female" className='gender-label'>여성</label>
         </fieldset>
           <button type="submit" className="mypage-submit-button">수정 완료</button>
         </form>
@@ -410,7 +412,7 @@ function Mypage() {
       {/* 탈퇴 모달 */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div className="withdraw-modal-content" onClick={e => e.stopPropagation()}>
             <h3>회원 탈퇴를 원하시면 하단에 비밀번호를 입력해주세요.</h3>
             <input
               id="withdraw-password"
@@ -419,8 +421,10 @@ function Mypage() {
               onChange={(e) => setWithdrawPassword(e.target.value)}
               placeholder="비밀번호를 입력하세요"
             />
+            <div className='withdraw-buttons'>
              <button className="confirm-btn" onClick={handleWithdrawConfirm}>회원 탈퇴</button>
-            <button className="cancel-btn" onClick={closeModal}>돌아가기</button>
+            <button className="turnback-btn" onClick={closeModal}>돌아가기</button>
+            </div>
           </div>
         </div>
       )}

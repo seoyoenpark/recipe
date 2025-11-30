@@ -364,9 +364,7 @@ function IngredientRegistration() {
               </div>
             </div>
           </div>
-
-          <div className="divider"></div>
-
+          <br /> <br />
           <div className="register-method">
             <h3>수기로 등록하기</h3>
             
@@ -534,16 +532,16 @@ function IngredientRegistration() {
                       </div>
                       <div className="ingredient-buttons">
                           <button
-                            className="edit-btn"
+                            className="fridge-edit-btn"
                             onClick={() => handleEditIngredient(ingredient.id)}
                           >
-                            수정하기
+                            수정
                           </button>
                           <button
-                            className="delete-btn"
+                            className="fridge-delete-btn"
                             onClick={() => removeIngredient(ingredient.id)}
                           >
-                            삭제하기
+                            삭제
                           </button>
                       </div>
                     </>
@@ -676,10 +674,10 @@ function IngredientRegistration() {
                         </div>
                       </div>
                       <div className="ingredient-buttons">
-                          <button className="edit-btn" onClick={() => handleEditAnalyzed(ingredient.id)}>
+                          <button className="fridge-edit-btn" onClick={() => handleEditAnalyzed(ingredient.id)}>
                             수정하기
                           </button>
-                          <button className="delete-btn" onClick={() => handleDeleteAnalyzed(ingredient.id)}>
+                          <button className="fridge-delete-btn" onClick={() => handleDeleteAnalyzed(ingredient.id)}>
                             삭제하기
                           </button>
                       </div>

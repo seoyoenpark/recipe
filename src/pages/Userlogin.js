@@ -65,7 +65,7 @@ function Login() {
               required
             />
           <div className="button-group">
-            <button type="submit" className="login-button">로그인</button>
+              <button type="submit" className="login-button">로그인</button>
             <div className="find-group">
               <Link to="/FindAccount01" className="find">아이디 찾기</Link>
               <Link to="/FindAccount02" className="find">비밀번호 재설정</Link>
