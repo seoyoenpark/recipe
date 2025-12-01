@@ -1,0 +1,198 @@
+.admin-ingredient-container {
+  padding: 20px;
+}
+
+/* 식재료 테이블 스타일 */
+.ingredient-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 0.9em;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ingredient-table th,
+.ingredient-table td {
+  padding: 12px 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.ingredient-table thead tr {
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+}
+
+/* 테이블 바디의 행에 마우스를 올렸을 때 */
+.ingredient-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* 편집 입력창 스타일 */
+.edit-input {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #007bff;
+  border-radius: 3px;
+  font-size: 0.9em;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* 상태 표시 스타일 */
+.status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-align: center;
+}
+
+.status.urgent {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.status.safe {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* 버튼 그룹 스타일 */
+.button-group {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  width: 130px !important;  /* 버튼 그룹 전체 고정 너비 */
+  height: 32px !important;  /* 버튼 그룹 전체 고정 높이 */
+  margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 버튼 스타일 */
+.edit-btn,
+.save-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+  width: 60px !important;      /* 강제 고정 너비 */
+  height: 32px !important;     /* 강제 고정 높이 */
+  box-sizing: border-box;      /* 패딩 포함한 크기 계산 */
+  white-space: nowrap;         /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;            /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis;     /* 넘치는 텍스트를 ... 으로 표시 */
+}
+
+.edit-btn:hover,
+.save-btn:hover {
+  background-color: #0056b3;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+  width: 60px !important;      /* 강제 고정 너비 */
+  height: 32px !important;     /* 강제 고정 높이 */
+  box-sizing: border-box;      /* 패딩 포함한 크기 계산 */
+  white-space: nowrap;         /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;            /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis;     /* 넘치는 텍스트를 ... 으로 표시 */
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+  width: 60px !important;      /* 강제 고정 너비 */
+  height: 32px !important;     /* 강제 고정 높이 */
+  box-sizing: border-box;      /* 패딩 포함한 크기 계산 */
+  white-space: nowrap;         /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;            /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis;     /* 넘치는 텍스트를 ... 으로 표시 */
+}
+
+.cancel-btn:hover {
+  background-color: #545b62;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .ingredient-table {
+    font-size: 0.8em;
+  }
+  
+  .ingredient-table th,
+  .ingredient-table td {
+    padding: 8px 6px;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    gap: 3px;
+  }
+  
+  .edit-btn,
+  .save-btn,
+  .delete-btn,
+  .cancel-btn {
+    font-size: 0.7em;
+    padding: 4px 8px;
+  }
+}
+
+.page-header h2 {
+  font-size: 1.5em;
+  color: #333;
+  margin: 0;
+}
+
+/* 검색창 스타일 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.search-bar input {
+  border: none;
+  padding: 8px 12px;
+  font-size: 1em;
+  outline: none;
+}
+
+.search-bar button {
+  background: #f8f9fa;
+  border: none;
+  border-left: 1px solid #ccc;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 1em;
+}
+

@@ -3,93 +3,41 @@ import { useNavigate } from 'react-router-dom';
 import './Recom.css';
 
 function Recom() {
-  // 로그인 권한 확인 (현재 주석 처리)
-  // const isAuthenticated = () => !!localStorage.getItem('token');
-  
-  // useEffect(() => {
-  //   if (!isAuthenticated()) {
-  //     alert('로그인이 필요한 서비스입니다.');
-  //     window.location.href = '/login';
-  //   }
-  // }, []);
-
   const navigate = useNavigate();
 
-  // 냉장고 재료 데이터 (서버 연결 전 더미 데이터)
   const [ingredientPages, setIngredientPages] = useState([
-    ['토마토', '양파', '당근', '감자', '브로콜리', '파프리카', '마늘', '생강', '대파', '시금치'],
-    ['배추', '무', '오이', '상추', '깻잎', '버섯', '계란', '우유', '닭고기', '돼지고기'],
-    ['소고기', '새우', '두부', '콩나물', '고추', '피망', '가지', '호박', '당근', '양배추']
+    ['토마토', '양파', '당근', '감자', '브로콜리'],
+    ['파프리카', '마늘', '생강', '대파', '시금치'],
+    ['배추', '무', '오이', '상추', '깻잎'],
+    ['버섯', '계란', '우유', '닭고기', '돼지고기'],
+    ['소고기', '새우', '두부', '콩나물', '고추'],
+    ['피망', '가지', '호박', '당근', '양배추']
   ]);
-
-  // 현재 재료 페이지
   const [currentIngredientPage, setCurrentIngredientPage] = useState(0);
-  
-  // 선택된 재료들
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-  
-  // 주제 태그들
   const [topicTags, setTopicTags] = useState([]);
   const [topicInput, setTopicInput] = useState('');
-  
-  // 주재료 유무 체크박스 (기본값: 주재료 O)
   const [hasMainIngredient, setHasMainIngredient] = useState(true);
-  
   const topicInputRef = useRef(null);
-  
-  // 검색 상태 및 레시피 데이터
   const [hasSearched, setHasSearched] = useState(false);
   const [recipes, setRecipes] = useState([]);
-  
-  // 임시 레시피 데이터
+  const [previousRecipes, setPreviousRecipes] = useState([]); // 이전 레시피 상태 추가
+
   const dummyRecipes = [
-    {
-      id: 1,
-      name: '레시피 이름',
-      description: '레시피에 대한 간단한 설명',
-      details: '레시피 재료',
-      image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=120&h=100&fit=crop&crop=center'
-    },
-    {
-      id: 2,
-      name: '레시피 이름',
-      description: '레시피에 대한 간단한 설명', 
-      details: '레시피 재료',
-      image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=120&h=100&fit=crop&crop=center'
-    },
-    {
-      id: 3,
-      name: '레시피 이름',
-      description: '레시피에 대한 간단한 설명',
-      details: '레시피 재료',
-      image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=120&h=100&fit=crop&crop=center'
-    },
-    {
-      id: 4,
-      name: '레시피 이름',
-      description: '레시피에 대한 간단한 설명',
-      details: '레시피 재료',
-      image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=120&h=100&fit=crop&crop=center'
-    },
-    {
-      id: 5,
-      name: '레시피 이름', 
-      description: '레시피에 대한 간단한 설명',
-      details: '레시피 재료',
-      image: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=120&h=100&fit=crop&crop=center'
-    },
-    {
-      id: 6,
-      name: '레시피 이름',
-      description: '레시피에 대한 간단한 설명',
-      details: '레시피 재료',
-      image: 'https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=120&h=100&fit=crop&crop=center'
-    }
+    { id: 1, name: '레시피 1', description: '설명 1', details: '재료 A, B', image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300&h=200&fit=crop&crop=center', views: 150 },
+    { id: 2, name: '레시피 2', description: '설명 2', details: '재료 C, D', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop&crop=center', views: 120 },
+    { id: 3, name: '레시피 3', description: '설명 3', details: '재료 E, F', image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=300&h=200&fit=crop&crop=center', views: 110 },
+    { id: 4, name: '레시피 4', description: '설명 4', details: '재료 G, H', image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=200&fit=crop&crop=center', views: 90 },
+    { id: 5, name: '레시피 5', description: '설명 5', details: '재료 I, J', image: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=300&h=200&fit=crop&crop=center', views: 85 },
+    { id: 6, name: '레시피 6', description: '설명 6', details: '재료 K, L', image: 'https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=300&h=200&fit=crop&crop=center', views: 70 },
+    { id: 7, name: '레시피 7', description: '설명 7', details: '재료 M, N', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=200&fit=crop&crop=center', views: 60 },
+    { id: 8, name: '레시피 8', description: '설명 8', details: '재료 O, P', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&h=200&fit=crop&crop=center', views: 50 },
+    { id: 9, name: '레시피 9', description: '설명 9', details: '재료 Q, R', image: 'https://images.unsplash.com/photo-1481931715705-36f3be9e6b0b?w=300&h=200&fit=crop&crop=center', views: 40 }
   ];
 
-  // 서버에서 재료 데이터 가져오기
   useEffect(() => {
     fetchIngredients();
+    fetchPreviousRecipes(); // 이전 레시피 불러오기
   }, []);
 
   const fetchIngredients = async () => {
@@ -97,20 +45,29 @@ function Recom() {
       const response = await fetch('http://localhost:3001/api/ingredients');
       if (response.ok) {
         const data = await response.json();
-        // 데이터를 페이지별로 나누기 (한 페이지당 10개)
         const pages = [];
-        for (let i = 0; i < data.length; i += 10) {
-          pages.push(data.slice(i, i + 10));
-        }
+        for (let i = 0; i < data.length; i += 5) pages.push(data.slice(i, i + 5));
         setIngredientPages(pages);
       }
     } catch (error) {
-      console.log('서버 연결 실패, 더미 데이터 사용');
-      // 서버 연결 실패 시 기존 더미 데이터 유지
+      // console.log('서버 연결 실패, 더미 데이터 사용');
     }
   };
 
-  // 재료 선택/해제 처리
+  // 이전 레시피 불러오기 함수
+  const fetchPreviousRecipes = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/recipes/previous');
+      if (response.ok) {
+        const data = await response.json();
+        setPreviousRecipes(data);
+      }
+    } catch (error) {
+      // 서버 연결 실패 시 빈 배열 유지 (디폴트)
+      setPreviousRecipes([]);
+    }
+  };
+
   const handleIngredientSelect = (ingredient) => {
     setSelectedIngredients(prev => 
       prev.includes(ingredient)
@@ -119,101 +76,160 @@ function Recom() {
     );
   };
 
-  // 주제 입력 처리
-  const handleTopicInputChange = (e) => {
-    setTopicInput(e.target.value);
-  };
+  const handleTopicInputChange = (e) => setTopicInput(e.target.value);
 
-  // 주제 태그 추가 (엔터키)
   const handleTopicInputKeyPress = (e) => {
     if (e.key === 'Enter' && topicInput.trim()) {
-      if (!topicTags.includes(topicInput.trim())) {
-        setTopicTags([...topicTags, topicInput.trim()]);
-      }
+      if (!topicTags.includes(topicInput.trim())) setTopicTags([...topicTags, topicInput.trim()]);
       setTopicInput('');
     }
   };
 
-  // 주제 태그 삭제
-  const handleTopicTagDelete = (tagToDelete) => {
-    setTopicTags(topicTags.filter(tag => tag !== tagToDelete));
+  const handleTopicTagDelete = (tagToDelete) => setTopicTags(topicTags.filter(tag => tag !== tagToDelete));
+
+  const handleRecipeClick = (recipeId) => {
+    const ingredientsParam = selectedIngredients.join(',');
+    navigate(`/RecipeDetail/${recipeId}?ingredients=${encodeURIComponent(ingredientsParam)}`);
   };
 
-  // 레시피 카드 클릭 시 상세 페이지로 이동
-  
-  const handleRecipeClick = (recipeId) => {
-    // 선택된 재료를 URL 파라미터로 전달
-    const ingredientsParam = selectedIngredients.join(',');
-    navigate(`/RecipeDetail/${recipeId}?ingredients=${encodeURIComponent(ingredientsParam)}`); // 👈 이 부분을 수정
-  };
   const handleNextIngredientPage = () => {
-    if (currentIngredientPage < ingredientPages.length - 1) {
-      setCurrentIngredientPage(currentIngredientPage + 1);
-    }
+    if (currentIngredientPage < ingredientPages.length - 1) setCurrentIngredientPage(currentIngredientPage + 1);
   };
 
   const handlePrevIngredientPage = () => {
-    if (currentIngredientPage > 0) {
-      setCurrentIngredientPage(currentIngredientPage - 1);
-    }
+    if (currentIngredientPage > 0) setCurrentIngredientPage(currentIngredientPage - 1);
   };
 
-  // 검색 버튼 클릭
   const handleSearch = async () => {
-    // 재료 선택 검증
     if (selectedIngredients.length === 0) {
       alert('재료를 하나 이상 선택해주세요!');
       return;
     }
-
-    console.log('검색 실행');
-    
-    const searchData = {
-      ingredients: selectedIngredients,
-      topics: topicTags,
-      hasMainIngredient: hasMainIngredient
-    };
-
+    const searchData = { ingredients: selectedIngredients, topics: topicTags, hasMainIngredient };
     try {
       const response = await fetch('http://localhost:3001/api/recipes/search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(searchData)
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(searchData)
       });
-
       if (response.ok) {
         const data = await response.json();
-        setRecipes(data);
-        setHasSearched(true);
+        setRecipes(data); setHasSearched(true);
       }
     } catch (error) {
-      console.log('검색 API 호출 실패, 더미 데이터 사용');
-      // 서버 연결 실패 시 더미 데이터 사용
-      setRecipes(dummyRecipes);
-      setHasSearched(true);
+      setRecipes(dummyRecipes); setHasSearched(true);
     }
+  };
+
+  // ranking slider state & refs
+  const rankingPerPage = 3;
+  const [rankPage, setRankPage] = useState(0);
+  const rankingRef = useRef(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftStart = useRef(0);
+
+  const sortedRanking = [...dummyRecipes].sort((a,b) => b.views - a.views);
+
+  const totalRankPages = Math.ceil(sortedRanking.length / rankingPerPage);
+
+  const goToRankPage = (pageIndex) => {
+    const clamped = Math.max(0, Math.min(pageIndex, totalRankPages -1));
+    setRankPage(clamped);
+    const container = rankingRef.current;
+    if (container) {
+      const width = container.clientWidth;
+      container.scrollTo({ left: clamped * width, behavior: 'smooth' });
+    }
+  };
+
+  const handleRankNext = () => goToRankPage(rankPage + 1);
+  const handleRankPrev = () => goToRankPage(rankPage - 1);
+
+  useEffect(() => {
+    const container = rankingRef.current;
+    if (!container) return;
+    const handleResize = () => {
+      goToRankPage(rankPage);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+    // eslint-disable-next-line
+  }, []);
+
+  const onRankMouseDown = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX - rankingRef.current.offsetLeft;
+    scrollLeftStart.current = rankingRef.current.scrollLeft;
+  };
+  const onRankMouseMove = (e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - rankingRef.current.offsetLeft;
+    const walk = (startX.current - x);
+    rankingRef.current.scrollLeft = scrollLeftStart.current + walk;
+  };
+  const onRankMouseUp = () => {
+    isDragging.current = false;
+    const container = rankingRef.current;
+    if (!container) return;
+    const page = Math.round(container.scrollLeft / container.clientWidth);
+    setRankPage(Math.max(0, Math.min(page, totalRankPages-1)));
+  };
+
+  // 이전 레시피 slider state & refs
+  const previousPerPage = 3;
+  const [prevPage, setPrevPage] = useState(0);
+  const previousRef = useRef(null);
+  const isPrevDragging = useRef(false);
+  const prevStartX = useRef(0);
+  const prevScrollLeftStart = useRef(0);
+
+  const totalPrevPages = Math.ceil(previousRecipes.length / previousPerPage);
+
+  const goToPrevPage = (pageIndex) => {
+    const clamped = Math.max(0, Math.min(pageIndex, totalPrevPages - 1));
+    setPrevPage(clamped);
+    const container = previousRef.current;
+    if (container) {
+      const width = container.clientWidth;
+      container.scrollTo({ left: clamped * width, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrevNext = () => goToPrevPage(prevPage + 1);
+  const handlePrevPrev = () => goToPrevPage(prevPage - 1);
+
+  const onPrevMouseDown = (e) => {
+    isPrevDragging.current = true;
+    prevStartX.current = e.pageX - previousRef.current.offsetLeft;
+    prevScrollLeftStart.current = previousRef.current.scrollLeft;
+  };
+  const onPrevMouseMove = (e) => {
+    if (!isPrevDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - previousRef.current.offsetLeft;
+    const walk = (prevStartX.current - x);
+    previousRef.current.scrollLeft = prevScrollLeftStart.current + walk;
+  };
+  const onPrevMouseUp = () => {
+    isPrevDragging.current = false;
+    const container = previousRef.current;
+    if (!container) return;
+    const page = Math.round(container.scrollLeft / container.clientWidth);
+    setPrevPage(Math.max(0, Math.min(page, totalPrevPages - 1)));
   };
 
   return (
     <div className="recom-container">
-      {/* 재료 선택하기 섹션 */}
-      <div className="section-bar">
-        <div className="section-title">재료 선택하기</div>
+      <div className="recom-section-bar">
+        <div className="recom-section-title">재료 선택하기</div>
         {currentIngredientPage > 0 && (
-          <button 
-            className="navigation-button"
-            onClick={handlePrevIngredientPage}
-          >
-            ←
-          </button>
+          <button className="recom-navigation-button" onClick={handlePrevIngredientPage}>‹</button>
         )}
-        <div className="ingredient-tags-wrapper">
+        <div className="recom-ingredient-tags-wrapper">
           {ingredientPages[currentIngredientPage] && ingredientPages[currentIngredientPage].map((ingredient, index) => (
             <button
               key={index}
-              className={`ingredient-tag ${selectedIngredients.includes(ingredient) ? 'selected' : ''}`}
+              className={`recom-ingredient-tag ${selectedIngredients.includes(ingredient) ? 'selected' : ''}`}
               onClick={() => handleIngredientSelect(ingredient)}
             >
               {ingredient}
@@ -221,19 +237,13 @@ function Recom() {
           ))}
         </div>
         {currentIngredientPage < ingredientPages.length - 1 && (
-          <button 
-            className="navigation-button"
-            onClick={handleNextIngredientPage}
-          >
-            →
-          </button>
+          <button className="recom-navigation-button" onClick={handleNextIngredientPage}>›</button>
         )}
       </div>
 
-      {/* 주제 선택하기 섹션 */}
-      <div className="section-bar">
-        <div className="section-title">주제 선택하기</div>
-        <div className="topic-input-container">
+      <div className="recom-section-bar">
+        <div className="recom-section-title">주제 선택하기</div>
+        <div className="recom-topic-input-container">
           <input
             ref={topicInputRef}
             type="text"
@@ -241,31 +251,25 @@ function Recom() {
             onChange={handleTopicInputChange}
             onKeyPress={handleTopicInputKeyPress}
             placeholder="엔터로 입력"
-            className="topic-input"
-            maxLength={5}
+            className="recom-topic-input"
+            maxLength={20}
           />
-          <div className="topic-tags">
+          <div className="recom-topic-tags">
             {topicTags.map((tag, index) => (
-              <div key={index} className="topic-tag">
+              <div key={index} className="recom-topic-tag">
                 {tag}
-                <button 
-                  className="topic-tag-delete"
-                  onClick={() => handleTopicTagDelete(tag)}
-                >
-                  ×
-                </button>
+                <button className="recom-topic-tag-delete" onClick={() => handleTopicTagDelete(tag)}>×</button>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* 주재료 유무 섹션 */}
-      <div className="section-bar">
-        <div className="section-title">주재료 유무</div>
+      <div className="recom-section-bar">
+        <div className="recom-section-title">주재료 유무 선택하기</div>
         <div className="radio-container">
           <label className="checkbox-label">
-            <span className="checkbox-text">주재료 O</span>
+            <span className="checkbox-text">주재료 포함하기</span>
             <div 
               className={`custom-checkbox ${hasMainIngredient ? 'checked' : ''}`}
               onClick={() => setHasMainIngredient(true)}
@@ -274,7 +278,7 @@ function Recom() {
             </div>
           </label>
           <label className="checkbox-label">
-            <span className="checkbox-text">주재료 X</span>
+            <span className="checkbox-text">주재료 미포함하기</span>
             <div 
               className={`custom-checkbox ${!hasMainIngredient ? 'checked' : ''}`}
               onClick={() => setHasMainIngredient(false)}
@@ -285,35 +289,146 @@ function Recom() {
         </div>
       </div>
 
-      {/* 레시피 섹션 */}
       <div className="recipe-section">
         <div className="search-btn-container">
           <button className="search-btn" onClick={handleSearch}>검색</button>
         </div>
-        
-        {!hasSearched ? (
+
+        {/* 레시피 랭킹 섹션 - 항상 표시 */}
+        <div className="ranking-section">
+          <h3 className="ranking-title">🍳 가장 조회수가 많은 레시피 랭킹</h3>
+
+          <div className="ranking-slider-wrapper">
+            <button 
+              className="rank-nav left" 
+              onClick={handleRankPrev} 
+              disabled={rankPage === 0}
+            >
+              ‹
+            </button>
+
+            <div
+              className="ranking-slider"
+              ref={rankingRef}
+              onMouseDown={onRankMouseDown}
+              onMouseMove={onRankMouseMove}
+              onMouseLeave={onRankMouseUp}
+              onMouseUp={onRankMouseUp}
+              onTouchStart={(e) => { onRankMouseDown(e.touches[0]); }}
+              onTouchMove={(e) => { onRankMouseMove(e.touches[0]); }}
+              onTouchEnd={onRankMouseUp}
+            >
+              {sortedRanking.map((r) => (
+                <div 
+                  key={r.id} 
+                  className="recipe-card ranking-card"
+                  onClick={() => handleRecipeClick(r.id)}
+                >
+                  <img src={r.image} alt={r.name} className="recipe-image" />
+                  <div className="recipe-info">
+                    <h4 className="recipe-name">{r.name}</h4>
+                    <p className="recipe-description">{r.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button 
+              className="rank-nav right" 
+              onClick={handleRankNext}
+              disabled={rankPage >= totalRankPages - 1}
+            >
+              ›
+            </button>
+          </div>
+        </div>
+
+        {/* 조건부 렌더링 */}
+        {hasSearched ? (
+          // 2번 케이스: 검색 후 추천 레시피 표시
+          <>
+            <div className="section-divider"></div>
+            <div className="recommended-section">
+              <h3 className="recommended-title">🍳 추천 레시피</h3>
+              <div className="recipe-grid-container">
+                {recipes.map((recipe) => (
+                  <div 
+                    key={recipe.id} 
+                    className="recipe-card" 
+                    onClick={() => handleRecipeClick(recipe.id)}
+                  >
+                    <img src={recipe.image} alt={recipe.name} className="recipe-image" />
+                    <div className="recipe-info">
+                      <h4 className="recipe-name">{recipe.name}</h4>
+                      <p className="recipe-description">{recipe.description}</p>
+                      <p className="recipe-details">{recipe.details}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : previousRecipes.length > 0 ? (
+          // 3번 케이스: 이전 레시피 표시
+          <>
+            <div className="section-divider"></div>
+            <div className="previous-recipe-section">
+              <h3 className="previous-recipe-title">🍳 이전에 보셨던 레시피는 어떠신가요?</h3>
+
+              <div className="previous-recipe-slider-wrapper">
+                <button 
+                  className="prev-nav left" 
+                  onClick={handlePrevPrev} 
+                  disabled={prevPage === 0}
+                >
+                  ‹
+                </button>
+
+                <div
+                  className="previous-recipe-slider"
+                  ref={previousRef}
+                  onMouseDown={onPrevMouseDown}
+                  onMouseMove={onPrevMouseMove}
+                  onMouseLeave={onPrevMouseUp}
+                  onMouseUp={onPrevMouseUp}
+                  onTouchStart={(e) => { onPrevMouseDown(e.touches[0]); }}
+                  onTouchMove={(e) => { onPrevMouseMove(e.touches[0]); }}
+                  onTouchEnd={onPrevMouseUp}
+                >
+                  {previousRecipes.map((r) => (
+                    <div 
+                      key={r.id} 
+                      className="recipe-card previous-recipe-card"
+                      onClick={() => handleRecipeClick(r.id)}
+                    >
+                      <img src={r.image} alt={r.name} className="recipe-image" />
+                      <div className="recipe-info">
+                        <h4 className="recipe-name">{r.name}</h4>
+                        <p className="recipe-description">{r.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <button 
+                  className="prev-nav right" 
+                  onClick={handlePrevNext}
+                  disabled={prevPage >= totalPrevPages - 1}
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          // 1번 케이스: 빈 박스 표시
           <div className="empty-recipe-container">
             <div className="empty-recipe-message">
               <div className="empty-title">아직 추천 레시피가 없습니다!</div>
-              <div className="empty-subtitle">원하는 재료와 주제를 선택한 뒤 검색 버튼을 눌러 레시피를 추천받아 보세요</div>
-            </div>
-          </div>
-        ) : (
-          <div className="recipe-grid-container">
-            {recipes.map((recipe) => (
-              <div 
-                key={recipe.id} 
-                className="recipe-card"
-                onClick={() => handleRecipeClick(recipe.id)}
-              >
-                <img src={recipe.image} alt={recipe.name} className="recipe-image" />
-                <div className="recipe-info">
-                  <h4 className="recipe-name">{recipe.name}</h4>
-                  <p className="recipe-description">{recipe.description}</p>
-                  <p className="recipe-details">{recipe.details}</p>
-                </div>
+              <div className="empty-subtitle">
+                원하는 재료와 주제를 선택한 뒤 검색 버튼을 눌러 레시피를 추천받아 보세요
               </div>
-            ))}
+            </div>
           </div>
         )}
       </div>
