@@ -1,22 +1,9 @@
 /* 비로그인 상태의 정보 등록 페이지 */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './InfoRegistration.css';
 import Stage from '../components/Stage';
-
-// 조리도구 리스트
-const TOOLS_LIST = [
-  '냄비', '프라이팬', '볼', '계량스푼', '키친타올', '계량컵', 
-  '전자레인지', '에어프라이어', '오븐', '찜기', '내열용기', '밀폐용기', 
-  '믹서기', '거품기', '스텐트레이', '랩', '매셔', '전기밥솥', '면보', '체망', '토치'
-];
-
-// 알레르기 리스트
-const ALLERGIES_LIST = [
-  '① 난류(가금류)', '② 우유', '③ 메밀', '④ 땅콩', '⑤ 대두', '⑥ 밀', 
-  '⑦ 고등어', '⑧ 게', '⑨ 새우', '⑩ 돼지고기', '⑪ 복숭아', '⑫ 토마토', 
-  '⑬ 아황산염', '⑭ 호두', '⑮ 닭고기', '⑯ 소고기', '⑰ 오징어', '⑱ 조개류(굴, 전복, 홍합 포함)'
-];
+import { useGlobalLoading } from '../components/LoadingProvider';
 
 // state 초기 객체 생성 함수
 const InitialState = (list) => {
@@ -28,13 +15,55 @@ const InitialState = (list) => {
 };
 
 function InfoRegistration() {
-  // state 설정
-  const [allergies, setAllergies] = useState(InitialState(ALLERGIES_LIST));
-  const [tools, setTools] = useState(InitialState(TOOLS_LIST));
-
   const navigate = useNavigate();
+  const { show, hide } = useGlobalLoading();
+  
+  // 서버에서 받아올 전체 리스트 저장 state
+  const [allergyList, setAllergyList] = useState([]);
+  const [toolList, setToolList] = useState([]);
 
-  // 알레르기 토글 핸들러
+  // 사용자의 선택 상태 저장 state(초기값은 빈 객체)
+  const [allergies, setAllergies] = useState([]);
+  const [tools, setTools] = useState([]);
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      show();
+      try {
+        const [allergiesRes, toolsRes] = await Promise.all([
+          fetch('http://localhost:3001/api/user/allergies'),
+          fetch('http://localhost:3001/api/user/tools'),
+        ]);
+
+        if (allergiesRes.ok && toolsRes.ok) {
+          const allergiesData = await allergiesRes.json();
+          const toolsData = await toolsRes.json();
+
+          // 배열 ["A", "B"] 형태로 온다고 가정
+          const allergyArray = allergiesData.data || allergiesData; 
+          const toolArray = toolsData.data || toolsData;
+
+          // 리스트 State 업데이트
+          setAllergyList(allergyArray);
+          setToolList(toolArray);
+
+          // 선택 상태 초기화 (모두 false로 설정)
+          setAllergies(InitialState(allergyArray));
+          setTools(InitialState(toolArray));
+        } else {
+          console.error("목록을 불러오지 못했습니다.");
+        }
+      } catch (error) {
+        console.error("API 호출 오류:", error);
+      } finally {
+        hide();
+      }
+    };
+
+    fetchOptions();
+  }, [show, hide]);
+  
+  // 토글 핸들러 (기존 유지)
   const toggleAllergy = (allergyName) => {
     setAllergies((prev) => ({
       ...prev,
@@ -42,17 +71,14 @@ function InfoRegistration() {
     }));
   };
 
-  // 조리도구 토글 핸들러
   const toggleTool = (toolName) => {
     setTools((prev) => ({
       ...prev,
       [toolName]: !prev[toolName]
     }));
   };
-
+      
   const handleSubmit = async () => {
-    console.log('선택된 알레르기:', allergies);
-    console.log('선택된 조리도구:', tools);
     
     try {
       // JWT 토큰 확인
@@ -98,7 +124,7 @@ function InfoRegistration() {
       
       <div className="info-registration-content">
         <div className="form-section">
-          <h1 className="section-title">정보 등록</h1>
+          <h1 className="infosection-title">정보 등록</h1>
           
           <div className="allergy-section">
             <label className="allergy-label">알레르기</label>

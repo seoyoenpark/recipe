@@ -1,5 +1,5 @@
 .info-registration-container {
-  width: 65%;
+  width: 75%;
   min-height: 100vh;
   background-color: #ffffff;
   margin: 0 auto; /* 중앙 정렬 추가 */
@@ -19,17 +19,18 @@
 .form-section {
   width: 100%;
   max-width: 2600px;
-  background-color: #FFF2DB;
+  background-color: #ffffff;
+  border: 3px solid #609966;
   padding: 5px 40px;
-  border-radius: 15px;
+  border-radius: 25px;
   margin-bottom: 30px;
 }
 
-.section-title {
-  font-size: 1.5rem !important;
-  font-weight: bold;
+.infosection-title {
+  font-size: 30px;
+  font-weight: 550;
   margin-bottom: 30px;
-  color: #333333;
+  color: #5D4037;
 }
 
 /* 알레르기 섹션 */
@@ -39,10 +40,10 @@
 
 .allergy-label {
   display: block;
-  font-size: 1.0rem;
+  font-size: 1.2rem;
   font-weight: normal;
   margin-bottom: 15px;
-  color: #333333;
+  color: #5D4037;
 }
 
 /* 알레르기 버튼 그룹 스타일 */
@@ -56,9 +57,9 @@
 
 /* 알레르기 버튼 스타일 */
 .allergy-button {
-  background-color: #f1f8e9; /* 연한 녹색 계열 */
-  border: 1.5px solid #8bc34a; /* 녹색 계열 */
-  color: #33691e; /* 진한 녹색 */
+  background-color: #ffffff;
+  border: 1.5px solid #609966;
+  color: #5D4037;
   border-radius: 25px;
   padding: 10px 20px;
   cursor: pointer;
@@ -69,14 +70,14 @@
 
 /* 선택된 알레르기 버튼 */
 .allergy-button.selected {
-  background-color: #8bc34a; /* 녹색 계열 */
+  background-color: #609966;
   color: white;
-  border-color: #8bc34a;
+  border-color: #609966;
 }
 
 .allergy-button:hover {
-  background-color: #9ccc65;
-  border-color: #8bc34a;
+  background-color: #609966;
+  border-color: #609966;
 }
 
 /* 조리도구 섹션 */
@@ -86,10 +87,10 @@
 
 .tools-label {
   display: block;
-  font-size: 1.0rem;
+  font-size: 1.2rem;
   font-weight: normal;
   margin-bottom: 15px;
-  color: #333333;
+  color: #5D4037;
 }
 
 /*조리도구 버튼 그룹 스타일 */
@@ -102,9 +103,9 @@
 
 /* Mypage와 동일한 조리도구 버튼 스타일 */
 .tool-button {
-  background-color: #fff5f0;
-  color: #333333;
-  border: 1.5px solid #ff7b52;
+  background-color: #ffffff;
+  color: #5D4037;
+  border: 1.5px solid #FFC36D;
   border-radius: 25px;
   padding: 10px 20px;
   cursor: pointer;
@@ -115,27 +116,26 @@
 
 /* 선택된 조리도구 버튼 */
 .tool-button.selected {
-  background-color: #ff7b52;
+  background-color: #FFC36D;
   color: white;
-  border-color: #ff7b52;
+  border-color: #FFC36D;
 }
 
 .tool-button:hover {
-  background-color: #f79273;
-  border-color: #FF7B52;
+  background-color: #FFC36D;
+  border-color: #FFC36D;
 }
 
 /* 제출 버튼 */
 .submit-btn {
-  width: 100%;
-  max-width: 2000px;
-  padding: 15px;
-  background-color: #FF7B52;
+  width: fit-content;
+  padding: 15px 30px;
+  background-color: #609966;
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 550;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin: 0 auto;
@@ -143,7 +143,7 @@
 }
 
 .submit-btn:hover {
-  background-color: #e6732d;
+  background-color: #4E6C50;
 }
 
 /* 반응형 디자인 */

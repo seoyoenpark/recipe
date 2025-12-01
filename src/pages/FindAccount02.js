@@ -7,7 +7,7 @@ function FindAccount02() {
   const [username, setUsername] = useState('');
   const [btd, setBtd] = useState('');
   
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState(''); 
 
@@ -99,7 +99,7 @@ function FindAccount02() {
   return (
     <>
       <section className="logincontainer">
-        <p>비밀번호를 분실했다면 하단에 이름과 아이디, 생년월일을 입력해주세요.</p>
+        <h3>비밀번호를 분실했다면 하단에 이름과 아이디, 생년월일을 입력해주세요.</h3>
 
         <form onSubmit={handleFindId}>
           <label htmlFor="name">이름</label>
@@ -134,13 +134,16 @@ function FindAccount02() {
             pattern="\d{6}"
             required
           />
-          <button type="submit" className="find-id">비밀번호 재설정</button>
+          <div className="button-container">
+            <button type="submit" className="find-pwd-btn">비밀번호 재설정</button>
+          </div>
         </form>
 
         {isModalOpen && (
           <div className="modal-overlay" onClick={closeModal}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <h2>하단에 새로운 비밀번호를 입력해주세요.</h2>
+              <h2>비밀번호 재설정</h2>
+            <p>하단에 새로운 비밀번호를 입력해주세요.</p>
             <form onSubmit={handleResetPassword}>
               <label htmlFor="newPassword">새로운 비밀번호</label>
               <input

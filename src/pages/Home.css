@@ -1,7 +1,7 @@
 /* 전체 메인 레이아웃 */
 .Maincontent {
-  padding: 40px 20px;
-  width: 65%;
+  padding: 20px;
+  width: 75%;
   margin: 0 auto;
   color: #333;
 }
@@ -15,12 +15,12 @@
 }
 
 .intro {
-  flex: 1.5;
+  flex: 2;
   font-size: 1.4rem;
-  line-height: 1.8;
+  line-height: 2.0;
   font-weight: 550;
   text-align: left;
-  padding-left: 10px;
+  padding: 0;
 }
 
 .imagecontent {
@@ -91,7 +91,7 @@
 /* 단계별 사용자 흐름 */
 .user-flow {
   text-align: left;
-  margin-bottom: 30px;
+  margin-bottom: 70px;
 }
 
 .user-flow h3 {

@@ -132,8 +132,9 @@ function Register() {
           checked={gender === 'male'}
           onChange={(e) => setGender(e.target.value)}
           required
+          className='gender-input'
         />
-        <label htmlFor="gender-male">남성</label>
+        <label htmlFor="gender-male" className='gender-label'>남성</label>
 
         <input
           id="gender-female"
@@ -143,8 +144,9 @@ function Register() {
           checked={gender === 'female'}
           onChange={(e) => setGender(e.target.value)}
           required
+          className='gender-input'
         />
-        <label htmlFor="gender-female">여성</label>
+        <label htmlFor="gender-female" className='gender-label'>여성</label>
       </fieldset>
 
         <button type="submit" className="registerbutton">회원가입 완료</button>

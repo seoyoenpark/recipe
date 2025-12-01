@@ -54,7 +54,7 @@ function FindAccount01() {
   return (
     <>
       <section className="logincontainer">
-        <p>아이디를 찾고 싶다면 하단에 이름과 생년월일을 입력해주세요.</p>
+        <h3>아이디를 찾고 싶다면 하단에 이름과 생년월일을 입력해주세요.</h3>
 
         <form onSubmit={handleFindId}>
           <label htmlFor="name">이름</label>
@@ -79,13 +79,15 @@ function FindAccount01() {
             pattern="\d{6}"
             required
           />
-          <button type="submit" className="find-id">아이디 찾기</button>
+          <div className="button-container">
+            <button type="submit" className="find-id">아이디 찾기</button>
+          </div>
         </form>
 
         {isModalOpen && (
           <div className="modal-overlay" onClick={closeModal}>
-            <div className="modal-content" onClick={e => e.stopPropagation()}>
-
+            <div className="find-modal-content" onClick={e => e.stopPropagation()}>
+              <h2>아이디 찾기</h2>
               <h3>{foundInfo.name}님의 아이디 찾기가 완료되었습니다.</h3>
               <h3>아이디는 {foundInfo.userID} 입니다.</h3>
 
