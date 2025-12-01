@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './AdminRecipe.css';
 
-// 더미 데이터
+// 더미 데이터 (이미지 URL 제거)
 const dummyRecipes = [
   { 
     id: 1, 
@@ -10,22 +10,15 @@ const dummyRecipes = [
     tools: '냄비', 
     tags: '한식, 찌개', 
     allergy: '없음',
-    description: '매콤하고 시원한 김치찌개입니다.',
     cookTime: '30분',
-    difficulty: '쉬움',
     steps: [
       '김치를 볶는다',
       '물을 넣고 끓인다',
       '돼지고기와 두부를 넣는다',
       '간을 맞춘다'
     ],
-    completedImage: 'https://picsum.photos/600/300?random=31',
-    stepImages: [
-      'https://picsum.photos/180/120?random=32',
-      'https://picsum.photos/180/120?random=33',
-      'https://picsum.photos/180/120?random=34',
-      'https://picsum.photos/180/120?random=35'
-    ]
+    completedImage: null, // 서버에서 받아올 예정
+    stepImages: [null, null, null, null] // 서버에서 받아올 예정
   },
   { 
     id: 2, 
@@ -34,74 +27,19 @@ const dummyRecipes = [
     tools: '냄비, 팬', 
     tags: '양식, 면요리', 
     allergy: '글루텐',
-    description: '간단하고 맛있는 토마토 파스타입니다.',
     cookTime: '20분',
-    difficulty: '보통',
     steps: [
       '면을 삶는다',
       '마늘을 볶는다',
       '토마토소스를 넣는다',
       '면과 섞어 완성'
     ],
-    completedImage: 'https://via.placeholder.com/600x300/e17055/ffffff?text=완성된+파스타',
-    stepImages: [
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step1',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step2',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step3',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step4'
-    ]
-  },
-  { 
-    id: 3, 
-    name: '계란볶음밥', 
-    ingredients: '밥, 계란, 파, 당근, 간장', 
-    tools: '팬', 
-    tags: '한식, 볶음밥', 
-    allergy: '없음',
-    description: '간단하고 맛있는 계란볶음밥입니다.',
-    cookTime: '15분',
-    difficulty: '쉬움',
-    steps: [
-      '계란을 스크램블한다',
-      '야채를 볶는다',
-      '밥을 넣어 볶는다',
-      '간장으로 간을 맞춘다'
-    ],
-    completedImage: 'https://via.placeholder.com/600x300/fdcb6e/ffffff?text=완성된+계란볶음밥',
-    stepImages: [
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step1',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step2',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step3',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step4'
-    ]
-  },
-  { 
-    id: 4, 
-    name: '치킨커리', 
-    ingredients: '닭고기, 양파, 커리가루, 코코넛밀크', 
-    tools: '냄비', 
-    tags: '양식, 커리', 
-    allergy: '없음',
-    description: '진한 맛의 치킨커리입니다.',
-    cookTime: '45분',
-    difficulty: '어려움',
-    steps: [
-      '닭고기를 볶는다',
-      '양파를 볶는다',
-      '커리가루를 넣는다',
-      '코코넛밀크로 끓인다'
-    ],
-    completedImage: 'https://via.placeholder.com/600x300/f39c12/ffffff?text=완성된+치킨커리',
-    stepImages: [
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step1',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step2',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step3',
-      'https://via.placeholder.com/180x120/cccccc/333333?text=180x120px+Step4'
-    ]
-  },
+    completedImage: null,
+    stepImages: [null, null, null, null]
+  }
 ];
 
-// 숫자를 한글로 변환하는 함수
+// 숫자 → 첫·두·세 번째 변환
 const numberToKorean = (num) => {
   const korean = ['첫', '두', '세', '네', '다섯', '여섯', '일곱', '여덟', '아홉', '열'];
   return korean[num - 1] || `${num}`;
@@ -111,98 +49,252 @@ function AdminRecipe() {
   const [allRecipes, setAllRecipes] = useState(dummyRecipes);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  
+  // 페이지네이션 상태
+  const [currentPage, setCurrentPage] = useState(1);
+  const recipesPerPage = 10;
 
-  useEffect(() => {
-    // 서버에서 레시피 데이터를 가져오는 로직
-    // 현재는 더미 데이터 사용
-  }, []);
+  useEffect(() => {}, []);
 
-  const handleRowClick = (recipe) => {
-    setSelectedRecipe({...recipe});
-    setIsPopupOpen(true);
+  // 현재 페이지의 레시피 계산
+  const indexOfLastRecipe = currentPage * recipesPerPage;
+  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+  const currentRecipes = allRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const totalPages = Math.ceil(allRecipes.length / recipesPerPage);
+
+  // 페이지 변경 핸들러
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
-  const handleClosePopup = () => {
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleRowClick = (recipe) => {
+    setSelectedRecipe({ ...recipe });
+    setIsPopupOpen(true);
+    setIsEditMode(false);
+  };
+
+  const handleOverlayClick = () => {
     setIsPopupOpen(false);
     setSelectedRecipe(null);
+    setIsEditMode(false);
+  };
+
+  // 삭제 기능
+  const handleDelete = () => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
+    setAllRecipes(allRecipes.filter(r => r.id !== selectedRecipe.id));
+    setIsPopupOpen(false);
+  };
+
+  // 수정 → 저장
+  const handleSave = () => {
+    setAllRecipes(prev =>
+      prev.map(r => (r.id === selectedRecipe.id ? selectedRecipe : r))
+    );
+    setIsEditMode(false);
+  };
+
+  // 이미지 에러 핸들러 - placeholder 표시
+  const handleImageError = (e) => {
+    e.target.style.display = 'block';
+    e.target.src = '';
+    e.target.style.backgroundColor = '#f0f0f0';
   };
 
   return (
     <div className="admin-recipe-container">
       <h2>레시피 목록 상세 조회 및 관리</h2>
 
-      {/* 레시피 정보 테이블 */}
-      <table className="recipe-table">
-        <thead>
-          <tr>
-            <th>Index</th>
-            <th>레시피 이름</th>
-            <th>재료</th>
-            <th>조리도구</th>
-            <th>주제(태그)</th>
-            <th>알레르기</th>
-          </tr>
-        </thead>
-        <tbody>
-          {allRecipes.map((recipe, index) => (
-            <tr key={recipe.id} onClick={() => handleRowClick(recipe)} style={{ cursor: 'pointer' }}>
-              <td>{index + 1}</td>
-              <td>{recipe.name}</td>
-              <td>{recipe.ingredients}</td>
-              <td>{recipe.tools}</td>
-              <td>{recipe.tags}</td>
-              <td>{recipe.allergy}</td>
+      {/* ============= 테이블 컨테이너 ============= */}
+      <div className="recipe-table-container">
+        <table className="recipe-table">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>레시피 이름</th>
+              <th>재료</th>
+              <th>조리도구</th>
+              <th>주제(태그)</th>
+              <th>알레르기</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentRecipes.map((recipe, index) => (
+              <tr
+                key={recipe.id}
+                onClick={() => handleRowClick(recipe)}
+                style={{ cursor: 'pointer' }}
+              >
+                <td>{indexOfFirstRecipe + index + 1}</td>
+                <td>{recipe.name}</td>
+                <td>{recipe.ingredients}</td>
+                <td>{recipe.tools}</td>
+                <td>{recipe.tags}</td>
+                <td>{recipe.allergy}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      {/* 상세 정보 팝업 */}
+        {/* 페이지네이션 */}
+        <div className="pagination">
+          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+            이전
+          </button>
+          <span className="page-info">
+            {currentPage} / {totalPages}
+          </span>
+          <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+            다음
+          </button>
+        </div>
+      </div>
+
+      {/* ================= 팝업 ================= */}
       {isPopupOpen && selectedRecipe && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <div className="popup-header">
-              <h3>레시피 상세 정보</h3>
-              <button className="close-btn" onClick={handleClosePopup}>×</button>
+        <div className="popup-overlay" onClick={handleOverlayClick}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+
+            {/* 상단 영역 (이미지 + 레시피 정보) */}
+            <div className="top-section">
+
+              {/* 메인 이미지 (placeholder 지원) */}
+              <img
+                src={selectedRecipe.completedImage || ''}
+                alt={selectedRecipe.name}
+                className="popup-main-image"
+                onError={handleImageError}
+              />
+
+              {/* 레시피 정보 블록 */}
+              <div className="recipe-info-block">
+                {isEditMode ? (
+                  <>
+                    <input
+                      type="text"
+                      value={selectedRecipe.name}
+                      onChange={(e) => setSelectedRecipe({...selectedRecipe, name: e.target.value})}
+                      placeholder="레시피 이름"
+                    />
+                    <label>태그</label>
+                    <input
+                      type="text"
+                      value={selectedRecipe.tags}
+                      onChange={(e) => setSelectedRecipe({...selectedRecipe, tags: e.target.value})}
+                      placeholder="태그"
+                    />
+                    <label>조리도구</label>
+                    <input
+                      type="text"
+                      value={selectedRecipe.tools}
+                      onChange={(e) => setSelectedRecipe({...selectedRecipe, tools: e.target.value})}
+                      placeholder="조리도구"
+                    />
+                    <label>알레르기</label>
+                    <input
+                      type="text"
+                      value={selectedRecipe.allergy}
+                      onChange={(e) => setSelectedRecipe({...selectedRecipe, allergy: e.target.value})}
+                      placeholder="알레르기"
+                    />
+                    <label>조리 시간</label>
+                    <input
+                      type="text"
+                      value={selectedRecipe.cookTime}
+                      onChange={(e) => setSelectedRecipe({...selectedRecipe, cookTime: e.target.value})}
+                      placeholder="조리 시간"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <h2>{selectedRecipe.name}</h2>
+                    <h4>주제(태그)</h4>
+                    <p>{selectedRecipe.tags}</p>
+
+                    <h4>조리도구</h4>
+                    <p>{selectedRecipe.tools}</p>
+
+                    <h4>알레르기</h4>
+                    <p>{selectedRecipe.allergy}</p>
+
+                    <h4>조리 시간</h4>
+                    <p>{selectedRecipe.cookTime}</p>
+                  </>
+                )}
+              </div>
             </div>
-            
-            <div className="popup-body">
-              {/* 완성된 음식 이미지 */}
-              <div className="completed-image-container">
-                <img 
-                  src={selectedRecipe.completedImage} 
-                  alt={selectedRecipe.name}
-                  className="completed-image"
-                />
-              </div>
 
-              {/* 레시피명 */}
-              <div className="recipe-title">
-                <h2>{selectedRecipe.name}</h2>
-              </div>
+            {/* 조리 단계 */}
+            <div className="cooking-steps">
+              {selectedRecipe.steps.map((step, index) => (
+                <div key={index} className="step-container">
 
-              {/* 조리 순서 */}
-              <div className="cooking-steps">
-                {selectedRecipe.steps.map((step, index) => (
-                  <div key={index} className="step-container">
-                    <div className="step-image">
-                      <img 
-                        src={selectedRecipe.stepImages[index]} 
-                        alt={`${index + 1}단계`}
-                      />
-                    </div>
-                    <div className="step-content">
-                      <div className="step-number">
-                        {numberToKorean(index + 1)}번째
-                      </div>
-                      <div className="step-description">
-                        {step}
-                      </div>
-                    </div>
+                  <div className="step-image">
+                    <img
+                      src={selectedRecipe.stepImages[index] || ''}
+                      alt={`${index + 1}단계`}
+                      onError={handleImageError}
+                    />
                   </div>
-                ))}
-              </div>
+
+                  <div className="step-content">
+                    {isEditMode ? (
+                      <>
+                        <label>{index + 1}단계</label>
+                        <textarea
+                          value={selectedRecipe.steps[index]}
+                          onChange={(e) => {
+                            const updated = [...selectedRecipe.steps];
+                            updated[index] = e.target.value;
+                            setSelectedRecipe({...selectedRecipe, steps: updated});
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <div className="step-number">
+                          {numberToKorean(index + 1)}번째
+                        </div>
+                        <div className="step-description">{step}</div>
+                      </>
+                    )}
+                  </div>
+
+                </div>
+              ))}
             </div>
+
+            {/* ========== 팝업 하단 버튼 ========== */}
+            <div className="popup-footer">
+
+              {/* 삭제 버튼 */}
+              <button className="delete-btn" onClick={handleDelete}>
+                삭제
+              </button>
+
+              {/* 수정 / 저장 버튼 */}
+              {!isEditMode ? (
+                <button className="edit-btn" onClick={() => setIsEditMode(true)}>
+                  수정
+                </button>
+              ) : (
+                <button className="save-btn" onClick={handleSave}>
+                  저장
+                </button>
+              )}
+
+            </div>
+
           </div>
         </div>
       )}

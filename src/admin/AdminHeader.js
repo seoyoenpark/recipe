@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './AdminHeader.css';
 
-function AdminHeader() {
+function AdminHeader({ title = "냉장고를 부탁해 관리자 페이지" }) {
   const navigate = useNavigate();
 
   // 로그아웃 처리 함수
@@ -13,18 +13,15 @@ function AdminHeader() {
   };
 
   return (
-    <header className="admin-header-wrapper">
-      <div className="admin-header-left"></div>
-      <div className="admin-header-center">
-        <Link to="/admin" className="admin-header-title-link">
-          <h1>냉장고를 부탁해 관리자 페이지</h1>
-        </Link>
+    <header className="admin-header">
+      <div className="header-logo">
+        {/* 로고 이미지 위치 - 추후 이미지 파일 추가 예정 */}
+        <img src="/path/to/logo.png" alt="냉장고를 부탁해 로고" className="logo-image" />
       </div>
-      <div className="admin-header-right">
-        <button onClick={handleLogout} className="admin-logout-button">
-          로그아웃
-        </button>
-      </div>
+      <h1 className="header-title">{title}</h1>
+      <button className="logout-button" onClick={handleLogout}>
+        로그아웃
+      </button>
     </header>
   );
 }

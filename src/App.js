@@ -26,7 +26,6 @@ import Main from './pages/Main';
 import AdminMain from './admin/AdminMain';
 import AdminUser from './admin/AdminUser';
 import AdminRecipe from './admin/AdminRecipe';
-import AdminIngredient from './admin/AdminIngredient';
 import AdminHeader from './admin/AdminHeader';
 import AdminLayout from './admin/AdminLayout';
 import AdminStatistics from './admin/AdminStatistics';
@@ -63,8 +62,9 @@ function AppContent() {
         </>
       )}
       <div className='main-content-wrapper'>
-        <Nav isAdmin={isAdmin} />
+        {!isAdminPage && <Nav isAdmin={isAdmin} />}
       <div className='content'>
+
        <Routes>
          {/* 기본 경로(/)로 접근 시 /Home으로 리다이렉트하는 Route */}
          <Route path="/" element={isAuthenticated() ? <Navigate to="/Main" /> : <Navigate to="/Home" />} />
@@ -86,7 +86,6 @@ function AppContent() {
             <Route index element={<AdminMain />} /> 
             <Route path="AdminUser" element={<AdminUser />} />
             <Route path="AdminRecipe" element={<AdminRecipe />} />
-            <Route path="AdminIngredient" element={<AdminIngredient />} />
             <Route path="AdminStatistics" element={<AdminStatistics />} />
           </Route>
        </Routes>

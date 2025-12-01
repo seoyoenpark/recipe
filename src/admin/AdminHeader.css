@@ -1,50 +1,48 @@
-/* 헤더 전체를 감싸는 컨테이너 */
-.admin-header-wrapper {
+.admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
-  height: 70px;
+  padding: 20px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  font-family: 'Noto Sans KR', sans-serif;
+  position: relative;
 }
 
-/* 헤더 중앙 영역 */
-.admin-header-center {
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  height: 50px;
+  width: auto;
+}
+
+.header-title {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-}
-
-.admin-header-title-link {
-  text-decoration: none;
-}
-
-/* 헤더 타이틀 */
-.admin-header-title-link h1 {
-  font-size: 1.5em;
-  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333333;
   margin: 0;
-  white-space: nowrap;
-  justify-content: center;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* 헤더 좌측 & 우측 영역 */
-.admin-header-left, .admin-header-right {
-  flex-shrink: 0;
-}
-
-/* 로그아웃 버튼 */
-.admin-logout-button {
-  padding: 8px 20px;
-  font-size: 1em;
-  font-weight: bold;
+.logout-button {
+  padding: 10px 24px;
+  background-color: #609966;
   color: #ffffff;
-  background-color: #a9d2f5;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.3s ease;
 }
 
-.admin-logout-button:hover {
-  background-color: #5a6268;
+.logout-button:hover {
+  background-color: #609966;
 }
