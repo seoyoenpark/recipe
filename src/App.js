@@ -33,8 +33,7 @@ import AdminLayout from './admin/AdminLayout';
 import AdminStatistics from './admin/AdminStatistics';
 
 // 로그인 여부를 확인하는 함수
-const isAuthenticated = () => true;
-  // !!localStorage.getItem('token');
+const isAuthenticated = () => !!localStorage.getItem('token');
 // 사용자 권한 확인 함수
 const getUserInfo = () => {
   const userInfo = localStorage.getItem('user');
