@@ -79,7 +79,7 @@ function AppContent() {
          <Route path="/FindAccount02" element={<FindAccount02 />}/>
          <Route path="/Userlogin" element={<Userlogin />}/>
          <Route path="/InfoRegistration" element={<InfoRegistration />} />
-         <Route path="/ingredientregistration" element={<IngredientRegistration />} />
+         <Route path="/ingredient-registration" element={<IngredientRegistration />} />
          <Route path="/RecipeDetail/:id" element={<RecipeDetail />} />
          <Route path="/Main" element={<Main />}/>
          {/* 관리자 페이지 */}
