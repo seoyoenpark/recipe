@@ -6,6 +6,8 @@ import Header from './components/Header';
 import MainHeader from './components/MainHeader';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
 
 // 사용자 페이지
 import Myfridge from './pages/Myfridge';
@@ -26,7 +28,6 @@ import Main from './pages/Main';
 import AdminMain from './admin/AdminMain';
 import AdminUser from './admin/AdminUser';
 import AdminRecipe from './admin/AdminRecipe';
-import AdminIngredient from './admin/AdminIngredient';
 import AdminHeader from './admin/AdminHeader';
 import AdminLayout from './admin/AdminLayout';
 import AdminStatistics from './admin/AdminStatistics';
@@ -48,9 +49,8 @@ function AppContent() {
   const handleSearch = (query) => setSearchQuery(query);
 
   // 사용자 정보와 관리자 여부 확인
-  // const currentUser = getUserInfo();
-  // const isAdmin = currentUser && currentUser.role === 'admin';
-  const isAdmin = true;
+  const currentUser = getUserInfo();
+  const isAdmin = currentUser && currentUser.role === 'admin';
 
   // 현재 경로가 관리자 페이지인지 확인
   const isAdminPage = location.pathname.toLocaleLowerCase().startsWith('/admin');
@@ -63,31 +63,31 @@ function AppContent() {
         </>
       )}
       <div className='main-content-wrapper'>
-        <Nav isAdmin={isAdmin} />
+        {!isAdminPage && <Nav isAdmin={isAdmin} />}
       <div className='content'>
+
        <Routes>
          {/* 기본 경로(/)로 접근 시 /Home으로 리다이렉트하는 Route */}
          <Route path="/" element={isAuthenticated() ? <Navigate to="/Main" /> : <Navigate to="/Home" />} />
          <Route path="/Home" element={<Home />} />
-         <Route path="/Myfridge" element={<Myfridge />}/>
-         <Route path="/Recom" element={<Recom />}/>
-         <Route path="/Mypage" element={<Mypage />}/>
+         <Route path="/Myfridge" element={<ProtectedRoute><Myfridge /></ProtectedRoute>}/>
+         <Route path="/Recom" element={<ProtectedRoute><Recom /></ProtectedRoute>}/>
+         <Route path="/Mypage" element={<ProtectedRoute><Mypage /></ProtectedRoute>}/>
          <Route path="/Register" element={<Register />}/>
          <Route path="/Login" element={<Login />}/>
          <Route path="/FindAccount01" element={<FindAccount01 />}/>
          <Route path="/FindAccount02" element={<FindAccount02 />}/>
          <Route path="/Userlogin" element={<Userlogin />}/>
          <Route path="/InfoRegistration" element={<InfoRegistration />} />
-         <Route path="/IngredientRegistration" element={<IngredientRegistration />} />
+         <Route path="/ingredientregistration" element={<IngredientRegistration />} />
          <Route path="/RecipeDetail/:id" element={<RecipeDetail />} />
          <Route path="/Main" element={<Main />}/>
          {/* 관리자 페이지 */}
-          <Route path="/admin" element={isAdmin ? <AdminLayout /> : <Navigate to="/" />}>
-            <Route index element={<AdminMain />} /> 
-            <Route path="AdminUser" element={<AdminUser />} />
-            <Route path="AdminRecipe" element={<AdminRecipe />} />
-            <Route path="AdminIngredient" element={<AdminIngredient />} />
-            <Route path="AdminStatistics" element={<AdminStatistics />} />
+          <Route path="/admin" element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
+            <Route index element={<AdminProtectedRoute><AdminMain /></AdminProtectedRoute>} /> 
+            <Route path="AdminUser" element={<AdminProtectedRoute><AdminUser /></AdminProtectedRoute>} />
+            <Route path="AdminRecipe" element={<AdminProtectedRoute><AdminRecipe /></AdminProtectedRoute>} />
+            <Route path="AdminStatistics" element={<AdminProtectedRoute><AdminStatistics /></AdminProtectedRoute>} />
           </Route>
        </Routes>
        </div>

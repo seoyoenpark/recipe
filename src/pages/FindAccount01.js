@@ -17,7 +17,7 @@ function FindAccount01() {
     console.log('아이디 찾기 시도:', { name, btd });
 
     try {
-      const res = await fetch('http://localhost:3001/api/user/find-id', {
+      const res = await fetch('http://localhost:3000/api/user/find-id', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,16 +29,25 @@ function FindAccount01() {
       });
 
       const data = await res.json(); 
+      console.log('아이디 찾기 응답:', data);
 
       if (res.ok) {
-        setFoundInfo({ name: name, userID: data.data.userID });
+        // 백엔드 응답: { success: true, data: { userID: '...', userId: '...' } }
+        const foundUserId = data.data?.userID || data.data?.userId || '';
+        if (!foundUserId) {
+          console.error('아이디 찾기 응답에 userID가 없음:', data);
+          alert('아이디를 찾을 수 없습니다.');
+          return;
+        }
+        setFoundInfo({ name: name, userID: foundUserId });
         setIsModalOpen(true);
       } else { 
+        console.error('아이디 찾기 실패:', data);
         alert(data.message || '아이디 찾기 실패'); 
       }
     } catch (error) {
       console.error('아이디 찾기 API 호출 중 오류 발생:', error);
-      alert('서버와 통신하는 중 문제가 발생했습니다.');
+      alert(error.message || '서버와 통신하는 중 문제가 발생했습니다.');
     }
   };
 

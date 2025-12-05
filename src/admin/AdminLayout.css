@@ -1,17 +1,19 @@
-.admin-layout-container {
+.admin-layout {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-.admin-main-content {
+.admin-body {
   display: flex;
-  flex-grow: 1;
-  overflow: hidden;
+  flex: 1;
 }
 
-.admin-page-content {
-  flex-grow: 1;
-  padding: 30px;
-  overflow-y: auto; 
+.admin-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #ffffff;
+  overflow-y: auto;
 }

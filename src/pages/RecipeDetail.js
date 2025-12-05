@@ -131,7 +131,7 @@ function RecipeDetail() {
 
   const fetchRecipeDetail = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/recipes/${id}`);
+      const response = await fetch(`http://localhost:3000/api/recipes/${id}`);
       if (response.ok) {
         const data = await response.json();
         setRecipeData(data);

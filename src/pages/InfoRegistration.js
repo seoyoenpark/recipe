@@ -31,8 +31,8 @@ function InfoRegistration() {
       show();
       try {
         const [allergiesRes, toolsRes] = await Promise.all([
-          fetch('http://localhost:3001/api/user/allergies'),
-          fetch('http://localhost:3001/api/user/tools'),
+          fetch('http://localhost:3000/api/allergies'),
+          fetch('http://localhost:3000/api/tools'),
         ]);
 
         if (allergiesRes.ok && toolsRes.ok) {
@@ -89,29 +89,44 @@ function InfoRegistration() {
         return;
       }
 
-      const response = await fetch('http://localhost:3001/api/user/detailinfo', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          allergies: allergies,
-          tools: tools,
+      // 알레르기와 조리도구를 별도 API로 분리하여 호출
+      const allergyArray = Object.keys(allergies).filter(key => allergies[key] === true);
+      const [allergyRes, toolRes] = await Promise.all([
+        fetch('http://localhost:3000/api/profile/allergies', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            allergies: allergyArray,
+          }),
         }),
-      });
+        fetch('http://localhost:3000/api/profile/tools', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            tools: tools,
+          }),
+        }),
+      ]);
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('정보 등록 성공:', data);
-        alert('정보가 성공적으로 등록되었습니다!');
-        // 다음 단계(재료 등록 페이지)로 이동
-        navigate('/ingredient-registration');
-      } else {
-         const errorData = await response.json();
-        console.error('정보 등록 실패:', errorData);
-        alert('정보 등록에 실패했습니다.');
+      if (!allergyRes.ok || !toolRes.ok) {
+        const allergyError = allergyRes.ok ? null : await allergyRes.json();
+        const toolError = toolRes.ok ? null : await toolRes.json();
+        throw new Error(allergyError?.message || toolError?.message || '정보 등록에 실패했습니다.');
       }
+
+      const allergyData = await allergyRes.json();
+      const toolData = await toolRes.json();
+      const data = { ...allergyData, ...toolData };
+      console.log('정보 등록 성공:', data);
+      alert('정보가 성공적으로 등록되었습니다!');
+      // 다음 단계(재료 등록 페이지)로 이동
+      navigate('/ingredient-registration');
     } catch (error) {
       console.error('API 호출 중 오류:', error);
       alert('서버와 연결할 수 없습니다.');

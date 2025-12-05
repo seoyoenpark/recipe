@@ -85,7 +85,7 @@ function IngredientRegistration() {
       const mockAnalyzedData = [
         { id: Date.now() + 1, name: '토마토', expiry: '', quantity: '', unit: '개' },
         { id: Date.now() + 2, name: '양파', expiry: '', quantity: '300', unit: 'g' },
-        { id: Date.now() + 3, name: '당근', expiry: '', quantity: '', unit: '개' },
+        { id: Date.now() + 3, name: '당근', expiry: '2025-12-12', quantity: '', unit: '개' },
       ];
       
       setAnalyzedIngredients(mockAnalyzedData);
@@ -266,14 +266,23 @@ function IngredientRegistration() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3001/api/ingredients', {
+      
+      // 프론트엔드 형식을 백엔드 형식으로 변환
+      const formattedIngredients = ingredients.map(ing => ({
+        name: ing.name,
+        expiryDate: ing.expiry || '', // expiry → expiryDate
+        quantity_value: ing.quantity ? parseFloat(ing.quantity) : 0, // quantity → quantity_value
+        quantity_unit: ing.unit || '개' // unit → quantity_unit
+      }));
+
+      const response = await fetch('http://localhost:3000/api/ingredients/bulk', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          ingredients: ingredients,
+          ingredients: formattedIngredients,
         }),
       });
 
@@ -282,8 +291,9 @@ function IngredientRegistration() {
         console.log('재료 등록 성공:', data);
         setShowCompletionModal(true);
       } else {
-        console.error('재료 등록 실패:', response.status);
-        alert('재료 등록에 실패했습니다.');
+        const errorData = await response.json();
+        console.error('재료 등록 실패:', errorData);
+        alert(errorData.message || '재료 등록에 실패했습니다.');
       }
     } catch (error) {
       console.error('API 호출 중 오류:', error);

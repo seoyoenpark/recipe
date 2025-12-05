@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Myfridge() {
   const [ingredients, setIngredients] = useState([]);
+  const [approachingExpiries, setApproachingExpiries] = useState([]);
   const [newIngredient, setNewIngredient] = useState({
     name: '',
     expiry: '',
@@ -38,19 +39,17 @@ function Myfridge() {
 
   const units = ['개', 'ml', 'l', 'g', 'kg'];
 
-  const getExpiringIngredients = () => {
-    const today = new Date();
-    const threeDaysLater = new Date(today);
-    threeDaysLater.setDate(today.getDate() + 3);
-
-    return ingredients.filter(ingredient => {
-      if (!ingredient.expiry) return false;
-      const expiryDate = new Date(ingredient.expiry);
-      return expiryDate <= threeDaysLater && expiryDate >= today;
-    });
+  // ISO 날짜 형식을 YYYY-MM-DD로 변환하는 헬퍼 함수
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return '';
+    // ISO 형식 (2025-12-03T15:00:00.000Z) 또는 YYYY-MM-DD 형식 모두 처리
+    if (dateString.includes('T')) {
+      return dateString.split('T')[0];
+    }
+    return dateString;
   };
 
-  const expiringIngredients = getExpiringIngredients();
+  // 소비기한 임박 식재료는 백엔드 API에서 조회하므로 클라이언트 계산 제거
 
   const handlePhotoUpload = () => {
     fileInputRef.current?.click();
@@ -79,36 +78,177 @@ function Myfridge() {
 
     setIsAnalyzing(true);
     
-    // Simulate API call to analyze the image
-    setTimeout(() => {
-      const mockAnalyzedData = [
-        { id: Date.now() + 1, name: '토마토', expiry: '', quantity: '', unit: '개' },
-        { id: Date.now() + 2, name: '양파', expiry: '', quantity: '300', unit: 'g' },
-        { id: Date.now() + 3, name: '당근', expiry: '', quantity: '', unit: '개' },
-      ];
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('로그인이 필요합니다.');
+        navigate('/Userlogin');
+        setIsAnalyzing(false);
+        return;
+      }
+
+      // 파일 객체 가져오기
+      const file = fileInputRef.current?.files?.[0];
+      if (!file) {
+        alert('파일을 선택해주세요.');
+        setIsAnalyzing(false);
+        return;
+      }
+
+      // FormData 생성
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // POST /api/images/upload - 이미지 업로드 및 분석 요청
+      const uploadResponse = await fetch('http://localhost:3000/api/images/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const uploadData = await uploadResponse.json();
+
+      if (!uploadResponse.ok) {
+        throw new Error(uploadData.message || '이미지 업로드에 실패했습니다.');
+      }
+
+      const analysisId = uploadData.data?.id;
+      if (!analysisId) {
+        throw new Error('분석 ID를 받지 못했습니다.');
+      }
+
+      // Polling으로 분석 결과 조회
+      let attempts = 0;
+      const maxAttempts = 30; // 최대 30초 대기 (1초 간격)
       
-      setAnalyzedIngredients(mockAnalyzedData);
-      setShowPhotoModal(true);
+      const pollAnalysisResult = async () => {
+        const resultResponse = await fetch(`http://localhost:3000/api/images/analysis/${analysisId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        const resultData = await resultResponse.json();
+
+        if (!resultResponse.ok) {
+          throw new Error(resultData.message || '분석 결과 조회에 실패했습니다.');
+        }
+
+        const status = resultData.data?.status;
+
+        if (status === 'COMPLETED') {
+          // 분석 완료: detections를 식재료 목록으로 변환
+          const detections = resultData.data?.identified_ingredients || [];
+          
+          if (detections.length === 0) {
+            alert('이미지에서 식재료를 찾을 수 없습니다.');
+            setIsAnalyzing(false);
+            return;
+          }
+
+          // detections 형식: [{ classId, label, bbox, confidence }]
+          // 프론트엔드 형식으로 변환: [{ id, name, expiry, quantity, unit }]
+          const formattedIngredients = detections.map((detection, index) => ({
+            id: Date.now() + index,
+            name: detection.label || detection.name || '',
+            expiry: '',
+            quantity: '',
+            unit: '개'
+          }));
+
+          setAnalyzedIngredients(formattedIngredients);
+          setShowPhotoModal(true);
+          setIsAnalyzing(false);
+        } else if (status === 'FAILED') {
+          throw new Error(resultData.data?.error_message || '이미지 분석에 실패했습니다.');
+        } else if (status === 'PENDING') {
+          // 아직 분석 중이면 다시 시도
+          attempts++;
+          if (attempts >= maxAttempts) {
+            throw new Error('분석 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.');
+          }
+          setTimeout(pollAnalysisResult, 1000); // 1초 후 다시 조회
+        }
+      };
+
+      // 첫 번째 polling 시작
+      await pollAnalysisResult();
+
+    } catch (error) {
+      console.error('이미지 분석 중 오류:', error);
+      alert(error.message || '이미지 분석 중 오류가 발생했습니다.');
       setIsAnalyzing(false);
-    }, 2000);
+    }
   };
   
-  const handleModalRegister = () => {
+  const handleModalRegister = async () => {
     if (analyzedIngredients.length === 0) {
       alert('등록할 재료가 없습니다.');
       return;
     }
     
-    setIngredients([...ingredients, ...analyzedIngredients]);
-    
-    setUploadedImage(null);
-    setAnalyzedIngredients([]);
-    setShowPhotoModal(false);
-    setEditingAnalyzedId(null);
-    setEditingAnalyzedIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
-    
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('로그인이 필요합니다.');
+        navigate('/Userlogin');
+        return;
+      }
+
+      // 분석된 재료들을 백엔드 API로 등록
+      const promises = analyzedIngredients.map(async (ingredient) => {
+        const expiryDate = ingredient.expiry || new Date().toISOString().split('T')[0];
+        const quantityValue = ingredient.quantity && parseFloat(ingredient.quantity) > 0
+          ? parseFloat(ingredient.quantity)
+          : 0;
+        const quantityUnit = ingredient.unit || '개';
+
+        const requestBody = {
+          name: ingredient.name.trim(),
+          expiryDate: expiryDate,
+          quantity_value: quantityValue,
+          quantity_unit: quantityUnit
+        };
+
+        const response = await fetch('http://localhost:3000/api/ingredients', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || '재료 등록에 실패했습니다.');
+        }
+
+        return await response.json();
+      });
+
+      await Promise.all(promises);
+      
+      // 등록 성공 후 UI 초기화 및 목록 새로고침
+      setUploadedImage(null);
+      setAnalyzedIngredients([]);
+      setShowPhotoModal(false);
+      setEditingAnalyzedId(null);
+      setEditingAnalyzedIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+      
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+
+      alert('재료가 등록되었습니다.');
+      // 등록 성공 후 목록 다시 조회
+      await fetchIngredientLists(false);
+    } catch (error) {
+      console.error('재료 등록 중 오류:', error);
+      alert(error.message || '재료 등록 중 오류가 발생했습니다.');
     }
   };
 
@@ -157,21 +297,64 @@ function Myfridge() {
     setEditingAnalyzedId(null);
   };
 
-  const handleManualRegister = () => {
-    if (newIngredient.name.trim()) {
-      const quantityToSave = newIngredient.quantity && parseFloat(newIngredient.quantity) > 0
-        ? newIngredient.quantity
-        : '';
-      
-      setIngredients([...ingredients, {
-        ...newIngredient,
-        quantity: quantityToSave,
-        id: Date.now()
-      }]);
-      setNewIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
-      setShowUnitDropdown(false);
-    } else {
+  const handleManualRegister = async () => {
+    if (!newIngredient.name.trim()) {
       alert('재료 이름을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('로그인이 필요합니다.');
+        navigate('/Userlogin');
+        return;
+      }
+
+      // 백엔드 API 형식에 맞게 데이터 변환
+      // 필수 필드: name, expiryDate, quantity_value, quantity_unit
+      // 소비기한이 없으면 오늘 날짜로 설정 (백엔드 필수 필드)
+      const expiryDate = newIngredient.expiry || new Date().toISOString().split('T')[0];
+      
+      // 수량이 없거나 0이면 기본값 0 설정 (백엔드 필수 필드)
+      const quantityValue = newIngredient.quantity && parseFloat(newIngredient.quantity) > 0
+        ? parseFloat(newIngredient.quantity)
+        : 0;
+      
+      // 단위가 없으면 '개'로 설정 (백엔드 필수 필드)
+      const quantityUnit = newIngredient.unit || '개';
+
+      const requestBody = {
+        name: newIngredient.name.trim(),
+        expiryDate: expiryDate,
+        quantity_value: quantityValue,
+        quantity_unit: quantityUnit
+      };
+
+      const response = await fetch('http://localhost:3000/api/ingredients', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setNewIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+        setShowUnitDropdown(false);
+        alert('재료가 등록되었습니다.');
+        // 등록 성공 후 목록 다시 조회
+        await fetchIngredientLists(false);
+      } else {
+        console.error('재료 등록 실패:', data);
+        alert(data.message || '재료 등록에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류:', error);
+      alert('서버와 연결할 수 없습니다.');
     }
   };
 
@@ -211,44 +394,124 @@ function Myfridge() {
     setShowEditUnitDropdown(false);
   };
 
-  const removeIngredient = (id) => {
-    setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
-    if (editingId === id) {
-      setEditingId(null);
-      setEditingIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+  const removeIngredient = async (id) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('로그인이 필요합니다.');
+        navigate('/Userlogin');
+        return;
+      }
+
+      // DELETE /api/ingredients/:id - 식재료 삭제
+      const response = await fetch(`http://localhost:3000/api/ingredients/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (editingId === id) {
+          setEditingId(null);
+          setEditingIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+        }
+        alert('재료가 삭제되었습니다.');
+        // 삭제 성공 후 목록 다시 조회
+        await fetchIngredientLists(false);
+      } else {
+        console.error('재료 삭제 실패:', data);
+        alert(data.message || '재료 삭제에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류:', error);
+      alert('서버와 연결할 수 없습니다.');
     }
   };
 
   const handleEditIngredient = (id) => {
     const ingredientToEdit = ingredients.find(item => item.id === id);
     if (ingredientToEdit) {
+      // 소비기한이 있으면 그대로 사용, 없으면 빈 문자열
+      // date input은 YYYY-MM-DD 형식이어야 함
+      const expiryValue = ingredientToEdit.expiry || '';
+      
       setEditingIngredient({
-        name: ingredientToEdit.name,
-        expiry: ingredientToEdit.expiry,
-        quantity: ingredientToEdit.quantity,
-        unit: ingredientToEdit.unit
+        name: ingredientToEdit.name || '',
+        expiry: expiryValue,
+        quantity: ingredientToEdit.quantity || '',
+        unit: ingredientToEdit.unit || '개'
       });
       setEditingId(id);
     }
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     if (!editingIngredient.name.trim()) {
       alert('재료 이름을 입력해주세요.');
       return;
     }
-    
-    const quantityToSave = editingIngredient.quantity && parseFloat(editingIngredient.quantity) > 0
-      ? editingIngredient.quantity
-      : '';
 
-    setIngredients(ingredients.map(ingredient =>
-      ingredient.id === editingId
-        ? { ...ingredient, ...editingIngredient, quantity: quantityToSave }
-        : ingredient
-    ));
-    setEditingId(null);
-    setEditingIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('로그인이 필요합니다.');
+        navigate('/Userlogin');
+        return;
+      }
+
+      // 백엔드 API 형식에 맞게 데이터 변환
+      // 필수 필드: name, expiryDate, quantity_value, quantity_unit
+      const expiryDate = editingIngredient.expiry || new Date().toISOString().split('T')[0];
+      
+      // 수량이 없거나 0이면 기본값 0 설정 (백엔드 필수 필드)
+      const quantityValue = editingIngredient.quantity && parseFloat(editingIngredient.quantity) > 0
+        ? parseFloat(editingIngredient.quantity)
+        : 0;
+      
+      // 단위가 없으면 '개'로 설정 (백엔드 필수 필드)
+      const quantityUnit = editingIngredient.unit || '개';
+
+      const requestBody = {
+        name: editingIngredient.name.trim(),
+        expiryDate: expiryDate,
+        quantity_value: quantityValue,
+        quantity_unit: quantityUnit
+      };
+
+      // PUT /api/ingredients/:id - 식재료 수정
+      const response = await fetch(`http://localhost:3000/api/ingredients/${editingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setEditingId(null);
+        setEditingIngredient({ name: '', expiry: '', quantity: '', unit: '개' });
+        alert('재료가 수정되었습니다.');
+        // 수정 성공 후 목록 다시 조회
+        await fetchIngredientLists(false);
+      } else {
+        console.error('재료 수정 실패:', data);
+        alert(data.message || '재료 수정에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류:', error);
+      alert('서버와 연결할 수 없습니다.');
+    }
   };
   
   const handleCancelEdit = () => {
@@ -272,37 +535,87 @@ function Myfridge() {
 
   const { show, hide } = useGlobalLoading();
 
+  // 식재료 목록과 소비기한 임박 목록을 조회하는 함수
+  const fetchIngredientLists = async (showLoading = true) => {
+    try {
+      if (showLoading) show();
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setIngredients([]);
+        setApproachingExpiries([]);
+        if (showLoading) hide();
+        return;
+      }
+
+      // GET /api/ingredients - 보유 식재료 목록 조회
+      const res = await fetch('http://localhost:3000/api/ingredients', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        throw new Error(`냉장고 데이터를 불러오지 못했어요: ${res.status} - ${text}`);
+      }
+      
+      const data = await res.json();
+
+      // 백엔드 응답 형식: { success: true, data: [...] }
+      const list = Array.isArray(data?.data) ? data.data : [];
+      
+      // 백엔드 데이터 형식을 프론트엔드 형식으로 변환
+      const formattedIngredients = list.map(item => ({
+        id: item.id,
+        name: item.name,
+        expiry: formatDateForInput(item.expiryDate), // expiryDate → expiry (ISO 형식을 YYYY-MM-DD로 변환)
+        quantity: item.quantity_value > 0 ? String(item.quantity_value) : '', // quantity_value → quantity
+        unit: item.quantity_unit // quantity_unit → unit
+      }));
+      
+      setIngredients(formattedIngredients);
+
+      // GET /api/ingredients/expiring - 소비기한 임박 식재료 조회
+      const expiringRes = await fetch('http://localhost:3000/api/ingredients/expiring', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (expiringRes.ok) {
+        const expiringData = await expiringRes.json();
+        const expiringList = Array.isArray(expiringData?.data) ? expiringData.data : [];
+        
+        // 백엔드 데이터 형식을 프론트엔드 형식으로 변환
+        const formattedExpiring = expiringList.map(item => ({
+          id: item.id,
+          name: item.name,
+          expiry: formatDateForInput(item.expiryDate),
+          quantity: item.quantity_value > 0 ? String(item.quantity_value) : '',
+          unit: item.quantity_unit
+        }));
+        
+        setApproachingExpiries(formattedExpiring);
+      }
+    } catch (e) {
+      console.error(e);
+      alert('냉장고 데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.');
+      setIngredients([]);
+      setApproachingExpiries([]);
+    } finally {
+      if (showLoading) hide();
+    }
+  };
+
   useEffect(() => {
     let alive = true;
-
-    async function fetchFridge() {
-      show();
-      try {
-        const res = await fetch('http://localhost:3001/api/Myfridge');
-        if (!res.ok) {
-          const text = await res.text().catch(() => '');
-          throw new Error(`냉장고 데이터를 불러오지 못했어요: ${res.status} - ${text}`);
-        }
-        const data = await res.json();
-        if (!alive) return;
-
-        const list = Array.isArray(data?.items) ? data.items
-                   : Array.isArray(data) ? data
-                   : [];
-        setIngredients(list);
-      } catch (e) {
-        if (!alive) return;
-        console.error(e);
-        alert('냉장고 데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.');
-        setIngredients([]); // 에러 시 안전 폴백
-      } finally {
-        hide();
-      }
-    }
-
-    fetchFridge();
+    fetchIngredientLists(true).then(() => {
+      if (!alive) return;
+    });
     return () => { alive = false; };
-  }, [show, hide, setIngredients]);
+  }, [show, hide]);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleModalClickOutside);
@@ -435,11 +748,11 @@ function Myfridge() {
 
         <h2 className="ingredients-title">재료 목록</h2>
         <div className="ingredients-section">
-          {expiringIngredients.length > 0 && (
+          {approachingExpiries.length > 0 && (
             <div className="expiry-warning-box">
               <h4 className="expiry-warning-title">🚨 유통기한이 임박한 재료가 있어요!</h4>
               <div className="expiry-tags">
-                {expiringIngredients.map(ingredient => (
+                {approachingExpiries.map(ingredient => (
                   <span key={ingredient.id} className="expiry-tag">{ingredient.name}</span>
                 ))}
               </div>

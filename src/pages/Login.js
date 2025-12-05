@@ -12,25 +12,35 @@ function Login() {
   const handleLogin = async(e) => {
     e.preventDefault(); // 폼 제출 시 새로고침 방지
 
+    // 입력값 검증
+    if (!username || !password) {
+      alert('아이디와 비밀번호를 모두 입력해주세요.');
+      return;
+    }
+
     console.log('로그인 시도:', {username, password});
+    
+    const requestBody = {
+      userID: username.trim(), // API 설계에 따라 userID로 전송
+      userPW: password.trim(), // API 설계에 따라 userPW로 전송
+    };
+    
+    console.log('전송할 데이터:', requestBody);
 
     try {
-    const res = await fetch('http://localhost:3001/api/login', { // 백엔드의 로그인 API 엔드포인트
+    const res = await fetch('http://localhost:3000/api/user/login', { // 백엔드의 로그인 API 엔드포인트
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ // 백엔드로 보낼 데이터 (키 값은 백엔드에서 예상하는 이름과 동일하게)
-        userID: username, // 백엔드에서 'userID'로 받음
-        userPW: password, // 백엔드에서 'userPW'로 받음
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     const data = await res.json(); // 백엔드의 응답 (JSON 형태)을 파싱
 
     if (res.ok) { // HTTP 상태 코드가 200번대 (200, 201 등) -> 성공
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('user', JSON.stringify(data.data)); // result_code 형식에 맞게 data.data 사용
       alert(data.message);
       navigate('/InfoRegistration');
     } else { // HTTP 상태 코드가 400, 500번대 -> 실패
