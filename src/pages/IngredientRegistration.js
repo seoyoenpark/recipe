@@ -85,7 +85,7 @@ function IngredientRegistration() {
       const mockAnalyzedData = [
         { id: Date.now() + 1, name: '토마토', expiry: '', quantity: '', unit: '개' },
         { id: Date.now() + 2, name: '양파', expiry: '', quantity: '300', unit: 'g' },
-        { id: Date.now() + 3, name: '당근', expiry: '2025-12-12', quantity: '', unit: '개' },
+        { id: Date.now() + 3, name: '당근', expiry: '', quantity: '', unit: '개' },
       ];
       
       setAnalyzedIngredients(mockAnalyzedData);

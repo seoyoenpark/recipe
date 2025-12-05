@@ -17,14 +17,14 @@ const MOCK_RECIPES = [
 
 function MainHeader() {
   const navigate = useNavigate();
-  const searchContainerRef = useRef(null);
+  const searchContainerRef = useRef(null); // 2. DOM 요소 참조를 위한 ref
 
-  // 상태 변수 추가
+  // 3. 상태 변수 추가
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]); // 추천 목록 상태
-  const [isSuggestionsVisible, setIsSuggestionsVisible] = useState(false);
+  const [isSuggestionsVisible, setIsSuggestionsVisible] = useState(false); // 목록 표시 여부
 
-  // 외부 클릭 감지 로직 (추천 목록 닫기용)
+  // 4. 외부 클릭 감지 로직 (추천 목록 닫기용)
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
@@ -37,7 +37,7 @@ function MainHeader() {
     };
   }, []);
 
-  // 검색어 입력 시 추천 목록 필터링
+  // 5. 검색어 입력 시 추천 목록 필터링
   const handleInputChange = (e) => {
     const value = e.target.value;
     setQuery(value);
@@ -53,7 +53,7 @@ function MainHeader() {
     }
   };
 
-  // 추천 항목 클릭 시 검색창 채우기
+  // 6. 추천 항목 클릭 시 검색창 채우기
   const handleSuggestionClick = (suggestion) => {
     setQuery(suggestion.title);
     setSuggestions([]);
