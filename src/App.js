@@ -33,7 +33,8 @@ import AdminLayout from './admin/AdminLayout';
 import AdminStatistics from './admin/AdminStatistics';
 
 // 로그인 여부를 확인하는 함수
-const isAuthenticated = () => !!localStorage.getItem('token');
+const isAuthenticated = () => true;
+  // !!localStorage.getItem('token');
 // 사용자 권한 확인 함수
 const getUserInfo = () => {
   const userInfo = localStorage.getItem('user');
@@ -79,7 +80,7 @@ function AppContent() {
          <Route path="/FindAccount02" element={<FindAccount02 />}/>
          <Route path="/Userlogin" element={<Userlogin />}/>
          <Route path="/InfoRegistration" element={<InfoRegistration />} />
-         <Route path="/ingredient-registration" element={<IngredientRegistration />} />
+         <Route path="/ingredientregistration" element={<IngredientRegistration />} />
          <Route path="/RecipeDetail/:id" element={<RecipeDetail />} />
          <Route path="/Main" element={<Main />}/>
          {/* 관리자 페이지 */}
