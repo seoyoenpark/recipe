@@ -26,17 +26,17 @@ function Register() {
 
   // 백엔드 API 호출
   try {
-    const res = await fetch('http://localhost:3001/api/signup', {
+    const res = await fetch('http://localhost:3000/api/user/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         gender: gender,
-        btd: btd,
-        name: name,
+        birthdate: btd,
+        fullName: name,
         nickname: nickname,
-        userID: username,
+        userId: username,
         userPW: password,
       }),
     });

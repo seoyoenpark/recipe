@@ -7,7 +7,8 @@ function FindAccount02() {
   const [username, setUsername] = useState('');
   const [btd, setBtd] = useState('');
   
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resetToken, setResetToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState(''); 
 
@@ -19,21 +20,23 @@ function FindAccount02() {
     console.log('비밀번호 재설정 시도:', { name, username, btd });
 
     try {
-      const res = await fetch('http://localhost:3001/api/user/find-pwd', {
+      const res = await fetch('http://localhost:3000/api/user/verify-reset-identity', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userName: name, //이름
-          userID: username, //id
-          userBtd: btd, //생년월일
+          fullName: name, //이름
+          userId: username, //id
+          birthdate: btd, //생년월일
         }),
       });
 
       const data = await res.json(); 
 
       if (res.ok) {
+        // resetToken 저장
+        setResetToken(data.data.resetToken);
         setIsModalOpen(true);
       } else { 
         alert(data.message || '사용자 정보가 일치하지 않습니다.'); 
@@ -55,18 +58,21 @@ function FindAccount02() {
       alert("새로운 비밀번호를 입력해주세요.");
       return;
     }
+    if(!resetToken) {
+      alert("본인 확인을 먼저 완료해주세요.");
+      return;
+    }
     
     try {
-      const res = await fetch('http://localhost:3001/api/user/reset-pwd', {
+      const res = await fetch('http://localhost:3000/api/user/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userName: name, //이름
-          userID: username, //id
-          userBtd: btd, //생년월일
+          resetToken: resetToken,
           newPassword: newPassword,
+          confirmPassword: newPasswordConfirm,
         }),
     });
 
@@ -75,6 +81,7 @@ function FindAccount02() {
     if (res.ok) {
       alert(data.message || "비밀번호가 성공적으로 재설정되었습니다. 다시 로그인해주세요.");
       setIsModalOpen(false);
+      setResetToken('');
       navigate('/Userlogin');
     } else {
       alert(data.message || "비밀번호 재설정에 실패했습니다.");
@@ -89,6 +96,7 @@ function FindAccount02() {
     setIsModalOpen(false);
     setNewPassword('');
     setNewPasswordConfirm('');
+    setResetToken('');
   };
 
     const goToLogin = () => {
@@ -160,12 +168,15 @@ function FindAccount02() {
                 name="newPasswordConfirm"
                 type="password"
                 value={newPasswordConfirm}
-                onChange={setNewPasswordConfirm}
-                placeholder="비밀번호를 다시 입력하세요" />
+                onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                placeholder="비밀번호를 다시 입력하세요"
+                required />
 
-              <button type="submit" className="go-to-Userlogin" onClick={goToLogin}>
-                로그인 페이지로 이동하기
-              </button>
+              <div className="button-container">
+                <button type="submit" className="reset-password-btn">
+                  비밀번호 재설정
+                </button>
+              </div>
             </form>
             </div>
           </div>

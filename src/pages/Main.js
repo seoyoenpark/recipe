@@ -67,27 +67,47 @@ function Main() {
     async function fetchFridge() {
       show();
       try {
-        // API 구현
-        const res = await fetch('/api/Myfridge/Myfridge');
-        if (!res.ok) {throw new Error('냉장고 데이터를 불러오지 못했어요');}
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setIngredients([]);
+          setApproachingExpiries([]);
+          hide();
+          return;
+        }
+
+        // GET /api/ingredients - 보유 식재료 목록 조회
+        const res = await fetch('http://localhost:3000/api/ingredients', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (!res.ok) {
+          throw new Error('냉장고 데이터를 불러오지 못했어요');
+        }
+        
         const data = await res.json();
         if (!alive) return;
 
-        const list = Array.isArray(data?.items) ? data.items : Array.isArray(data) ? data : [];
-        setIngredients(list);
+        // 백엔드 응답 형식: { success: true, data: [...] }
+        const list = Array.isArray(data?.data) ? data.data : [];
+        
+        // 백엔드 데이터 형식을 프론트엔드 형식으로 변환
+        const formattedIngredients = list.map(item => ({
+          id: item.id,
+          name: item.name,
+          expiry: item.expiryDate, // expiryDate → expiry
+          quantity: item.quantity_value,
+          unit: item.quantity_unit
+        }));
+        
+        setIngredients(formattedIngredients);
 
       } catch (e) {
         if (!alive) return;
         console.error(e);
-        // API 호출 실패 시 더미 데이터
-        const dummyIngredients = [
-            { id: 1, name: '김치', expiry: '2025-09-20' },
-            { id: 2, name: '양파', expiry: '2025-10-05' },
-            { id: 3, name: '돼지고기', expiry: '2025-09-18' },
-            { id: 4, name: '두부', expiry: '2025-09-22' },
-            { id: 5, name: '대파', expiry: '2025-09-25' },
-        ];
-        setIngredients(dummyIngredients);
+        setIngredients([]);
       } finally {
         hide();
       }
@@ -95,6 +115,56 @@ function Main() {
     fetchFridge();
     return () => { alive = false; };
   }, [show, hide]);
+
+  // 소비기한 임박 식재료 조회
+  useEffect(() => {
+    let alive = true;
+    async function fetchExpiringIngredients() {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setApproachingExpiries([]);
+          return;
+        }
+
+        // GET /api/ingredients/expiring - 소비기한 임박 식재료 조회
+        const res = await fetch('http://localhost:3000/api/ingredients/expiring', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (!res.ok) {
+          throw new Error('임박 식재료 데이터를 불러오지 못했어요');
+        }
+        
+        const data = await res.json();
+        if (!alive) return;
+
+        // 백엔드 응답 형식: { success: true, data: [...] }
+        const list = Array.isArray(data?.data) ? data.data : [];
+        
+        // 백엔드 데이터 형식을 프론트엔드 형식으로 변환
+        const formattedExpiring = list.map(item => ({
+          id: item.id,
+          name: item.name,
+          expiry: item.expiryDate, // expiryDate → expiry
+          quantity: item.quantity_value,
+          unit: item.quantity_unit
+        }));
+        
+        setApproachingExpiries(formattedExpiring);
+
+      } catch (e) {
+        if (!alive) return;
+        console.error(e);
+        setApproachingExpiries([]);
+      }
+    }
+    fetchExpiringIngredients();
+    return () => { alive = false; };
+  }, []);
     
   // 헤더 검색바와 URL 파라미터 연동
   useEffect(() => {
@@ -118,23 +188,7 @@ function Main() {
     setTopicTags(topicTags.filter(tag => tag !== tagToDelete));
   };
 
-   // 유통기한 임박 재료 계산
-  useEffect(() => {
-    const getExpiringIngredients = () => {
-        const today = new Date();
-        // 오늘부터 3일 후까지의 날짜를 계산
-        const threeDaysLater = new Date(today);
-        threeDaysLater.setDate(today.getDate() + 3);
-
-        return ingredients.filter(ingredient => {
-            if (!ingredient.expiry) return false;
-            const expiryDate = new Date(ingredient.expiry);
-            // 만료일 3일 이내 재료 필터링
-            return expiryDate <= threeDaysLater && expiryDate >= today;
-        });
-    };
-    setApproachingExpiries(getExpiringIngredients());
-  }, [ingredients]);
+  // 소비기한 임박 식재료는 백엔드 API에서 조회하므로 이 useEffect는 제거됨
 
   return (
     <main className="MainPage">

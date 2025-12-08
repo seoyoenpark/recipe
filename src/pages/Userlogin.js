@@ -14,14 +14,14 @@ function Login() {
     console.log('로그인 시도:', {username, password});
 
     try {
-    const res = await fetch('http://localhost:3001/api/login', { // 백엔드의 로그인 API 엔드포인트
+    const res = await fetch('http://localhost:3000/api/user/login', { // 백엔드의 로그인 API 엔드포인트
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ // 백엔드로 보낼 데이터 (키 값은 백엔드에서 예상하는 이름과 동일하게)
-        userID: username, // 백엔드에서 'userID'로 받음
-        userPW: password, // 백엔드에서 'userPW'로 받음
+      body: JSON.stringify({ // API 설계에 따라 userID로 전송
+        userID: username, // API 설계에 따라 userID로 전송
+        userPW: password, // API 설계에 따라 userPW로 전송
       }),
     });
 
@@ -29,7 +29,7 @@ function Login() {
 
     if (res.ok) { // HTTP 상태 코드가 200번대 (200, 201 등) -> 성공
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('user', JSON.stringify(data.data)); // result_code 형식에 맞게 data.data 사용
       alert(data.message);
       navigate('/Main');
     } else { // HTTP 상태 코드가 400, 500번대 -> 실패
