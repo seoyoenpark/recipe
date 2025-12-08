@@ -7,7 +7,6 @@ function AdminMain() {
     <div className="main-page">
       {/* 메인 페이지 내용 */}
       <div className="admin-main-container">
-        <h2 className="admin-main-title">관리자 대시보드</h2>
 
         <div className="admin-menu-grid">
 

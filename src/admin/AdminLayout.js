@@ -11,7 +11,9 @@ function AdminLayout() {
       <div className="admin-body">
         <AdminNav />
         <main className="admin-content">
-          <Outlet />
+          <div className="admin-content-box">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

@@ -26,21 +26,6 @@ function AdminUser() {
   const allergyOptions = ['난류(가금류)', '우유', '메밀', '땅콩', '대두', '밀', '고등어', '돼지고기', '복숭아', '토마토', '아황산염', '호두', '닭고기', '조개류(굴, 전복, 홍합 포함)', '게', '새우', '오징어', '소고기'];
   const cookingToolOptions = ['냄비', '프라이팬', '볼', '계량스푼', '키친타올', '계량컵', '오븐', '찜기', '내열용기', '밀폐용기', '믹서기', '거품기', '전기밥솥', '면보', '채망', '토치', '전자레인지', '에어프라이어', '스텐트레이', '랩', '매셔'];
 
-  // const [allergyOptions, setAllergyOptions] = useState([]);
-  // const [cookingToolOptions, setCookingToolOptions] = useState([]);
-
-  //   useEffect(() => {
-  //   fetch('/api/allergies')
-  //     .then(res => res.json())
-  //     .then(data => setAllergyOptions(data))
-  //     .catch(err => console.error(err));
-
-  //   fetch('/api/cooking-tools')
-  //     .then(res => res.json())
-  //     .then(data => setCookingToolOptions(data))
-  //     .catch(err => console.error(err));
-  // }, []);
-
   const usersPerPage = 10;
 
   const indexOfLastUser = currentPage * usersPerPage;
@@ -126,6 +111,7 @@ function AdminUser() {
 
   return (
     <div className="admin-user-page">
+      <h2 className="page-title">사용자 목록 상세 조회 및 계정 상태 관리</h2>
       <div className="user-table-container">
         <table className="user-table">
           <thead>

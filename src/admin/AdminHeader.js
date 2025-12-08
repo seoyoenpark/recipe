@@ -1,28 +1,30 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './AdminHeader.css';
+import logo from '../img/logo.jpg';
+import { useNavigate } from 'react-router-dom';
 
-function AdminHeader({ title = "냉장고를 부탁해 관리자 페이지" }) {
+function AdminHeader() {
   const navigate = useNavigate();
 
-  // 로그아웃 처리 함수
   const handleLogout = () => {
-    localStorage.removeItem('admin_token'); 
-    alert('로그아웃 되었습니다.');
-    navigate('/Home'); // 비로그인 메인 페이지로 이동
+    localStorage.removeItem('admin_token');
+    navigate('/Home');
   };
 
   return (
-    <header className="admin-header">
-      <div className="header-logo">
-        {/* 로고 이미지 위치 - 추후 이미지 파일 추가 예정 */}
-        <img src="/path/to/logo.png" alt="냉장고를 부탁해 로고" className="logo-image" />
+    <div className="admin-header-wrapper">
+      <div className="admin-header-left">
+        <img src={logo} alt="냉장고를 부탁해" className="admin-header-logo" />
       </div>
-      <h1 className="header-title">{title}</h1>
-      <button className="logout-button" onClick={handleLogout}>
-        로그아웃
-      </button>
-    </header>
+
+      <h1 className="admin-header-title">냉장고를 부탁해 관리자 페이지</h1>
+
+      <div className="admin-header-right">
+        <button className="admin-logout-button" onClick={handleLogout}>
+          로그아웃
+        </button>
+      </div>
+    </div>
   );
 }
 

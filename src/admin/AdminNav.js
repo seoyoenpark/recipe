@@ -70,6 +70,11 @@ function AdminNav() {
             </div>
           </div>
         ))}
+        
+        {/* 사용자 페이지로 이동 버튼 */}
+        <Link to="/main" className="nav-user-page-btn">
+          사용자 페이지로 이동
+        </Link>
       </div>
     </nav>
   );
